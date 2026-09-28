@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { getPublishedPosts } from '../../lib/posts';
+import { CATEGORIES, CATEGORY_KEYS, type CategoryKey } from '../../site.config';
+
+export function getStaticPaths() {
+  return CATEGORY_KEYS.map((category) => ({ params: { category } }));
+}
+
+const category = Astro.params.category as CategoryKey;
+const info = CATEGORIES[category];
+const posts = (await getPublishedPosts()).filter((p) => p.data.category === category);
+---
+<Base title={`SketchUp ${info.title}`} description={info.description}>
+  <section class="hero">
+    <h1>{info.title}</h1>
+    <p>{info.description}</p>
+  </section>
+  {posts.length > 0
+    ? <div class="grid">{posts.map((post) => <PostCard post={post} />)}</div>
+    : <p>New articles in this section are on the way.</p>}
+  <AdSlot slot="footer" />
+</Base>

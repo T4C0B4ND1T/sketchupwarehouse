@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site.config';
+---
+<Base title="Contact" description={`Contact ${SITE.name}.`}>
+  <div class="page prose">
+    <h1>Contact</h1>
+    <p>Corrections, tips, partnership and advertising enquiries: <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.</p>
+    <p>Extension developers: we're happy to look at your plugin for a review. Send a link and a short description.</p>
+  </div>
+</Base>

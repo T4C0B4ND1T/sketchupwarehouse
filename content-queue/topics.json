@@ -1,0 +1,701 @@
+{
+  "_readme": "Evergreen topic queue. The generator writes the first topic whose id is not yet used by a post (frontmatter topicId). Reorder to change priority; append to add more.",
+  "topics": [
+    {
+      "id": "sketchup-for-beginners",
+      "category": "tutorials",
+      "title": "SketchUp for Beginners: The First 10 Tools to Master",
+      "keyword": "sketchup for beginners",
+      "angle": "Tool-by-tool walkthrough with shortcuts and a mini practice project.",
+      "slug": "sketchup-for-beginners"
+    },
+    {
+      "id": "sketchup-groups-vs-components",
+      "category": "tutorials",
+      "title": "How to Use Groups vs Components in SketchUp",
+      "keyword": "sketchup groups vs components",
+      "angle": "When to use each, nesting, making unique, common mistakes.",
+      "slug": "sketchup-groups-vs-components"
+    },
+    {
+      "id": "sketchup-keyboard-shortcuts",
+      "category": "tutorials",
+      "title": "Every SketchUp Keyboard Shortcut Worth Learning (and How to Set Your Own)",
+      "keyword": "sketchup keyboard shortcuts",
+      "angle": "Default shortcuts table plus how to customize on Windows and Mac.",
+      "slug": "sketchup-keyboard-shortcuts"
+    },
+    {
+      "id": "sketchup-follow-me-tool",
+      "category": "tutorials",
+      "title": "How to Use the Follow Me Tool in SketchUp",
+      "keyword": "sketchup follow me tool",
+      "angle": "Moldings, pipes, lathe-style round objects, fixing faceting.",
+      "slug": "sketchup-follow-me-tool"
+    },
+    {
+      "id": "sketchup-tags-layers",
+      "category": "tutorials",
+      "title": "Tags (Layers) in SketchUp: How to Organize a Model Properly",
+      "keyword": "sketchup tags layers",
+      "angle": "Tags vs groups, tag folders, dashed tags, best-practice workflow.",
+      "slug": "sketchup-tags-layers"
+    },
+    {
+      "id": "sketchup-reversed-faces",
+      "category": "tutorials",
+      "title": "How to Fix Reversed Faces in SketchUp",
+      "keyword": "sketchup reversed faces",
+      "angle": "Why blue/grey faces matter for rendering and 3D printing; fixes and extensions.",
+      "slug": "sketchup-reversed-faces"
+    },
+    {
+      "id": "sketchup-solid-for-3d-printing",
+      "category": "tutorials",
+      "title": "How to Make a Model Solid for 3D Printing in SketchUp",
+      "keyword": "sketchup solid for 3d printing",
+      "angle": "Solid inspector, holes, stray edges, exporting STL.",
+      "slug": "sketchup-solid-for-3d-printing"
+    },
+    {
+      "id": "sketchup-import-floor-plan-scale",
+      "category": "tutorials",
+      "title": "How to Import a PDF or Image and Scale It in SketchUp",
+      "keyword": "sketchup import floor plan scale",
+      "angle": "Tracing a floor plan accurately with the Tape Measure resize trick.",
+      "slug": "sketchup-import-floor-plan-scale"
+    },
+    {
+      "id": "sketchup-curved-surfaces",
+      "category": "tutorials",
+      "title": "How to Create Curved Surfaces in SketchUp",
+      "keyword": "sketchup curved surfaces",
+      "angle": "Native techniques plus sandbox tools and popular curve extensions.",
+      "slug": "sketchup-curved-surfaces"
+    },
+    {
+      "id": "sketchup-sandbox-terrain",
+      "category": "tutorials",
+      "title": "Sandbox Tools in SketchUp: Modeling Terrain Step by Step",
+      "keyword": "sketchup sandbox terrain",
+      "angle": "From contours and from scratch, stamping a building pad.",
+      "slug": "sketchup-sandbox-terrain"
+    },
+    {
+      "id": "sketchup-scenes-animation",
+      "category": "tutorials",
+      "title": "How to Use Scenes and Animations in SketchUp",
+      "keyword": "sketchup scenes animation",
+      "angle": "Scene properties, transitions, exporting video.",
+      "slug": "sketchup-scenes-animation"
+    },
+    {
+      "id": "how-to-model-stairs-in-sketchup",
+      "category": "tutorials",
+      "title": "How to Model Stairs in SketchUp",
+      "keyword": "how to model stairs in sketchup",
+      "angle": "Straight run with code-friendly rise/run, using arrays.",
+      "slug": "how-to-model-stairs-in-sketchup"
+    },
+    {
+      "id": "how-to-make-a-roof-in-sketchup",
+      "category": "tutorials",
+      "title": "How to Make a Roof in SketchUp (Gable, Hip and Shed)",
+      "keyword": "how to make a roof in sketchup",
+      "angle": "Manual methods and roof extensions.",
+      "slug": "how-to-make-a-roof-in-sketchup"
+    },
+    {
+      "id": "sketchup-section-planes",
+      "category": "tutorials",
+      "title": "Section Planes in SketchUp: Cuts, Fills and Exporting to LayOut",
+      "keyword": "sketchup section planes",
+      "angle": "Section fills, multiple sections, scenes.",
+      "slug": "sketchup-section-planes"
+    },
+    {
+      "id": "sketchup-slow-model-file-size",
+      "category": "tutorials",
+      "title": "How to Reduce SketchUp File Size and Speed Up a Slow Model",
+      "keyword": "sketchup slow model file size",
+      "angle": "Purge, proxies, component instancing, textures, hidden geometry.",
+      "slug": "sketchup-slow-model-file-size"
+    },
+    {
+      "id": "sketchup-layout-tutorial",
+      "category": "tutorials",
+      "title": "LayOut for Beginners: Turning a SketchUp Model into Construction Documents",
+      "keyword": "sketchup layout tutorial",
+      "angle": "Viewports, scale, dimensions, title blocks.",
+      "slug": "sketchup-layout-tutorial"
+    },
+    {
+      "id": "sketchup-dimensions",
+      "category": "tutorials",
+      "title": "How to Dimension a Model in SketchUp",
+      "keyword": "sketchup dimensions",
+      "angle": "Dimension tool, text, units, styles, LayOut alternative.",
+      "slug": "sketchup-dimensions"
+    },
+    {
+      "id": "sketchup-materials-textures",
+      "category": "tutorials",
+      "title": "Materials and Textures in SketchUp: A Practical Guide",
+      "keyword": "sketchup materials textures",
+      "angle": "Importing, positioning, projected textures, PBR materials.",
+      "slug": "sketchup-materials-textures"
+    },
+    {
+      "id": "3d-warehouse-sketchup-download",
+      "category": "tutorials",
+      "title": "How to Download and Use Models from 3D Warehouse",
+      "keyword": "3d warehouse sketchup download",
+      "angle": "Finding quality models, checking polycount, licensing, cleaning up.",
+      "slug": "3d-warehouse-sketchup-download"
+    },
+    {
+      "id": "sketchup-array-copy",
+      "category": "tutorials",
+      "title": "Array Copies in SketchUp: Linear and Radial",
+      "keyword": "sketchup array copy",
+      "angle": "Move/rotate with multiplier and divider syntax.",
+      "slug": "sketchup-array-copy"
+    },
+    {
+      "id": "sketchup-styles",
+      "category": "tutorials",
+      "title": "SketchUp Styles: How to Make Your Model Look Hand-Drawn",
+      "keyword": "sketchup styles",
+      "angle": "Style builder, edge settings, watermarks.",
+      "slug": "sketchup-styles"
+    },
+    {
+      "id": "sketchup-solid-tools",
+      "category": "tutorials",
+      "title": "How to Use the Outer Shell and Solid Tools in SketchUp",
+      "keyword": "sketchup solid tools",
+      "angle": "Union, subtract, trim, intersect with examples.",
+      "slug": "sketchup-solid-tools"
+    },
+    {
+      "id": "sketchup-intersect-faces",
+      "category": "tutorials",
+      "title": "Intersect Faces in SketchUp Explained",
+      "keyword": "sketchup intersect faces",
+      "angle": "Use cases like complex cuts and domes.",
+      "slug": "sketchup-intersect-faces"
+    },
+    {
+      "id": "sketchup-export-dwg",
+      "category": "tutorials",
+      "title": "How to Export from SketchUp to AutoCAD (DWG/DXF)",
+      "keyword": "sketchup export dwg",
+      "angle": "Settings, scale, what survives the export.",
+      "slug": "sketchup-export-dwg"
+    },
+    {
+      "id": "sketchup-import-revit-ifc",
+      "category": "tutorials",
+      "title": "How to Import Revit and IFC Files into SketchUp",
+      "keyword": "sketchup import revit ifc",
+      "angle": "Current import options and cleanup.",
+      "slug": "sketchup-import-revit-ifc"
+    },
+    {
+      "id": "sketchup-free-vs-pro",
+      "category": "tutorials",
+      "title": "SketchUp Web vs SketchUp Pro vs SketchUp Go: Which Should You Use?",
+      "keyword": "sketchup free vs pro",
+      "angle": "Feature comparison table, who each is for. Verify current plans on sketchup.com.",
+      "slug": "sketchup-free-vs-pro"
+    },
+    {
+      "id": "sketchup-kitchen-design",
+      "category": "tutorials",
+      "title": "How to Model a Kitchen in SketchUp",
+      "keyword": "sketchup kitchen design",
+      "angle": "Cabinet components, dynamic components, appliances from 3D Warehouse.",
+      "slug": "sketchup-kitchen-design"
+    },
+    {
+      "id": "sketchup-dynamic-components",
+      "category": "tutorials",
+      "title": "Dynamic Components in SketchUp: A Beginner Guide",
+      "keyword": "sketchup dynamic components",
+      "angle": "Attributes, formulas, a resizable cabinet example.",
+      "slug": "sketchup-dynamic-components"
+    },
+    {
+      "id": "sketchup-ipad",
+      "category": "tutorials",
+      "title": "How to Use SketchUp on iPad",
+      "keyword": "sketchup ipad",
+      "angle": "Apple Pencil workflows, AR, limitations.",
+      "slug": "sketchup-ipad"
+    },
+    {
+      "id": "sketchup-geolocation",
+      "category": "tutorials",
+      "title": "How to Geolocate a Model and Import Site Context in SketchUp",
+      "keyword": "sketchup geolocation",
+      "angle": "Add location, terrain, shadows accuracy.",
+      "slug": "sketchup-geolocation"
+    },
+    {
+      "id": "sketchup-shadow-study",
+      "category": "tutorials",
+      "title": "Shadow Studies in SketchUp",
+      "keyword": "sketchup shadow study",
+      "angle": "Setting date/time, animating shadows, exporting.",
+      "slug": "sketchup-shadow-study"
+    },
+    {
+      "id": "sketchup-match-photo",
+      "category": "tutorials",
+      "title": "Match Photo in SketchUp: Model from a Photograph",
+      "keyword": "sketchup match photo",
+      "angle": "Step by step with pitfalls.",
+      "slug": "sketchup-match-photo"
+    },
+    {
+      "id": "sketchup-soften-edges",
+      "category": "tutorials",
+      "title": "Soften and Smooth Edges in SketchUp",
+      "keyword": "sketchup soften edges",
+      "angle": "Soften/smooth dialog, why models look faceted.",
+      "slug": "sketchup-soften-edges"
+    },
+    {
+      "id": "sketchup-z-fighting",
+      "category": "tutorials",
+      "title": "How to Fix Z-Fighting and Flickering Faces in SketchUp",
+      "keyword": "sketchup z-fighting",
+      "angle": "Causes and fixes including camera clipping.",
+      "slug": "sketchup-z-fighting"
+    },
+    {
+      "id": "best-free-sketchup-extensions",
+      "category": "extensions",
+      "title": "The Best Free SketchUp Extensions",
+      "keyword": "best free sketchup extensions",
+      "angle": "Roundup with what each does and where to get it (Extension Warehouse, SketchUcation).",
+      "slug": "best-free-sketchup-extensions"
+    },
+    {
+      "id": "sketchup-extensions-for-architects",
+      "category": "extensions",
+      "title": "Best SketchUp Extensions for Architects",
+      "keyword": "sketchup extensions for architects",
+      "angle": "Roundup by task: modeling, documentation, analysis.",
+      "slug": "sketchup-extensions-for-architects"
+    },
+    {
+      "id": "sketchup-woodworking-extensions",
+      "category": "extensions",
+      "title": "Best SketchUp Extensions for Woodworking",
+      "keyword": "sketchup woodworking extensions",
+      "angle": "Cut lists, joinery, OpenCutList etc.",
+      "slug": "sketchup-woodworking-extensions"
+    },
+    {
+      "id": "opencutlist-sketchup",
+      "category": "extensions",
+      "title": "OpenCutList Review: Cut Lists and Cost Estimates in SketchUp",
+      "keyword": "opencutlist sketchup",
+      "angle": "Setup, workflow, cutting diagrams.",
+      "slug": "opencutlist-sketchup"
+    },
+    {
+      "id": "profile-builder-sketchup",
+      "category": "extensions",
+      "title": "Profile Builder Review: Parametric Assemblies in SketchUp",
+      "keyword": "profile builder sketchup",
+      "angle": "What it does, who needs it.",
+      "slug": "profile-builder-sketchup"
+    },
+    {
+      "id": "sketchup-roof-extension",
+      "category": "extensions",
+      "title": "Best Roof Extensions for SketchUp",
+      "keyword": "sketchup roof extension",
+      "angle": "Compare popular roof plugins.",
+      "slug": "sketchup-roof-extension"
+    },
+    {
+      "id": "install-sketchup-extension-rbz",
+      "category": "extensions",
+      "title": "How to Install SketchUp Extensions (.rbz) Safely",
+      "keyword": "install sketchup extension rbz",
+      "angle": "Extension Manager, trusted sources, troubleshooting.",
+      "slug": "install-sketchup-extension-rbz"
+    },
+    {
+      "id": "sketchup-organic-modeling-extensions",
+      "category": "extensions",
+      "title": "Best Organic Modeling Extensions for SketchUp",
+      "keyword": "sketchup organic modeling extensions",
+      "angle": "SubD, Artisan, Vertex Tools, etc.",
+      "slug": "sketchup-organic-modeling-extensions"
+    },
+    {
+      "id": "sketchup-landscape-extensions",
+      "category": "extensions",
+      "title": "Best SketchUp Extensions for Landscape Design",
+      "keyword": "sketchup landscape extensions",
+      "angle": "Scatter, terrain, plants.",
+      "slug": "sketchup-landscape-extensions"
+    },
+    {
+      "id": "curic-sketchup",
+      "category": "extensions",
+      "title": "Curic Extensions Overview: Are They Worth It?",
+      "keyword": "curic sketchup",
+      "angle": "Popular Curic tools and use cases.",
+      "slug": "curic-sketchup"
+    },
+    {
+      "id": "fredo6-sketchup",
+      "category": "extensions",
+      "title": "Fredo6 Extensions Explained: FredoScale, Round Corner, Curviloft",
+      "keyword": "fredo6 sketchup",
+      "angle": "What each popular Fredo6 tool does.",
+      "slug": "fredo6-sketchup"
+    },
+    {
+      "id": "sketchup-interior-design-extensions",
+      "category": "extensions",
+      "title": "Best SketchUp Extensions for Interior Design",
+      "keyword": "sketchup interior design extensions",
+      "angle": "Furniture, lighting, documentation.",
+      "slug": "sketchup-interior-design-extensions"
+    },
+    {
+      "id": "skalp-sketchup",
+      "category": "extensions",
+      "title": "Skalp for SketchUp Review: Better Section Fills",
+      "keyword": "skalp sketchup",
+      "angle": "Features versus native section fills.",
+      "slug": "skalp-sketchup"
+    },
+    {
+      "id": "best-rendering-software-for-sketchup",
+      "category": "rendering",
+      "title": "Best Rendering Software for SketchUp Compared",
+      "keyword": "best rendering software for sketchup",
+      "angle": "V-Ray, Enscape, D5, Twinmotion, Lumion, Thea — table of price model, realtime vs offline, hardware.",
+      "slug": "best-rendering-software-for-sketchup"
+    },
+    {
+      "id": "vray-sketchup-tutorial",
+      "category": "rendering",
+      "title": "V-Ray for SketchUp: A Beginner Rendering Workflow",
+      "keyword": "vray sketchup tutorial",
+      "angle": "Lights, materials, render settings, denoiser.",
+      "slug": "vray-sketchup-tutorial"
+    },
+    {
+      "id": "enscape-sketchup",
+      "category": "rendering",
+      "title": "Enscape for SketchUp: Getting Great Renders Fast",
+      "keyword": "enscape sketchup",
+      "angle": "Setup, assets, atmosphere, export.",
+      "slug": "enscape-sketchup"
+    },
+    {
+      "id": "d5-render-sketchup",
+      "category": "rendering",
+      "title": "D5 Render with SketchUp: Free Realtime Rendering Workflow",
+      "keyword": "d5 render sketchup",
+      "angle": "LiveSync, free vs pro, GPU needs.",
+      "slug": "d5-render-sketchup"
+    },
+    {
+      "id": "twinmotion-sketchup",
+      "category": "rendering",
+      "title": "Twinmotion and SketchUp: Datasmith Workflow Guide",
+      "keyword": "twinmotion sketchup",
+      "angle": "Direct link, materials, licensing notes.",
+      "slug": "twinmotion-sketchup"
+    },
+    {
+      "id": "enscape-vs-vray",
+      "category": "rendering",
+      "title": "Enscape vs V-Ray for SketchUp",
+      "keyword": "enscape vs vray",
+      "angle": "Honest comparison by use case.",
+      "slug": "enscape-vs-vray"
+    },
+    {
+      "id": "free-rendering-sketchup",
+      "category": "rendering",
+      "title": "Free Rendering Options for SketchUp",
+      "keyword": "free rendering sketchup",
+      "angle": "Free tiers and free renderers, limits.",
+      "slug": "free-rendering-sketchup"
+    },
+    {
+      "id": "sketchup-interior-rendering-lighting",
+      "category": "rendering",
+      "title": "How to Light an Interior Scene for Realistic Renders",
+      "keyword": "sketchup interior rendering lighting",
+      "angle": "Principles that apply across renderers.",
+      "slug": "sketchup-interior-rendering-lighting"
+    },
+    {
+      "id": "sketchup-pbr-materials",
+      "category": "rendering",
+      "title": "PBR Materials in SketchUp Explained",
+      "keyword": "sketchup pbr materials",
+      "angle": "Roughness, metalness, normal maps, native support.",
+      "slug": "sketchup-pbr-materials"
+    },
+    {
+      "id": "post-processing-sketchup-renders",
+      "category": "rendering",
+      "title": "Post-Processing SketchUp Renders in Photoshop and Free Alternatives",
+      "keyword": "post processing sketchup renders",
+      "angle": "Color grading, entourage, GIMP/Photopea.",
+      "slug": "post-processing-sketchup-renders"
+    },
+    {
+      "id": "sketchup-ai-render",
+      "category": "rendering",
+      "title": "Using AI Render Tools with SketchUp",
+      "keyword": "sketchup ai render",
+      "angle": "SketchUp Diffusion and third-party AI tools; pros and limits.",
+      "slug": "sketchup-ai-render"
+    },
+    {
+      "id": "sketchup-exterior-rendering",
+      "category": "rendering",
+      "title": "Rendering Exteriors: Sky, Grass and Vegetation Tips",
+      "keyword": "sketchup exterior rendering",
+      "angle": "Proxies, scatter, HDRI.",
+      "slug": "sketchup-exterior-rendering"
+    },
+    {
+      "id": "sketchup-for-woodworking",
+      "category": "workflows",
+      "title": "SketchUp for Woodworking: Designing Furniture Step by Step",
+      "keyword": "sketchup for woodworking",
+      "angle": "Board components, joinery, cut lists.",
+      "slug": "sketchup-for-woodworking"
+    },
+    {
+      "id": "sketchup-3d-printing",
+      "category": "workflows",
+      "title": "SketchUp for 3D Printing: Complete Workflow",
+      "keyword": "sketchup 3d printing",
+      "angle": "Units, solids, STL export, slicer tips.",
+      "slug": "sketchup-3d-printing"
+    },
+    {
+      "id": "sketchup-for-interior-design",
+      "category": "workflows",
+      "title": "SketchUp for Interior Designers",
+      "keyword": "sketchup for interior design",
+      "angle": "Space planning to client presentation.",
+      "slug": "sketchup-for-interior-design"
+    },
+    {
+      "id": "sketchup-landscape-design",
+      "category": "workflows",
+      "title": "SketchUp for Landscape Architecture",
+      "keyword": "sketchup landscape design",
+      "angle": "Terrain, planting, site plans.",
+      "slug": "sketchup-landscape-design"
+    },
+    {
+      "id": "sketchup-for-architects",
+      "category": "workflows",
+      "title": "SketchUp for Architects: From Concept to Permit Set",
+      "keyword": "sketchup for architects",
+      "angle": "Templates, LayOut, BIM interoperability.",
+      "slug": "sketchup-for-architects"
+    },
+    {
+      "id": "sketchup-kitchen-bath-design",
+      "category": "workflows",
+      "title": "SketchUp for Kitchen and Bath Designers",
+      "keyword": "sketchup kitchen bath design",
+      "angle": "Cabinet libraries, presentations.",
+      "slug": "sketchup-kitchen-bath-design"
+    },
+    {
+      "id": "sketchup-stage-design",
+      "category": "workflows",
+      "title": "SketchUp for Set and Stage Design",
+      "keyword": "sketchup stage design",
+      "angle": "Venue models, lighting previews.",
+      "slug": "sketchup-stage-design"
+    },
+    {
+      "id": "sketchup-deck-design",
+      "category": "workflows",
+      "title": "SketchUp for Deck and Patio Design",
+      "keyword": "sketchup deck design",
+      "angle": "Framing, material takeoffs.",
+      "slug": "sketchup-deck-design"
+    },
+    {
+      "id": "sketchup-cnc",
+      "category": "workflows",
+      "title": "SketchUp for CNC: Exporting Toolpath-Ready Geometry",
+      "keyword": "sketchup cnc",
+      "angle": "DXF/SVG export, CAM options.",
+      "slug": "sketchup-cnc"
+    },
+    {
+      "id": "sketchup-vs-revit",
+      "category": "workflows",
+      "title": "SketchUp vs Revit: Which Should You Learn?",
+      "keyword": "sketchup vs revit",
+      "angle": "Fair comparison for different careers.",
+      "slug": "sketchup-vs-revit"
+    },
+    {
+      "id": "sketchup-vs-blender",
+      "category": "workflows",
+      "title": "SketchUp vs Blender for Architecture",
+      "keyword": "sketchup vs blender",
+      "angle": "Strengths of each, when to combine.",
+      "slug": "sketchup-vs-blender"
+    },
+    {
+      "id": "sketchup-vs-autocad",
+      "category": "workflows",
+      "title": "SketchUp vs AutoCAD: Differences Explained",
+      "keyword": "sketchup vs autocad",
+      "angle": "2D drafting vs 3D modeling, interoperability.",
+      "slug": "sketchup-vs-autocad"
+    },
+    {
+      "id": "sketchup-vs-fusion-360",
+      "category": "workflows",
+      "title": "SketchUp vs Fusion 360 for Woodworking and 3D Printing",
+      "keyword": "sketchup vs fusion 360",
+      "angle": "Direct vs parametric modeling.",
+      "slug": "sketchup-vs-fusion-360"
+    },
+    {
+      "id": "sketchup-template",
+      "category": "workflows",
+      "title": "Building a SketchUp Template for Faster Projects",
+      "keyword": "sketchup template",
+      "angle": "Units, styles, tags, scenes, default components.",
+      "slug": "sketchup-template"
+    },
+    {
+      "id": "trimble-connect-sketchup",
+      "category": "workflows",
+      "title": "How to Collaborate on SketchUp Models with Trimble Connect",
+      "keyword": "trimble connect sketchup",
+      "angle": "Sharing, versions, reference models.",
+      "slug": "trimble-connect-sketchup"
+    },
+    {
+      "id": "sketchup-client-presentation",
+      "category": "workflows",
+      "title": "How to Present SketchUp Models to Clients",
+      "keyword": "sketchup client presentation",
+      "angle": "Scenes, styles, walkthroughs, AR/VR viewers.",
+      "slug": "sketchup-client-presentation"
+    },
+    {
+      "id": "sketchup-freelance-rates",
+      "category": "workflows",
+      "title": "How Much Do SketchUp Freelancers Charge?",
+      "keyword": "sketchup freelance rates",
+      "angle": "Rates by task/region, how to find work. Use cautious ranges and cite sources.",
+      "slug": "sketchup-freelance-rates"
+    },
+    {
+      "id": "sketchup-jobs",
+      "category": "workflows",
+      "title": "How to Get a Job Using SketchUp",
+      "keyword": "sketchup jobs",
+      "angle": "Industries hiring, portfolio tips, certifications.",
+      "slug": "sketchup-jobs"
+    },
+    {
+      "id": "best-laptop-for-sketchup",
+      "category": "hardware",
+      "title": "Best Laptops for SketchUp",
+      "keyword": "best laptop for sketchup",
+      "angle": "What specs matter (single-core CPU speed, GPU for rendering), buying guide by budget.",
+      "slug": "best-laptop-for-sketchup"
+    },
+    {
+      "id": "sketchup-system-requirements",
+      "category": "hardware",
+      "title": "SketchUp System Requirements Explained",
+      "keyword": "sketchup system requirements",
+      "angle": "Official requirements plus practical recommendations.",
+      "slug": "sketchup-system-requirements"
+    },
+    {
+      "id": "best-mouse-for-sketchup",
+      "category": "hardware",
+      "title": "Best Mouse for SketchUp",
+      "keyword": "best mouse for sketchup",
+      "angle": "Why a 3-button scroll mouse matters, 3D mice.",
+      "slug": "best-mouse-for-sketchup"
+    },
+    {
+      "id": "best-gpu-for-sketchup",
+      "category": "hardware",
+      "title": "Best Graphics Card for SketchUp and Rendering",
+      "keyword": "best gpu for sketchup",
+      "angle": "SketchUp vs GPU renderers requirements.",
+      "slug": "best-gpu-for-sketchup"
+    },
+    {
+      "id": "sketchup-mac-apple-silicon",
+      "category": "hardware",
+      "title": "Can You Run SketchUp on a Mac? Apple Silicon Guide",
+      "keyword": "sketchup mac apple silicon",
+      "angle": "Performance, renderer compatibility.",
+      "slug": "sketchup-mac-apple-silicon"
+    },
+    {
+      "id": "pc-build-for-sketchup",
+      "category": "hardware",
+      "title": "Best Desktop PC Build for SketchUp and Enscape",
+      "keyword": "pc build for sketchup",
+      "angle": "Budget and high-end parts lists.",
+      "slug": "pc-build-for-sketchup"
+    },
+    {
+      "id": "spacemouse-sketchup",
+      "category": "hardware",
+      "title": "3Dconnexion SpaceMouse with SketchUp: Is It Worth It?",
+      "keyword": "spacemouse sketchup",
+      "angle": "Setup and who benefits.",
+      "slug": "spacemouse-sketchup"
+    },
+    {
+      "id": "best-monitor-for-3d-modeling",
+      "category": "hardware",
+      "title": "Best Monitors for 3D Modeling and Rendering",
+      "keyword": "best monitor for 3d modeling",
+      "angle": "Resolution, color accuracy, size.",
+      "slug": "best-monitor-for-3d-modeling"
+    },
+    {
+      "id": "sketchup-slow-fix",
+      "category": "hardware",
+      "title": "Why Is SketchUp So Slow? Hardware and Settings Fixes",
+      "keyword": "sketchup slow fix",
+      "angle": "Graphics settings, drivers, hardware bottlenecks.",
+      "slug": "sketchup-slow-fix"
+    },
+    {
+      "id": "best-3d-printer-for-beginners",
+      "category": "hardware",
+      "title": "Best 3D Printers for SketchUp Users",
+      "keyword": "best 3d printer for beginners",
+      "angle": "Buying guide for model makers and architects.",
+      "slug": "best-3d-printer-for-beginners"
+    }
+  ]
+}
