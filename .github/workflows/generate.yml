@@ -39,17 +39,41 @@ jobs:
           cache: npm
       - run: npm ci
 
-      - name: Write article with Claude
+      - name: Pick topic
+        id: job
+        env:
+          # "claude-code" (default) bills your Claude subscription; "api" bills an Anthropic API key.
+          ENGINE: ${{ vars.ARTICLE_ENGINE || 'claude-code' }}
+        run: |
+          NEWS=""
+          if [ "${{ github.event.schedule }}" = "7 14 * * 2" ] || [ "${{ inputs.mode }}" = "news" ]; then NEWS="--news"; fi
+          echo "news=$NEWS" >> "$GITHUB_OUTPUT"
+          echo "engine=$ENGINE" >> "$GITHUB_OUTPUT"
+          if [ "$ENGINE" = "claude-code" ]; then node scripts/generate-post.mjs --prepare $NEWS; fi
+
+      - name: Write article with Claude Code
+        if: steps.job.outputs.engine == 'claude-code'
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ github.token }}
+          prompt: Read .article/prompt.md and follow its instructions exactly. Finish by writing the article to .article/draft.md.
+          claude_args: >-
+            --allowedTools "WebSearch,WebFetch,Read,Write,Glob,Grep"
+            --max-turns 40
+            ${{ vars.CLAUDE_CODE_MODEL && format('--model {0}', vars.CLAUDE_CODE_MODEL) || '' }}
+
+      - name: Validate and save article
         id: gen
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
           CLAUDE_EFFORT: ${{ vars.CLAUDE_EFFORT }}
         run: |
-          if [ "${{ github.event.schedule }}" = "7 14 * * 2" ] || [ "${{ inputs.mode }}" = "news" ]; then
-            node scripts/generate-post.mjs --news
+          if [ "${{ steps.job.outputs.engine }}" = "claude-code" ]; then
+            node scripts/generate-post.mjs --finalize
           else
-            node scripts/generate-post.mjs
+            node scripts/generate-post.mjs ${{ steps.job.outputs.news }}
           fi
 
       - name: Verify the site still builds
