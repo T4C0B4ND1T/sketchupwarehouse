@@ -3,11 +3,21 @@ import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
 import AdSlot from '../components/AdSlot.astro';
 import Newsletter from '../components/Newsletter.astro';
+import Section from '../components/Section.astro';
+import Icon from '../components/Icon.astro';
 import { getPublishedPosts } from '../lib/posts';
 import { SITE, CATEGORIES } from '../site.config';
 
 const posts = await getPublishedPosts();
 const latest = posts.slice(0, SITE.postsPerPage);
+const topics = Object.entries(CATEGORIES);
+const sourcesCited = posts.reduce((n, p) => n + p.data.sources.length, 0);
+const stats = [
+  { value: posts.length, label: 'Articles' },
+  { value: topics.length, label: 'Topics' },
+  { value: sourcesCited, label: 'Sources cited' },
+  { value: '$0', label: 'Always free' },
+];
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
@@ -17,30 +27,65 @@ const jsonLd = {
 };
 ---
 <Base jsonLd={jsonLd}>
-  <section class="hero">
-    <h1>Model faster. Render better. Ship the project.</h1>
-    <p>{SITE.description}</p>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <p class="label"><b>00.</b> {SITE.tagline}</p>
+      <h1 id="hero-title" class="display">Model faster. Render better. Ship <em>the project.</em></h1>
+      <p class="lede">{SITE.description}</p>
+      <div class="hero-actions">
+        <a class="btn" href="#latest">Latest articles <Icon name="arrow" class="icon" /></a>
+        <a class="btn btn--secondary" href="#topics">Browse topics</a>
+      </div>
+    </div>
+    <div class="composition swiss-grid-pattern" aria-hidden="true">
+      <div class="c-post"></div>
+      <div class="c-circle"></div>
+      <div class="c-square swiss-dots"></div>
+      <div class="c-block"></div>
+      <div class="c-bar"></div>
+      <div class="c-caption">Fig. 01 — Push / Pull</div>
+    </div>
   </section>
 
-  <h2 class="section-title">Latest articles</h2>
-  <div class="grid">
-    {latest.map((post) => <PostCard post={post} />)}
+  <div class="stats">
+    {stats.map((s) => (
+      <div class="stat">
+        <Icon name="plus" class="plus" />
+        <strong>{s.value}</strong>
+        <span class="label">{s.label}</span>
+      </div>
+    ))}
   </div>
-  {posts.length > SITE.postsPerPage && (
-    <div class="pager"><span></span><a class="btn" href="/blog/2/">Older articles →</a></div>
-  )}
+
+  <Section index="01" label="Journal" title="Latest articles" id="latest">
+    <p slot="intro">New tutorials, reviews and release notes — researched, cited and updated when SketchUp changes.</p>
+    <div class="grid">
+      {latest.map((post, i) => <PostCard post={post} index={i + 1} />)}
+    </div>
+    {posts.length > SITE.postsPerPage && (
+      <nav class="pager pager--single" aria-label="Pagination">
+        <a href="/blog/2/">Older articles <Icon name="arrow" class="icon" /></a>
+      </nav>
+    )}
+  </Section>
 
   <AdSlot slot="footer" />
 
-  <h2 class="section-title" style="margin-top:48px">Browse by topic</h2>
-  <div class="grid">
-    {Object.entries(CATEGORIES).map(([key, c]) => (
-      <article class="card">
-        <h3><a href={`/category/${key}/`}>{c.title}</a></h3>
-        <p>{c.description}</p>
-      </article>
-    ))}
-  </div>
+  <Section index="02" label="Index" title="Browse by topic" id="topics">
+    <p slot="intro">Six disciplines, one tool. Pick the part of your workflow you want to improve.</p>
+    <div class="grid">
+      {topics.map(([key, c], i) => (
+        <article class="card card--topic">
+          <div class="card-top">
+            <span class="num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <Icon name="plus" class="plus" />
+          </div>
+          <h3><a href={`/category/${key}/`}>{c.title}</a></h3>
+          <p>{c.description}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
 
   <Newsletter />
 </Base>

@@ -3,24 +3,29 @@ import Base from '../layouts/Base.astro';
 import { SITE } from '../site.config';
 ---
 <Base title="Privacy policy" description={`Privacy policy for ${SITE.name}.`}>
-  <div class="page prose">
+  <section class="page-hero swiss-grid-pattern bg-muted">
+    <p class="label"><b>§</b> Legal</p>
     <h1>Privacy policy</h1>
-    <p><em>Last updated: 2026-09-28</em></p>
-    <p>{SITE.name} does not require accounts and does not collect personal information directly, except the email address you choose to give us when subscribing to the newsletter or contacting us.</p>
-    <h2>Advertising</h2>
-    <p>
-      We use Google AdSense to show ads. Google and its partners use cookies to serve ads based on your prior visits to
-      this and other websites. You can opt out of personalized advertising at
-      <a href="https://adssettings.google.com/">Google Ads Settings</a> or
-      <a href="https://www.aboutads.info/choices/">aboutads.info</a>. Learn more about
-      <a href="https://policies.google.com/technologies/partner-sites">how Google uses data from partner sites</a>.
-      Visitors in the EEA, UK and Switzerland are asked for consent through a Google-certified consent management platform.
-    </p>
-    <h2>Analytics</h2>
-    <p>We use privacy-friendly analytics to count page views. These do not identify you personally.</p>
-    <h2>Affiliate links</h2>
-    <p>Some links go to retailers such as Amazon, which may set their own cookies to attribute purchases. See our <a href="/disclosure/">affiliate disclosure</a>.</p>
-    <h2>Contact</h2>
-    <p>Questions about this policy: <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.</p>
+  </section>
+  <div class="page-body">
+    <div class="prose">
+      <p><em>Last updated: 2026-09-28</em></p>
+      <p>{SITE.name} does not require accounts and does not collect personal information directly, except the email address you choose to give us when subscribing to the newsletter or contacting us.</p>
+      <h2>Advertising</h2>
+      <p>
+        We use Google AdSense to show ads. Google and its partners use cookies to serve ads based on your prior visits to
+        this and other websites. You can opt out of personalized advertising at
+        <a href="https://adssettings.google.com/">Google Ads Settings</a> or
+        <a href="https://www.aboutads.info/choices/">aboutads.info</a>. Learn more about
+        <a href="https://policies.google.com/technologies/partner-sites">how Google uses data from partner sites</a>.
+        Visitors in the EEA, UK and Switzerland are asked for consent through a Google-certified consent management platform.
+      </p>
+      <h2>Analytics</h2>
+      <p>We use privacy-friendly analytics to count page views. These do not identify you personally.</p>
+      <h2>Affiliate links</h2>
+      <p>Some links go to retailers such as Amazon, which may set their own cookies to attribute purchases. See our <a href="/disclosure/">affiliate disclosure</a>.</p>
+      <h2>Contact</h2>
+      <p>Questions about this policy: <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.</p>
+    </div>
   </div>
 </Base>

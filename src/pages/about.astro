@@ -3,24 +3,29 @@ import Base from '../layouts/Base.astro';
 import { SITE } from '../site.config';
 ---
 <Base title="About" description={`About ${SITE.name} and our editorial standards.`}>
-  <div class="page prose">
+  <section class="page-hero swiss-grid-pattern bg-muted">
+    <p class="label"><b>§</b> Colophon</p>
     <h1>About {SITE.name}</h1>
-    <p>
-      {SITE.name} is an independent resource for people who design in SketchUp — architects, interior designers,
-      woodworkers, landscape designers, set designers and hobbyists. We publish practical tutorials, extension
-      roundups, rendering guides, hardware advice and news about the SketchUp ecosystem.
-    </p>
-    <p>
-      We are not affiliated with Trimble Inc. SketchUp and 3D Warehouse are trademarks of Trimble Inc. Looking for
-      free 3D models? The official library is <a href="https://3dwarehouse.sketchup.com/">3D Warehouse</a>.
-    </p>
+  </section>
+  <div class="page-body">
+    <div class="prose">
+      <p>
+        {SITE.name} is an independent resource for people who design in SketchUp — architects, interior designers,
+        woodworkers, landscape designers, set designers and hobbyists. We publish practical tutorials, extension
+        roundups, rendering guides, hardware advice and news about the SketchUp ecosystem.
+      </p>
+      <p>
+        We are not affiliated with Trimble Inc. SketchUp and 3D Warehouse are trademarks of Trimble Inc. Looking for
+        free 3D models? The official library is <a href="https://3dwarehouse.sketchup.com/">3D Warehouse</a>.
+      </p>
 
-    <h2 id="editorial-standards">Editorial standards</h2>
-    <ul>
-      <li>Articles are researched from official documentation, release notes and reputable publications, which we cite at the end of each article.</li>
-      <li>Some articles are drafted with AI assistance. Those articles are labeled, cite their sources, and are held to the same accuracy standard as everything else.</li>
-      <li>We correct mistakes quickly. If you find one, <a href="/contact/">let us know</a>.</li>
-      <li>Product recommendations are never paid placements. Some links earn us a commission — see our <a href="/disclosure/">affiliate disclosure</a>.</li>
-    </ul>
+      <h2 id="editorial-standards">Editorial standards</h2>
+      <ul>
+        <li>Articles are researched from official documentation, release notes and reputable publications, which we cite at the end of each article.</li>
+        <li>Some articles are drafted with AI assistance. Those articles are labeled, cite their sources, and are held to the same accuracy standard as everything else.</li>
+        <li>We correct mistakes quickly. If you find one, <a href="/contact/">let us know</a>.</li>
+        <li>Product recommendations are never paid placements. Some links earn us a commission — see our <a href="/disclosure/">affiliate disclosure</a>.</li>
+      </ul>
+    </div>
   </div>
 </Base>
