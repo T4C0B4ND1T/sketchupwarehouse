@@ -3,13 +3,16 @@ import { MONETIZATION } from '../site.config';
 const action = MONETIZATION.newsletterAction;
 ---
 {action && (
-  <section class="newsletter">
-    <h2>Get one useful SketchUp tip every week</h2>
-    <p>Tutorials, extension picks and release news. No spam, unsubscribe anytime.</p>
+  <section class="newsletter" aria-labelledby="nl-title">
+    <div>
+      <p class="label"><b>→</b> Weekly dispatch</p>
+      <h2 id="nl-title">One useful SketchUp tip every week</h2>
+      <p>Tutorials, extension picks and release news. No spam, unsubscribe anytime.</p>
+    </div>
     <form action={action} method="post" target="_blank">
-      <label class="sr-only" for="nl-email">Email address</label>
-      <input id="nl-email" type="email" name="email" placeholder="you@example.com" required />
-      <button type="submit">Subscribe</button>
+      <label class="label" for="nl-email">Email address</label>
+      <input id="nl-email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required />
+      <button class="btn" type="submit">Subscribe</button>
     </form>
   </section>
 )}

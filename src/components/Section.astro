@@ -1,0 +1,18 @@
+---
+// A numbered section: sticky 4-col header on the left, 8-col body on the right.
+interface Props { index: string; label: string; title: string; id?: string }
+const { index, label, title, id } = Astro.props;
+const headingId = id ? `${id}-title` : undefined;
+---
+<section class="section" id={id} aria-labelledby={headingId}>
+  <header class="section-head swiss-dots">
+    <div class="sticky">
+      <p class="label"><b>{index}.</b> {label}</p>
+      <h2 id={headingId}>{title}</h2>
+      <slot name="intro" />
+    </div>
+  </header>
+  <div class="section-body">
+    <slot />
+  </div>
+</section>

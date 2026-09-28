@@ -2,13 +2,19 @@
 import type { Post } from '../lib/posts';
 import { postUrl, formatDate } from '../lib/posts';
 import { CATEGORIES } from '../site.config';
+import Icon from './Icon.astro';
 
-interface Props { post: Post }
-const { post } = Astro.props;
+interface Props { post: Post; index?: number }
+const { post, index } = Astro.props;
 const cat = CATEGORIES[post.data.category];
 ---
 <article class="card">
-  <a class="card-cat" href={`/category/${post.data.category}/`}>{cat.title}</a>
+  <div class="card-top">
+    <a class="label" href={`/category/${post.data.category}/`}>
+      {index !== undefined && <b>{String(index).padStart(2, '0')}.</b>} {cat.title}
+    </a>
+    <Icon name="arrow" class="arrow" />
+  </div>
   <h3><a href={postUrl(post)}>{post.data.title}</a></h3>
   <p>{post.data.description}</p>
   <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>

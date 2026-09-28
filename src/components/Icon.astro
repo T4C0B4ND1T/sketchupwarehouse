@@ -1,0 +1,11 @@
+---
+// Lucide-style functional glyphs, inlined so the site stays zero-JS.
+// Stroke weight matches the heavy type (2.5) with square, not round, joins.
+interface Props { name: 'arrow' | 'plus' | 'cube'; class?: string }
+const { name, class: className } = Astro.props;
+---
+<svg class={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">
+  {name === 'arrow' && <path d="M4 12h15M13 6l6 6-6 6" />}
+  {name === 'plus' && <path d="M12 4v16M4 12h16" />}
+  {name === 'cube' && <><path d="M12 2.5 21 7.5v9L12 21.5 3 16.5v-9z" /><path d="M3 7.5l9 5 9-5M12 12.5v9" /></>}
+</svg>

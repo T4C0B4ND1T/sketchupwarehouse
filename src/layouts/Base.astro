@@ -1,5 +1,7 @@
 ---
+import '@fontsource-variable/inter/wght.css';
 import '../styles/global.css';
+import Icon from '../components/Icon.astro';
 import { SITE, MONETIZATION, ANALYTICS, CATEGORIES } from '../site.config';
 
 interface Props {
@@ -24,6 +26,7 @@ const pageTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} — ${SITE.t
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(image, Astro.site);
 const year = new Date().getFullYear();
+const path = Astro.url.pathname;
 ---
 <!doctype html>
 <html lang="en">
@@ -67,38 +70,65 @@ const year = new Date().getFullYear();
       </>
     )}
   </head>
-  <body>
+  <body class="swiss-noise">
     <a class="skip" href="#main">Skip to content</a>
-    <header class="site-header">
-      <div class="wrap header-inner">
-        <a class="logo" href="/">
-          <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 29 10v12L16 29 3 22V10z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M3 10l13 7 13-7M16 17v12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg>
-          <span>{SITE.name}</span>
-        </a>
-        <nav aria-label="Main">
-          {Object.entries(CATEGORIES).map(([key, c]) => (
-            <a href={`/category/${key}/`}>{c.title.split(' ')[0]}</a>
-          ))}
-        </nav>
-      </div>
-    </header>
+    <div class="frame">
+      <header class="site-header">
+        <div class="header-inner">
+          <a class="logo" href="/">
+            <span class="logo-mark"><Icon name="cube" /></span>
+            <span>{SITE.name}</span>
+          </a>
+          <nav class="site-nav" aria-label="Main">
+            {Object.entries(CATEGORIES).map(([key, c]) => {
+              const href = `/category/${key}/`;
+              const text = c.title.split(' ')[0];
+              return (
+                <a href={href} aria-current={path === href ? 'page' : undefined}>
+                  <span class="slide"><span>{text}</span><span aria-hidden="true">{text}</span></span>
+                </a>
+              );
+            })}
+          </nav>
+        </div>
+      </header>
 
-    <main id="main" class="wrap">
-      <slot />
-    </main>
+      <main id="main">
+        <slot />
+      </main>
 
-    <footer class="site-footer">
-      <div class="wrap footer-inner">
-        <p>&copy; {year} {SITE.name}. Independent site, not affiliated with or endorsed by Trimble Inc. SketchUp is a trademark of Trimble Inc.</p>
-        <nav aria-label="Footer">
-          <a href="/about/">About</a>
-          <a href="/contact/">Contact</a>
-          <a href="/privacy/">Privacy</a>
-          <a href="/disclosure/">Affiliate disclosure</a>
-          <a href="/rss.xml">RSS</a>
-        </nav>
-      </div>
-    </footer>
+      <footer class="site-footer">
+        <div class="footer-mark" aria-hidden="true">
+          <span>SketchUp</span><span>Warehouse</span>
+        </div>
+        <div class="footer-cols">
+          <div class="about">
+            <p class="label"><b>&copy;</b> {year} {SITE.name}</p>
+            <p>Independent site, not affiliated with or endorsed by Trimble Inc. SketchUp is a trademark of Trimble Inc.</p>
+          </div>
+          <nav aria-label="Topics">
+            <p class="label">Topics</p>
+            <ul>
+              {Object.entries(CATEGORIES).map(([key, c]) => <li><a href={`/category/${key}/`}>{c.title}</a></li>)}
+            </ul>
+          </nav>
+          <nav aria-label="Footer">
+            <p class="label">Site</p>
+            <ul>
+              <li><a href="/about/">About</a></li>
+              <li><a href="/contact/">Contact</a></li>
+              <li><a href="/privacy/">Privacy</a></li>
+              <li><a href="/disclosure/">Affiliate disclosure</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="footer-base">
+          <span>{SITE.tagline}</span>
+          <span>Est. {year}</span>
+        </div>
+      </footer>
+    </div>
 
     {ANALYTICS.cloudflareToken && (
       <script
