@@ -57,6 +57,15 @@ Suggested order:
 3. **Right away:** Amazon Associates (hardware articles), plus the Chaos (V-Ray/Enscape) and D5 affiliate programs if they're accepting partners.
 4. **At about 10k sessions/month:** move from AdSense to Journey by Mediavine or Ezoic, which usually pay about 2–3× more per visitor.
 
+## Cover photos
+
+Each article gets a free stock photo from [Pexels](https://www.pexels.com). The photo appears under the article header, on the article's card in lists, and as its social preview image. Pexels photos are free for commercial use. Each photo is credited to its photographer, and the About page credits Pexels.
+
+- **Setup:** create a free API key at [pexels.com/api](https://www.pexels.com/api/). Add it under *Settings → Secrets and variables → Actions → Secrets* as `PEXELS_API_KEY`.
+- **Existing articles:** go to *Actions → Add cover photos → Run workflow*. It adds a photo to every article that doesn't have one, then redeploys.
+- **New articles:** the writer suggests an `imageQuery` for each article, and *Generate article* fetches the photo automatically. If the key isn't set, the article still publishes without a photo.
+- **Change a photo:** delete the `cover:` block from the article's front matter and its file in `src/content/posts/images/`. Edit `imageQuery` if you want a different search, then run *Add cover photos* again.
+
 ## Ad zones
 
 Ads appear only in designated zones that fit the site's grid. Each zone chooses the largest standard ad size that fits its own column width:

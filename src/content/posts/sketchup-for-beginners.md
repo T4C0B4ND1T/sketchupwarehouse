@@ -10,6 +10,7 @@ tags:
   - tools
   - shortcuts
   - tutorial
+imageQuery: "architect designing 3d model on laptop"
 aiAssisted: true
 topicId: sketchup-for-beginners
 sources:

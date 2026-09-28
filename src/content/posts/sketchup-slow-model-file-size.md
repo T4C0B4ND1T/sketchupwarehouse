@@ -4,6 +4,7 @@ description: "A slow SketchUp model is almost always fixable. Twelve practical w
 pubDate: 2026-09-26
 category: tutorials
 tags: [performance, file size, troubleshooting, tips]
+imageQuery: "computer workstation multiple monitors"
 aiAssisted: true
 topicId: sketchup-slow-model-file-size
 sources:

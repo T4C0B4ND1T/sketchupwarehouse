@@ -1,5 +1,6 @@
 ---
 import { render } from 'astro:content';
+import { Image, getImage } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import AdZone from '../../components/AdZone.astro';
 import PostCard from '../../components/PostCard.astro';
@@ -21,6 +22,10 @@ const cat = CATEGORIES[data.category];
 const related = relatedPosts(post, all);
 const toc = headings.filter((h) => h.depth === 2);
 const url = new URL(Astro.url.pathname, Astro.site).toString();
+// Social preview: the cover cropped to the standard 1200×630 share size.
+const ogImage = data.cover
+  ? (await getImage({ src: data.cover.src, width: 1200, height: 630, fit: 'cover', format: 'jpg' })).src
+  : undefined;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -28,6 +33,7 @@ const jsonLd = {
     {
       '@type': 'BlogPosting',
       headline: data.title,
+      ...(ogImage ? { image: new URL(ogImage, Astro.site).toString() } : {}),
       description: data.description,
       datePublished: data.pubDate.toISOString(),
       dateModified: (data.updatedDate ?? data.pubDate).toISOString(),
@@ -47,7 +53,7 @@ const jsonLd = {
   ],
 };
 ---
-<Base title={data.title} description={data.description} type="article" jsonLd={jsonLd}>
+<Base title={data.title} description={data.description} type="article" jsonLd={jsonLd} image={ogImage}>
   <article class="article">
     <header class="article-head">
       <a class="label" href={`/category/${data.category}/`}><b>→</b> {cat.title}</a>
@@ -59,6 +65,20 @@ const jsonLd = {
         <span>{readingTime(post.body)} min read</span>
       </div>
     </header>
+
+    {data.cover && (
+      <figure class="article-cover">
+        <Image
+          src={data.cover.src}
+          alt={data.cover.alt}
+          widths={[640, 960, 1440]}
+          sizes="(min-width: 1440px) 1432px, 100vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <figcaption>Photo: <a href={data.cover.creditUrl} rel="noopener">{data.cover.credit} / Pexels</a></figcaption>
+      </figure>
+    )}
 
     <AdZone zone="pageTop" />
 

@@ -1,0 +1,56 @@
+name: Add cover photos
+
+# Run by hand to add Pexels cover photos to every article that doesn't have one
+# yet (new articles get theirs automatically in "Generate article").
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: generate
+  cancel-in-progress: false
+
+jobs:
+  images:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.commit.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Fetch cover photos
+        env:
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+        run: |
+          if [ -z "$PEXELS_API_KEY" ]; then echo "::error::Add the PEXELS_API_KEY secret first"; exit 1; fi
+          node scripts/add-images.mjs
+
+      - name: Verify the site still builds
+        run: npm run build
+
+      - name: Commit
+        id: commit
+        run: |
+          git config user.name "sketchupwarehouse-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/content/posts
+          if git diff --cached --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+          git commit -m "Add cover photos"
+          git push origin "HEAD:${{ github.event.repository.default_branch }}"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    needs: images
+    if: needs.images.outputs.changed == 'true'
+    uses: ./.github/workflows/deploy.yml

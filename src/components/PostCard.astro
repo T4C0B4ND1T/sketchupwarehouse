@@ -3,12 +3,18 @@ import type { Post } from '../lib/posts';
 import { postUrl, formatDate } from '../lib/posts';
 import { CATEGORIES } from '../site.config';
 import Icon from './Icon.astro';
+import { Image } from 'astro:assets';
 
 interface Props { post: Post; index?: number }
 const { post, index } = Astro.props;
 const cat = CATEGORIES[post.data.category];
 ---
-<article class="card">
+<article class={post.data.cover ? 'card card--media' : 'card'}>
+  {post.data.cover && (
+    <div class="card-media">
+      <Image src={post.data.cover.src} alt="" widths={[480, 720]} sizes="(min-width: 1024px) 480px, 100vw" />
+    </div>
+  )}
   <div class="card-top">
     <a class="label" href={`/category/${post.data.category}/`}>
       {index !== undefined && <b>{String(index).padStart(2, '0')}.</b>} {cat.title}

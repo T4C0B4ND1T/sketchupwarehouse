@@ -365,6 +365,11 @@ a.label:hover { color: var(--accent-ink); }
 .card:focus-within { outline: 2px solid var(--accent); outline-offset: -6px; }
 .card:focus-within h3 a:focus-visible { outline: none; }
 
+/* Card with a photo: the image bleeds to the card edges above a thin rule */
+.card-media { margin: -40px calc(-1 * var(--gutter)) 8px; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: var(--rule-thin) solid var(--border); background: var(--muted); }
+.card-media img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform var(--ease); }
+.card:hover .card-media img { transform: scale(1.03); }
+
 /* Topic card variant: big index numeral, inverts to black */
 .card--topic { min-height: 260px; }
 .card--topic .num { font-size: var(--t-3xl); font-weight: 900; line-height: 0.8; letter-spacing: -0.06em; color: var(--accent); transition: color var(--ease-fast); }
@@ -411,6 +416,13 @@ a.label:hover { color: var(--accent-ink); }
 .sources li::marker { color: var(--accent-ink); font-weight: 800; }
 .ai-note { margin: 24px 0 0; font-size: var(--t-sm); color: var(--muted-fg); }
 .ai-note a, .sources a { text-decoration-thickness: 2px; text-underline-offset: 3px; }
+
+/* Cover photo: full-bleed band under the article header, credit in a strip */
+.article-cover { margin: 0; border-bottom: var(--rule) solid var(--border); }
+.article-cover img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; max-height: 72vh; object-fit: cover; }
+@media (min-width: 1024px) { .article-cover img { aspect-ratio: 21 / 9; } }
+.article-cover figcaption { padding: 10px var(--gutter); border-top: var(--rule-thin) solid var(--border); font-size: var(--t-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--muted-fg); }
+.article-cover figcaption a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: 3px; }
 
 /* ==========================================================================
    Prose — flush-left, ragged-right, rules instead of decoration
