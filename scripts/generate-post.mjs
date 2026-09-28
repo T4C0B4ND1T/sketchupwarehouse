@@ -36,6 +36,7 @@ const MODEL = process.env.CLAUDE_MODEL || 'claude-opus-5';
 const EFFORT = process.env.CLAUDE_EFFORT || 'medium';
 const CATEGORIES = ['tutorials', 'extensions', 'rendering', 'workflows', 'hardware', 'news'];
 const MIN_WORDS = 700;
+const MIN_SOURCES = 2;
 
 const args = new Set(process.argv.slice(2));
 const dryRun = args.has('--dry-run');
@@ -86,6 +87,8 @@ const SYSTEM = `You are the staff writer for SketchUp Warehouse (sketchupwarehou
 Write genuinely useful, accurate, people-first articles. Standards:
 - Research with web search before writing. Prefer official sources (sketchup.com, help.sketchup.com, forums.sketchup.com, extensions.sketchup.com, vendor docs) and reputable publications.
 - Never invent version numbers, prices, release dates, menu paths, keyboard shortcuts or features. If you cannot verify a detail, leave it out or say it may vary by version.
+- Verify every keyboard shortcut, modifier key (Shift/Ctrl/Option/Alt) and tool behavior you describe against the official SketchUp Help Center (help.sketchup.com) page for that tool before writing it. Modifier keys are easy to mix up — for example, with the Eraser, Shift hides edges while Ctrl/Option softens and smooths them.
+- Cite at least 2 distinct sources you actually consulted, including the official help page for any tool whose behavior you describe.
 - Be specific: concrete steps, real menu names, real extension names, practical tips from experience, common mistakes and how to fix them.
 - Plain, confident, friendly tone. No filler intros ("In today's fast-paced world..."), no "In conclusion", no hype, no emojis.
 - Structure with ## and ### headings, short paragraphs, numbered steps for procedures, and a comparison table when comparing options. Use <kbd>X</kbd> for keys.
@@ -194,7 +197,8 @@ function parseArticle(raw) {
   });
   const words = body.split(/\s+/).length;
   if (words < MIN_WORDS) problems.push(`too short (${words} words)`);
-  if (data.sources.length === 0) problems.push('no sources');
+  const distinctSources = new Set(data.sources.map((src) => src.url.replace(/[#?].*$/, '').replace(/\/$/, '')));
+  if (distinctSources.size < MIN_SOURCES) problems.push(`only ${distinctSources.size} source(s), need ${MIN_SOURCES}`);
   if (/^#\s/m.test(body)) problems.push('body contains an H1');
   if (problems.length) throw new Error(`Article failed quality checks: ${problems.join(', ')}`);
 
