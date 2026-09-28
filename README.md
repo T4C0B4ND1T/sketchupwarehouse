@@ -4,7 +4,7 @@ A static SketchUp content site that runs on its own: GitHub Actions has Claude r
 
 - **Site:** [Astro](https://astro.build) static site, fast, SEO-ready (sitemap, RSS, canonical URLs, Open Graph, JSON-LD `BlogPosting`/`BreadcrumbList`, `robots.txt`, `ads.txt`).
 - **Hosting:** GitHub Pages, $0.
-- **Content engine:** `scripts/generate-post.mjs` calls the Claude API with web search, writes a cited Markdown article and runs quality checks on it.
+- **Content engine:** by default, [Claude Code](https://github.com/anthropics/claude-code-action) runs inside GitHub Actions on your Claude subscription. It researches with web search and writes a cited Markdown article. `scripts/generate-post.mjs` picks the topic beforehand and runs quality checks on the result. It can also call the Claude API directly if you prefer pay-per-use billing.
 - **Schedule:** evergreen articles Mon/Wed/Fri, a news article on Tuesdays, and a daily rebuild. That's about 17 articles a month.
 
 ## Monthly running cost
@@ -14,11 +14,11 @@ A static SketchUp content site that runs on its own: GitHub Actions has Claude r
 | Domain (already owned) | about $1/mo ($10–20/yr renewal) |
 | Hosting (GitHub Pages) | $0 |
 | Build minutes (GitHub Actions) | $0 (a public repo, or well under the private-repo free tier) |
-| Claude API, about 17 articles/mo with `claude-opus-5` | about $5–10 |
-| Claude API with `CLAUDE_MODEL=claude-sonnet-5` | about $2–4 |
-| **Total** | **about $3–11/mo** |
+| Article writing with Claude Code (default) | $0 extra, uses your Claude Pro/Max plan's usage limits |
+| *or* Claude API with `claude-opus-5` (`ARTICLE_ENGINE=api`) | about $5–10 |
+| **Total** | **about $1/mo on top of your Claude plan** |
 
-These are estimates. Each article uses about 30–60k input tokens (mostly web-search results), 6–10k output tokens and up to 8 searches (billed at $10 per 1,000). The script logs token usage for every run, so you can check the real numbers in the Actions logs.
+With Claude Code, each run shares your plan's usage limits with your own Claude use. At about 4 articles a week, that's a noticeable share on Pro and comfortable on Max. If a run hits your limit, that article fails, nothing gets published, and the next scheduled run tries again.
 
 ## One-time setup (about 30 minutes)
 
@@ -28,7 +28,8 @@ These are estimates. Each article uses about 30–60k input tokens (mostly web-s
    - `CNAME` for `www` → `t4c0b4nd1t.github.io`
 
    Then, in *Settings → Pages*, set the custom domain to `sketchupwarehouse.com` and tick **Enforce HTTPS**. (`public/CNAME` is already committed.)
-3. **Add your Claude API key.** Create a key at [console.anthropic.com](https://console.anthropic.com). Make sure **web search is enabled** for the organization in Console settings. Then add the key under *Settings → Secrets and variables → Actions → Secrets* as `ANTHROPIC_API_KEY`. Setting a monthly spend limit in the Console is a good idea.
+3. **Connect your Claude subscription.** On your computer, install Claude Code (`npm install -g @anthropic-ai/claude-code`), then run `claude setup-token` and sign in with your Claude account. Copy the token it prints and add it under *Settings → Secrets and variables → Actions → Secrets* as `CLAUDE_CODE_OAUTH_TOKEN`.
+   - *Alternative, pay-per-use API:* create a key at [console.anthropic.com](https://console.anthropic.com) with web search enabled. Add it as the secret `ANTHROPIC_API_KEY`, and set the repository variable `ARTICLE_ENGINE` to `api`.
 4. **Allow the bot to push.** *Settings → Actions → General → Workflow permissions → Read and write*. Also tick "Allow GitHub Actions to create pull requests" if you plan to use review mode.
 5. **Test it.** *Actions → Generate article → Run workflow*. After a few minutes a new article should be live.
 
@@ -44,8 +45,9 @@ All monetization settings are **repository variables** (*Settings → Secrets an
 | `PUBLIC_NEWSLETTER_ACTION` | Form endpoint from a free newsletter tool (Buttondown, MailerLite, Kit). Shows a signup box. |
 | `PUBLIC_CF_ANALYTICS_TOKEN` or `PUBLIC_GA4_ID` | Free analytics. |
 | `PUBLIC_CONTACT_EMAIL` | Shown on the Contact and Privacy pages. |
-| `CLAUDE_MODEL` | Defaults to `claude-opus-5`. Set it to `claude-sonnet-5` for about half the cost. |
-| `CLAUDE_EFFORT` | `low` / `medium` (default) / `high`. |
+| `ARTICLE_ENGINE` | `claude-code` (default, uses your subscription) or `api` (uses `ANTHROPIC_API_KEY`). |
+| `CLAUDE_CODE_MODEL` | Optional model for Claude Code runs, e.g. `sonnet` to use less of your plan's usage. If unset, your plan's default model is used. |
+| `CLAUDE_MODEL` / `CLAUDE_EFFORT` | API engine only. The model defaults to `claude-opus-5` and effort to `medium`. |
 | `PUBLISH_MODE` | `auto` (default) publishes straight away. `review` opens a PR that you merge to publish. |
 
 Suggested order:
@@ -72,6 +74,11 @@ npm install
 npm run dev                                   # http://localhost:4321
 ANTHROPIC_API_KEY=... npm run generate:dry    # print an article without saving it
 ANTHROPIC_API_KEY=... npm run generate -- --news
+
+# Claude Code engine, as the Action runs it:
+node scripts/generate-post.mjs --prepare        # writes .article/prompt.md
+claude "Read .article/prompt.md and follow it"  # writes .article/draft.md
+node scripts/generate-post.mjs --finalize       # validates and saves the post
 ```
 
 Articles are plain Markdown files in `src/content/posts/`. You can edit, delete or write your own there. A post dated in the future goes live on its date, thanks to the daily rebuild.

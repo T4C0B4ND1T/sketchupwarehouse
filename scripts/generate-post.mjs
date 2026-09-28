@@ -5,12 +5,19 @@
 // asks Claude to find a fresh SketchUp news story), has Claude research it with
 // web search, and writes a Markdown post into src/content/posts/.
 //
-// Usage:
+// Two ways to run it:
+//
+// 1. Claude API (billed per token):
 //   node scripts/generate-post.mjs               # evergreen topic from the queue
 //   node scripts/generate-post.mjs --news        # latest-news article
 //   node scripts/generate-post.mjs --dry-run     # print the post instead of writing it
 //
-// Env:
+// 2. Claude Code (billed to a Claude subscription), used by the GitHub Action:
+//   node scripts/generate-post.mjs --prepare [--news]   # writes .article/prompt.md
+//   ...Claude Code follows the prompt and writes .article/draft.md...
+//   node scripts/generate-post.mjs --finalize           # validates the draft and saves the post
+//
+// Env (API mode only):
 //   ANTHROPIC_API_KEY   required
 //   CLAUDE_MODEL        optional, defaults to claude-opus-5
 //   CLAUDE_EFFORT       optional, low|medium|high (default medium)
@@ -32,7 +39,15 @@ const MIN_WORDS = 700;
 
 const args = new Set(process.argv.slice(2));
 const dryRun = args.has('--dry-run');
-const newsMode = args.has('--news');
+const prepareMode = args.has('--prepare');
+const finalizeMode = args.has('--finalize');
+const JOB_DIR = path.join(root, '.article');
+const JOB_FILE = path.join(JOB_DIR, 'job.json');
+const PROMPT_FILE = path.join(JOB_DIR, 'prompt.md');
+const DRAFT_FILE = path.join(JOB_DIR, 'draft.md');
+// In finalize mode the mode comes from the prepared job, not the CLI.
+const job = finalizeMode ? JSON.parse(fs.readFileSync(JOB_FILE, 'utf8')) : null;
+const newsMode = job ? job.news : args.has('--news');
 
 function slugify(s) {
   return s
@@ -191,12 +206,7 @@ function toMarkdown(data, body) {
   return `---\n${fm}\n---\n\n${body}\n`;
 }
 
-async function main() {
-  const published = existingPosts();
-  const topic = newsMode ? null : nextTopic(published);
-  console.error(newsMode ? '[topic] latest news' : `[topic] ${topic.id}: ${topic.title}`);
-
-  const raw = await callClaude(userPrompt(topic));
+function savePost(raw, topic, published) {
   const { data, body, words } = parseArticle(raw);
 
   const today = new Date().toISOString().slice(0, 10);
@@ -228,6 +238,47 @@ async function main() {
   if (process.env.GITHUB_OUTPUT && !dryRun) {
     fs.appendFileSync(process.env.GITHUB_OUTPUT, `title=${post.title.replace(/\n/g, ' ')}\nslug=${slug}\n`);
   }
+}
+
+function prepare(topic) {
+  fs.mkdirSync(JOB_DIR, { recursive: true });
+  fs.writeFileSync(JOB_FILE, JSON.stringify({ news: newsMode, topic }, null, 2));
+  fs.rmSync(DRAFT_FILE, { force: true });
+  const prompt = `${SYSTEM}
+
+## Your assignment
+
+${userPrompt(topic)}
+
+## How to deliver it
+
+- Use the WebSearch and WebFetch tools to research before writing.
+- Write the finished file (front matter + body, exactly in the output format above) to \`.article/draft.md\` using the Write tool.
+- Do not create, edit or delete any other file, and do not run git commands. A script validates and publishes the draft after you finish.
+`;
+  fs.writeFileSync(PROMPT_FILE, prompt);
+  console.error(`[prepared] ${path.relative(root, PROMPT_FILE)}`);
+}
+
+async function main() {
+  const published = existingPosts();
+
+  if (finalizeMode) {
+    if (!fs.existsSync(DRAFT_FILE)) throw new Error('No draft found at .article/draft.md — Claude Code did not finish the article.');
+    savePost(fs.readFileSync(DRAFT_FILE, 'utf8'), job.topic, published);
+    return;
+  }
+
+  const topic = newsMode ? null : nextTopic(published);
+  console.error(newsMode ? '[topic] latest news' : `[topic] ${topic.id}: ${topic.title}`);
+
+  if (prepareMode) {
+    prepare(topic);
+    return;
+  }
+
+  const raw = await callClaude(userPrompt(topic));
+  savePost(raw, topic, published);
 }
 
 main().catch((err) => {
