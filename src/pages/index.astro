@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
-import AdSlot from '../components/AdSlot.astro';
+import AdZone from '../components/AdZone.astro';
 import Newsletter from '../components/Newsletter.astro';
 import Section from '../components/Section.astro';
 import Icon from '../components/Icon.astro';
@@ -60,7 +60,12 @@ const jsonLd = {
   <Section index="01" label="Journal" title="Latest articles" id="latest">
     <p slot="intro">New tutorials, reviews and release notes — researched, cited and updated when SketchUp changes.</p>
     <div class="grid">
-      {latest.map((post, i) => <PostCard post={post} index={i + 1} />)}
+      {latest.map((post, i) => (
+        <>
+          <PostCard post={post} index={i + 1} />
+          {i === 5 && latest.length > 6 && <AdZone zone="feed" />}
+        </>
+      ))}
     </div>
     {posts.length > SITE.postsPerPage && (
       <nav class="pager pager--single" aria-label="Pagination">
@@ -69,7 +74,7 @@ const jsonLd = {
     )}
   </Section>
 
-  <AdSlot slot="footer" />
+  <AdZone zone="sectionBreak" />
 
   <Section index="02" label="Index" title="Browse by topic" id="topics">
     <p slot="intro">Six disciplines, one tool. Pick the part of your workflow you want to improve.</p>

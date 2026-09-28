@@ -330,13 +330,13 @@ a.label:hover { color: var(--accent-ink); }
 .grid { display: grid; grid-template-columns: 1fr; gap: var(--rule-thin); background: var(--border); }
 @media (min-width: 768px) {
   .grid { grid-template-columns: repeat(2, 1fr); }
-  .grid > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .grid > .card:last-child:nth-child(odd of .card) { grid-column: 1 / -1; }
 }
 @media (min-width: 1024px) {
   .grid--3 { grid-template-columns: repeat(3, 1fr); }
-  .grid--3 > :last-child:nth-child(odd) { grid-column: auto; }
-  .grid--3 > :last-child:nth-child(3n + 1) { grid-column: 1 / -1; }
-  .grid--3 > :last-child:nth-child(3n + 2) { grid-column: span 2; }
+  .grid--3 > .card:last-child:nth-child(odd of .card) { grid-column: auto; }
+  .grid--3 > .card:last-child:nth-child(3n + 1 of .card) { grid-column: 1 / -1; }
+  .grid--3 > .card:last-child:nth-child(3n + 2 of .card) { grid-column: span 2; }
 }
 .grid + .pager { border-top: var(--rule) solid var(--border); }
 
@@ -451,10 +451,51 @@ a.label:hover { color: var(--accent-ink); }
 .page-body { padding: var(--space) var(--gutter); border-bottom: var(--rule) solid var(--border); }
 
 /* ==========================================================================
-   Ads — framed, labelled, never masquerading as content
+   Ads — designated zones only. Framed and labelled, never masquerading as
+   content. Each zone is a size container: the unit takes the largest
+   standard IAB size that fits the zone's own width (Google's "exact size per
+   screen width" method, keyed to the column instead of the viewport), so ads
+   stay on the grid at every breakpoint and reserve their space up front.
    ========================================================================== */
-.ad { margin: 40px 0; min-height: 100px; }
-main > .ad { margin: 0; padding: 40px var(--gutter); border-bottom: var(--rule) solid var(--border); }
+.ad { container-type: inline-size; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.ad-label { margin: 0; align-self: stretch; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; color: var(--muted-fg); }
+.ad-unit { display: block; max-width: 100%; }
+
+/* Shapes */
+.ad-unit--banner { width: 320px; height: 100px; }
+@container (min-width: 728px) { .ad-unit--banner { width: 728px; height: 90px; } }
+.ad-unit--rectangle { width: 300px; height: 250px; }
+@container (min-width: 336px) { .ad-unit--rectangle { width: 336px; height: 280px; } }
+.ad-unit--sidebar { width: 300px; height: 250px; }
+/* Sidebar zone: desktop only, and only when the column fits a full 300px unit */
+@container (max-width: 299px) { .ad--sidebar > * { display: none !important; } }
+@media (max-width: 1023px) { .ad--sidebar { display: none !important; } }
+.ad-unit--native { width: 100%; }
+
+/* Full-width bands: between the page header and content, and between sections */
+main > .ad, .article > .ad { padding: 28px var(--gutter) 32px; border-bottom: var(--rule) solid var(--border); }
+main > .ad .ad-label, .article > .ad .ad-label { max-width: 728px; align-self: center; width: 100%; }
+
+/* A full row inside a card grid; the black gap lines frame it like a card */
+.grid > .ad { grid-column: 1 / -1; background: var(--bg); padding: 28px var(--gutter) 32px; }
+.grid > .ad .ad-label { max-width: 728px; align-self: center; width: 100%; }
+
+/* Inside the article text: set off by thin rules, full text-column width */
+.prose .ad { margin: 2.4em 0; padding: 14px 0 20px; border-block: var(--rule-thin) solid var(--border); }
+
+/* Top of the sidebar, above the sticky table of contents (not sticky itself) */
+.article-aside > .ad { align-items: flex-start; margin-bottom: 40px; }
+.article-aside > .ad .ad-label { max-width: 300px; }
+
+/* After the article's sources */
+.article-body > .ad { margin-top: 64px; max-width: var(--read); align-items: flex-start; }
+
+/* Collapse a zone AdSense couldn't fill, rather than leave an empty frame */
+.ad:has(ins[data-ad-status='unfilled']) { display: none; }
+
+/* Local design preview (PUBLIC_AD_PREVIEW=true): shows each zone's box */
+.ad-preview { display: grid; place-items: center; border: var(--rule-thin) dashed var(--accent-ink); background: var(--muted); font-size: var(--t-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; text-align: center; padding: 8px; }
+.ad-preview.ad-unit--native { height: 250px; }
 
 /* ==========================================================================
    Newsletter — the one black band. No texture on black.

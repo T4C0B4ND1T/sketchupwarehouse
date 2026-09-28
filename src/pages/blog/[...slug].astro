@@ -1,7 +1,7 @@
 ---
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import AdSlot from '../../components/AdSlot.astro';
+import AdZone from '../../components/AdZone.astro';
 import PostCard from '../../components/PostCard.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import Section from '../../components/Section.astro';
@@ -48,7 +48,7 @@ const jsonLd = {
 };
 ---
 <Base title={data.title} description={data.description} type="article" jsonLd={jsonLd}>
-  <article>
+  <article class="article">
     <header class="article-head">
       <a class="label" href={`/category/${data.category}/`}><b>→</b> {cat.title}</a>
       <h1>{data.title}</h1>
@@ -60,10 +60,10 @@ const jsonLd = {
       </div>
     </header>
 
+    <AdZone zone="pageTop" />
+
     <div class="article-layout">
       <div class="article-body">
-        <AdSlot slot="inArticle" format="fluid" />
-
         <div class="prose">
           <Content />
         </div>
@@ -87,10 +87,11 @@ const jsonLd = {
           </footer>
         )}
 
-        <AdSlot slot="footer" />
+        <AdZone zone="articleEnd" />
       </div>
 
       <aside class="article-aside swiss-grid-pattern bg-muted" aria-label="Article details">
+        <AdZone zone="sidebar" />
         <div class="sticky">
           {toc.length > 0 && (
             <nav class="toc" aria-labelledby="toc-title">
@@ -104,11 +105,21 @@ const jsonLd = {
               <div class="tags">{data.tags.map((t) => <span>{t}</span>)}</div>
             </div>
           )}
-          <AdSlot slot="sidebar" />
         </div>
       </aside>
     </div>
   </article>
+
+  <template id="ad-in-article"><AdZone zone="inArticle" /></template>
+  <script is:inline>
+    // Fill the in-article markers (placed at section breaks at build time).
+    (function () {
+      var tpl = document.getElementById('ad-in-article');
+      document.querySelectorAll('.ad-marker').forEach(function (m) {
+        if (tpl && tpl.content.childElementCount) m.replaceWith(tpl.content.cloneNode(true));
+      });
+    })();
+  </script>
 
   {related.length > 0 && (
     <Section index="→" label="Continue" title="Related reading" id="related">

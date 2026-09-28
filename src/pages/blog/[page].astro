@@ -3,6 +3,7 @@ import type { GetStaticPaths, Page } from 'astro';
 import Base from '../../layouts/Base.astro';
 import PostCard from '../../components/PostCard.astro';
 import Icon from '../../components/Icon.astro';
+import AdZone from '../../components/AdZone.astro';
 import { getPublishedPosts, type Post } from '../../lib/posts';
 import { SITE } from '../../site.config';
 
@@ -19,7 +20,12 @@ const offset = (page.currentPage - 1) * SITE.postsPerPage;
     <p class="label"><b>{String(page.currentPage).padStart(2, '0')}.</b> Page {page.currentPage} of {page.lastPage}</p>
     <h1>All articles</h1>
   </section>
-  <div class="grid grid--3">{page.data.map((post, i) => <PostCard post={post} index={offset + i + 1} />)}</div>
+  <div class="grid grid--3">{page.data.map((post, i) => (
+    <>
+      <PostCard post={post} index={offset + i + 1} />
+      {i === 5 && page.data.length > 6 && <AdZone zone="feed" />}
+    </>
+  ))}</div>
   <nav class="pager" aria-label="Pagination">
     {page.url.prev ? <a href={page.url.prev}>← Newer</a> : <span></span>}
     {page.url.next ? <a href={page.url.next}>Older <Icon name="arrow" class="icon" /></a> : <span></span>}
