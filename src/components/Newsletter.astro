@@ -1,0 +1,15 @@
+---
+import { MONETIZATION } from '../site.config';
+const action = MONETIZATION.newsletterAction;
+---
+{action && (
+  <section class="newsletter">
+    <h2>Get one useful SketchUp tip every week</h2>
+    <p>Tutorials, extension picks and release news. No spam, unsubscribe anytime.</p>
+    <form action={action} method="post" target="_blank">
+      <label class="sr-only" for="nl-email">Email address</label>
+      <input id="nl-email" type="email" name="email" placeholder="you@example.com" required />
+      <button type="submit">Subscribe</button>
+    </form>
+  </section>
+)}

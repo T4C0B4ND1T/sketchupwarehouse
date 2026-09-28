@@ -1,0 +1,89 @@
+name: Generate article
+
+on:
+  schedule:
+    # Evergreen articles: Mon, Wed, Fri
+    - cron: '17 13 * * 1,3,5'
+    # News roundup: Tue
+    - cron: '7 14 * * 2'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'evergreen or news'
+        type: choice
+        options: [evergreen, news]
+        default: evergreen
+
+permissions:
+  contents: write
+  pull-requests: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: generate
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    outputs:
+      published: ${{ steps.publish.outputs.published }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch || github.ref_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Write article with Claude
+        id: gen
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
+          CLAUDE_EFFORT: ${{ vars.CLAUDE_EFFORT }}
+        run: |
+          if [ "${{ github.event.schedule }}" = "7 14 * * 2" ] || [ "${{ inputs.mode }}" = "news" ]; then
+            node scripts/generate-post.mjs --news
+          else
+            node scripts/generate-post.mjs
+          fi
+
+      - name: Verify the site still builds
+        run: npm run build
+
+      - name: Publish
+        id: publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TITLE: ${{ steps.gen.outputs.title }}
+          SLUG: ${{ steps.gen.outputs.slug }}
+          # "auto" publishes straight to the default branch; "review" opens a PR for you to merge.
+          MODE: ${{ vars.PUBLISH_MODE || 'auto' }}
+          BASE: ${{ github.event.repository.default_branch || github.ref_name }}
+        run: |
+          git config user.name "sketchupwarehouse-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ "$MODE" = "review" ]; then
+            git switch -c "article/$SLUG"
+            git add src/content/posts
+            git commit -m "New article: $TITLE"
+            git push -u origin "article/$SLUG"
+            gh pr create --base "$BASE" --title "New article: $TITLE" \
+              --body "Auto-generated draft. Review for accuracy, then merge to publish."
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          else
+            git add src/content/posts
+            git commit -m "New article: $TITLE"
+            git push origin "HEAD:$BASE"
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  # Pushes made with GITHUB_TOKEN don't trigger other workflows, so deploy explicitly.
+  deploy:
+    needs: generate
+    if: needs.generate.outputs.published == 'true'
+    uses: ./.github/workflows/deploy.yml

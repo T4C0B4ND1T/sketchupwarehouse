@@ -1,0 +1,15 @@
+---
+import type { Post } from '../lib/posts';
+import { postUrl, formatDate } from '../lib/posts';
+import { CATEGORIES } from '../site.config';
+
+interface Props { post: Post }
+const { post } = Astro.props;
+const cat = CATEGORIES[post.data.category];
+---
+<article class="card">
+  <a class="card-cat" href={`/category/${post.data.category}/`}>{cat.title}</a>
+  <h3><a href={postUrl(post)}>{post.data.title}</a></h3>
+  <p>{post.data.description}</p>
+  <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+</article>

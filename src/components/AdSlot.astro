@@ -1,0 +1,24 @@
+---
+import { MONETIZATION } from '../site.config';
+
+interface Props {
+  slot: keyof typeof MONETIZATION.adSlots;
+  format?: string;
+}
+const { slot, format = 'auto' } = Astro.props;
+const client = MONETIZATION.adsenseClient;
+const slotId = MONETIZATION.adSlots[slot];
+---
+{client && slotId && (
+  <aside class="ad" aria-label="Advertisement">
+    <ins
+      class="adsbygoogle"
+      style="display:block"
+      data-ad-client={client}
+      data-ad-slot={slotId}
+      data-ad-format={format}
+      data-full-width-responsive="true"
+    ></ins>
+    <script is:inline>(window.adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </aside>
+)}
