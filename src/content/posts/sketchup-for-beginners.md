@@ -2,6 +2,7 @@
 title: "SketchUp for Beginners: The First 10 Tools to Master"
 description: New to SketchUp? Learn the 10 essential tools, their default keyboard shortcuts, and a mini practice project that puts them together in about 20 minutes.
 pubDate: 2026-09-28
+updatedDate: 2026-09-28
 category: tutorials
 tags:
   - sketchup
@@ -14,6 +15,8 @@ topicId: sketchup-for-beginners
 sources:
   - title: Default Keyboard Shortcuts – SketchUp Help
     url: https://help.sketchup.com/en/default-keyboard-shortcuts
+  - title: Softening, Smoothing, and Hiding Geometry – SketchUp Help
+    url: https://help.sketchup.com/en/sketchup/softening-smoothing-and-hiding-geometry
 ---
 
 SketchUp looks like it has dozens of tools, but you can build a surprising amount with just ten. Learn these, memorize their default shortcuts, and finish the practice project at the end, and you will have the core workflow that every other SketchUp skill builds on.
@@ -95,7 +98,7 @@ A real three-button mouse makes SketchUp far more comfortable than a trackpad. I
 
 ## 10. Eraser (<kbd>E</kbd>)
 
-Click an edge to delete it, and any faces depending on that edge go with it. Hold <kbd>Shift</kbd> while erasing to hide edges instead of deleting them, which is how you smooth out surfaces. To remove a face but keep its edges, select the face and press <kbd>Delete</kbd> instead.
+Click an edge to delete it, and any faces depending on that edge go with it. Hold <kbd>Shift</kbd> while erasing to hide edges instead of deleting them, or tap <kbd>Ctrl</kbd> (<kbd>Option</kbd> on Mac) to soften and smooth them, which is how you get rid of the faceted look on curved surfaces. To remove a face but keep its edges, select the face and press <kbd>Delete</kbd> instead.
 
 ## Mini practice project: a simple shed
 
