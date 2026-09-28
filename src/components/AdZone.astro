@@ -1,0 +1,43 @@
+---
+// One designated ad zone. The zone's shape is set in CSS (see "Ads" in
+// global.css): each zone is a size container and picks the largest standard
+// IAB size that fits its own column, per Google's "exact size per screen
+// width" method. That keeps every ad on the site's grid at any breakpoint.
+//
+// Display zones share one AdSense display ad unit; the in-article zone uses an
+// AdSense in-article (native) unit. A zone renders nothing unless AdSense is
+// configured and the zone is switched on in AD_ZONES.
+import { MONETIZATION, AD_ZONES, type AdZoneKey } from '../site.config';
+
+interface Props { zone: AdZoneKey }
+const { zone } = Astro.props;
+const { shape, label } = AD_ZONES[zone];
+const client = MONETIZATION.adsenseClient;
+const slot = shape === 'native' ? MONETIZATION.adSlots.inArticle : MONETIZATION.adSlots.display;
+const preview = MONETIZATION.adPreview;
+const enabled = AD_ZONES[zone].enabled && (preview || (client && slot));
+---
+{enabled && (
+  <aside class={`ad ad--${zone}`} aria-label="Advertisement" data-ad-zone={zone}>
+    <p class="ad-label">Advertisement</p>
+    {preview ? (
+      <div class={`ad-unit ad-unit--${shape} ad-preview`}><span>{label}</span></div>
+    ) : shape === 'native' ? (
+      <ins
+        class="adsbygoogle ad-unit ad-unit--native"
+        style="display:block; text-align:center;"
+        data-ad-client={client}
+        data-ad-slot={slot}
+        data-ad-layout="in-article"
+        data-ad-format="fluid"
+      ></ins>
+    ) : (
+      <ins
+        class={`adsbygoogle ad-unit ad-unit--${shape}`}
+        style="display:inline-block"
+        data-ad-client={client}
+        data-ad-slot={slot}
+      ></ins>
+    )}
+  </aside>
+)}

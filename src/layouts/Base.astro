@@ -130,6 +130,20 @@ const path = Astro.url.pathname;
       </footer>
     </div>
 
+    {MONETIZATION.adsenseClient && !MONETIZATION.adPreview && (
+      <script is:inline>
+        // Each push fills the next unfilled unit in page order, so first drop the
+        // zones hidden at this width (e.g. the sidebar on phones), then request
+        // one ad per remaining zone.
+        var units = [].slice.call(document.querySelectorAll('ins.adsbygoogle:not([data-adsbygoogle-status])'));
+        units.forEach(function (ins) {
+          if (ins.offsetWidth === 0) ins.closest('.ad').remove();
+        });
+        units.forEach(function (ins) {
+          if (ins.isConnected) (window.adsbygoogle = window.adsbygoogle || []).push({});
+        });
+      </script>
+    )}
     {ANALYTICS.cloudflareToken && (
       <script
         defer

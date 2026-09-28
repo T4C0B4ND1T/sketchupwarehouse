@@ -40,7 +40,7 @@ All monetization settings are **repository variables** (*Settings → Secrets an
 | Variable | What it does |
 |---|---|
 | `PUBLIC_ADSENSE_CLIENT` | Your AdSense ID, e.g. `ca-pub-1234…`. Loads AdSense and generates `ads.txt`. |
-| `PUBLIC_ADSENSE_SLOT_IN_ARTICLE` / `_FOOTER` | Optional manual ad units. Without them, turn on **Auto ads** in AdSense. |
+| `PUBLIC_ADSENSE_SLOT_DISPLAY` / `PUBLIC_ADSENSE_SLOT_IN_ARTICLE` | Ad unit IDs for the designated ad zones (see below). |
 | `PUBLIC_AMAZON_TAG` | Amazon Associates tag. It's added to every Amazon link automatically, and those links are marked `rel="sponsored"`. |
 | `PUBLIC_NEWSLETTER_ACTION` | Form endpoint from a free newsletter tool (Buttondown, MailerLite, Kit). Shows a signup box. |
 | `PUBLIC_CF_ANALYTICS_TOKEN` or `PUBLIC_GA4_ID` | Free analytics. |
@@ -56,6 +56,26 @@ Suggested order:
 2. **After about 25–30 articles (roughly 6–8 weeks):** apply for AdSense. For EU/UK visitors, turn on Google's free consent message under *Privacy & messaging* in AdSense.
 3. **Right away:** Amazon Associates (hardware articles), plus the Chaos (V-Ray/Enscape) and D5 affiliate programs if they're accepting partners.
 4. **At about 10k sessions/month:** move from AdSense to Journey by Mediavine or Ezoic, which usually pay about 2–3× more per visitor.
+
+## Ad zones
+
+Ads appear only in designated zones that fit the site's grid. Each zone chooses the largest standard ad size that fits its own column width:
+
+| Zone | Where | Size |
+|---|---|---|
+| `pageTop` | Band under the header of article and topic pages | 728×90, or 320×100 on narrow screens |
+| `inArticle` | Inside the article text, at section breaks (before the 3rd heading, and about two-thirds through long articles) | Native in-article, full text-column width |
+| `sidebar` | Top of the article sidebar, desktop only (not sticky) | 300×250 |
+| `articleEnd` | After the article's sources | 336×280, or 300×250 |
+| `feed` | Full row after the 6th card in article lists (only when there are more than 6) | 728×90, or 320×100 |
+| `sectionBreak` | Homepage, between "Latest articles" and "Browse by topic" | 728×90, or 320×100 |
+
+Setup in AdSense (**Ads → By ad unit**):
+1. Create a **Display ad**. Choose the **Fixed** size option; the site's CSS sets the size. Copy its `data-ad-slot` number into the variable `PUBLIC_ADSENSE_SLOT_DISPLAY`.
+2. Create an **In-article ad** and put its slot number in `PUBLIC_ADSENSE_SLOT_IN_ARTICLE`.
+3. In **Ads → By site**, turn off **Auto ads → In-page ads** so Google doesn't place ads outside these zones. Anchor and vignette ads are optional.
+
+To switch a zone off, set `enabled: false` for it in `AD_ZONES` in `src/site.config.ts`. To preview every zone as a labeled box on your machine, run `PUBLIC_AD_PREVIEW=true PUBLIC_ADSENSE_CLIENT=ca-pub-0 npm run dev`. Never set `PUBLIC_AD_PREVIEW` in the deploy workflow.
 
 ## Content quality guardrails
 

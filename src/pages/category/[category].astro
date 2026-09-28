@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PostCard from '../../components/PostCard.astro';
-import AdSlot from '../../components/AdSlot.astro';
+import AdZone from '../../components/AdZone.astro';
 import { getPublishedPosts } from '../../lib/posts';
 import { CATEGORIES, CATEGORY_KEYS, type CategoryKey } from '../../site.config';
 
@@ -20,8 +20,13 @@ const posts = (await getPublishedPosts()).filter((p) => p.data.category === cate
     <h1>{info.title}</h1>
     <p>{info.description}</p>
   </section>
+  <AdZone zone="pageTop" />
   {posts.length > 0
-    ? <div class="grid grid--3 rule-b">{posts.map((post, i) => <PostCard post={post} index={i + 1} />)}</div>
+    ? <div class="grid grid--3 rule-b">{posts.map((post, i) => (
+        <>
+          <PostCard post={post} index={i + 1} />
+          {i === 5 && posts.length > 6 && <AdZone zone="feed" />}
+        </>
+      ))}</div>
     : <p class="empty rule-b">New articles in this section are on the way.</p>}
-  <AdSlot slot="footer" />
 </Base>
