@@ -5,7 +5,7 @@ import { CATEGORY_KEYS } from './site.config';
 
 const posts = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/posts' }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string().max(110),
     description: z.string().max(200),
     pubDate: z.coerce.date(),
@@ -16,6 +16,19 @@ const posts = defineCollection({
     aiAssisted: z.boolean().default(false),
     topicId: z.string().optional(),
     sources: z.array(z.object({ title: z.string(), url: z.string().url() })).default([]),
+    // Stock-photo search the image fetcher uses (scripts/add-images.mjs).
+    imageQuery: z.string().optional(),
+    // Cover photo: a file in ./images (uploaded in /admin or fetched from
+    // Pexels) or a link to an image elsewhere. Both are optimized at build time.
+    cover: z
+      .object({
+        src: z.union([z.string().url(), image()]),
+        alt: z.string(),
+        credit: z.string().optional(),
+        creditUrl: z.string().url().optional(),
+        pexelsId: z.number().optional(),
+      })
+      .optional(),
   }),
 });
 

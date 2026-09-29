@@ -57,6 +57,45 @@ Suggested order:
 3. **Right away:** Amazon Associates (hardware articles), plus the Chaos (V-Ray/Enscape) and D5 affiliate programs if they're accepting partners.
 4. **At about 10k sessions/month:** move from AdSense to Journey by Mediavine or Ezoic, which usually pay about 2–3× more per visitor.
 
+## Admin: write and edit articles yourself
+
+Go to **https://sketchupwarehouse.com/admin/** to write new articles, edit or delete existing ones (including the AI-written ones), and upload your own images. It runs [Sveltia CMS](https://sveltiacms.app), a free editor that runs in your browser. When you save, it commits to this repository and the site redeploys in about a minute.
+
+**Sign in (first time):**
+1. On the admin page, click **Sign In Using Access Token**. The dialog links to GitHub's token page with the right permission already selected.
+2. Alternatively, create a *fine-grained personal access token* yourself at GitHub → Settings → Developer settings. Give it **Only select repositories → sketchupwarehouse** and **Contents: Read and write**, and set an expiry you're comfortable with.
+3. Paste the token. It's stored only in your browser. Anyone with the token can edit the repository, so don't share it.
+
+**Security:**
+- **What the public sees:** `/admin/` shows only a sign-in screen. Changing anything needs a GitHub token with write access to this repository. The page is hidden from search engines.
+- **Pinned editor:** the editor is pinned to an exact version with an integrity hash, so browsers refuse to run it if the file on the CDN is ever altered.
+- **Restricted page:** a Content Security Policy only lets the page run that pinned editor and talk to GitHub.
+- **Keeping it current:** the *Update admin editor* workflow checks for new releases monthly and opens a PR. Before pinning, it verifies the CDN file matches the official npm package. To update by hand, run `node scripts/update-admin.mjs`.
+- **Your part:**
+  - Turn on 2-factor authentication on your GitHub account.
+  - Give the token a 30–90 day expiry.
+  - Click **Sign Out** (top-right menu) when you're done. The token is stored in your browser for the whole `sketchupwarehouse.com` site, so signing out removes it.
+
+**Images:**
+- **Cover image:** upload a photo, or paste a link to an image hosted elsewhere (https://…). If you leave it empty, a Pexels photo is added automatically the next time *Generate article* or *Add cover photos* runs.
+- **Images in the article text:** use the image button in the editor.
+- Uploaded images go to `src/content/posts/images/` and are resized and converted to WebP automatically, so large photos from a phone or camera are fine.
+- Images linked from other sites are downloaded and optimized at build time. Only link images you have the right to use.
+
+**Tips:**
+- Tick **Draft** to save an article without publishing it.
+- A future **Publish date** schedules the article; it goes live that morning.
+- For your own articles, leave **Drafted with AI** off.
+
+## Cover photos
+
+Each article gets a free stock photo from [Pexels](https://www.pexels.com). The photo appears under the article header, on the article's card in lists, and as its social preview image. Pexels photos are free for commercial use. Each photo is credited to its photographer, and the About page credits Pexels.
+
+- **Setup:** create a free API key at [pexels.com/api](https://www.pexels.com/api/). Add it under *Settings → Secrets and variables → Actions → Secrets* as `PEXELS_API_KEY`.
+- **Existing articles:** go to *Actions → Add cover photos → Run workflow*. It adds a photo to every article that doesn't have one, then redeploys.
+- **New articles:** the writer suggests an `imageQuery` for each article, and *Generate article* fetches the photo automatically. If the key isn't set, the article still publishes without a photo.
+- **Change a photo:** replace it in **/admin**. To get a different Pexels photo instead, clear the cover image (and edit **Photo search** if you like), then run *Add cover photos* again.
+
 ## Ad zones
 
 Ads appear only in designated zones that fit the site's grid. Each zone chooses the largest standard ad size that fits its own column width:

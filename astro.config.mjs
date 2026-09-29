@@ -12,6 +12,10 @@ export default defineConfig({
   build: {
     format: 'directory',
   },
+  // Cover images linked from other sites are downloaded and optimized at build.
+  image: {
+    remotePatterns: [{ protocol: 'https' }],
+  },
   markdown: {
     processor: unified({
       rehypePlugins: [[rehypeAffiliateLinks, { amazonTag: process.env.PUBLIC_AMAZON_TAG || '' }], rehypeAdMarkers],

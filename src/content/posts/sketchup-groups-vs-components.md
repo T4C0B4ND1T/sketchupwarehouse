@@ -4,6 +4,7 @@ description: "Groups and components both keep SketchUp geometry from sticking to
 pubDate: 2026-09-28
 category: tutorials
 tags: [groups, components, beginners, modeling]
+imageQuery: "woodworking workshop furniture making"
 aiAssisted: true
 topicId: sketchup-groups-vs-components
 sources:

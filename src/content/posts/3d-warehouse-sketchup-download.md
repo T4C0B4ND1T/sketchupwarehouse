@@ -4,6 +4,7 @@ description: "3D Warehouse has millions of free SketchUp models, but quality var
 pubDate: 2026-09-27
 category: tutorials
 tags: [3d warehouse, components, performance, beginners]
+imageQuery: "modern furnished living room interior"
 aiAssisted: true
 topicId: 3d-warehouse-sketchup-download
 sources:

@@ -76,6 +76,11 @@ jobs:
             node scripts/generate-post.mjs ${{ steps.job.outputs.news }}
           fi
 
+      - name: Add cover photo
+        env:
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+        run: node scripts/add-images.mjs
+
       - name: Verify the site still builds
         run: npm run build
 

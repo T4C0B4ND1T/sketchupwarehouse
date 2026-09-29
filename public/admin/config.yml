@@ -1,0 +1,97 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+# Admin editor for sketchupwarehouse.com. Fields mirror src/content.config.ts;
+# keep the two in sync when adding front matter fields.
+
+backend:
+  name: github
+  repo: T4C0B4ND1T/sketchupwarehouse
+  branch: main
+  # Only token sign-in: "Sign In with GitHub" would need an OAuth server.
+  auth_methods: [token]
+  commit_messages:
+    create: 'Add article: {{slug}}'
+    update: 'Edit article: {{slug}}'
+    delete: 'Delete article: {{slug}}'
+    uploadMedia: 'Upload image: {{path}}'
+    deleteMedia: 'Delete image: {{path}}'
+
+site_url: https://sketchupwarehouse.com
+display_url: https://sketchupwarehouse.com
+
+# Uploaded images are stored next to the articles, so Astro optimizes them
+# (resized, converted to WebP) the same way as the automatic cover photos.
+# The top-level folder must be absolute; the Articles collection below writes
+# paths relative to the article (./images/…), which is what Astro expects.
+media_folder: /src/content/posts/images
+public_folder: /src/content/posts/images
+
+output:
+  # Astro's schema expects missing optional fields, not empty strings.
+  omit_empty_optional_fields: true
+
+collections:
+  - name: posts
+    label: Articles
+    label_singular: Article
+    folder: /src/content/posts
+    media_folder: /src/content/posts/images
+    public_folder: ./images
+    extension: md
+    format: frontmatter
+    create: true
+    delete: true
+    slug: '{{slug}}'
+    preview_path: 'blog/{{slug}}/'
+    summary: '{{title}} · {{pubDate}}{{draft | ternary(" · DRAFT", "")}}'
+    sortable_fields: [pubDate, title, category]
+    view_filters:
+      - { label: Drafts, field: draft, pattern: true }
+      - { label: Written by AI, field: aiAssisted, pattern: true }
+    fields:
+      - { label: Title, name: title, widget: string, hint: 'Up to about 70 characters works best in Google results.' }
+      - label: Description
+        name: description
+        widget: text
+        hint: 'Shown under the title and in Google results. 140–160 characters (max 200).'
+        pattern: ['^[\s\S]{20,200}$', 'Between 20 and 200 characters']
+      - { label: Publish date, name: pubDate, widget: datetime, type: date, picker_utc: true, default: '{{now}}', hint: 'A future date schedules the article; it goes live on that day.' }
+      - { label: Updated date, name: updatedDate, widget: datetime, type: date, picker_utc: true, required: false }
+      - label: Category
+        name: category
+        widget: select
+        options:
+          - { label: Tutorials, value: tutorials }
+          - { label: Extensions & Plugins, value: extensions }
+          - { label: Rendering, value: rendering }
+          - { label: Industry Workflows, value: workflows }
+          - { label: Hardware & Setup, value: hardware }
+          - { label: News, value: news }
+      - { label: Tags, name: tags, widget: list, required: false, hint: 'Short lowercase tags, e.g. rendering, v-ray.' }
+      - { label: Draft (hidden from the site), name: draft, widget: boolean, default: false }
+      - label: Cover image
+        name: cover
+        widget: object
+        required: false
+        collapsed: false
+        hint: 'Upload your own photo, or paste an image link (https://…). Leave empty to get a Pexels photo automatically.'
+        fields:
+          - { label: Image, name: src, widget: image }
+          - { label: Alt text, name: alt, widget: string, hint: 'Describe the image for screen readers and search engines.' }
+          - { label: Credit, name: credit, widget: string, required: false, hint: 'Photographer or source. Leave empty for your own photos.' }
+          - { label: Credit link, name: creditUrl, widget: string, required: false, pattern: ['^https?://', 'Must start with http:// or https://'] }
+          - { label: Pexels ID, name: pexelsId, widget: hidden }
+      - label: Body
+        name: body
+        widget: markdown
+        hint: 'Use Heading 2 for sections. Images you insert here are uploaded with the article.'
+      - label: Sources
+        name: sources
+        widget: list
+        required: false
+        summary: '{{title}}'
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: URL, name: url, widget: string, pattern: ['^https?://', 'Must start with http:// or https://'] }
+      - { label: Drafted with AI, name: aiAssisted, widget: boolean, default: false, hint: 'Shows the AI-assistance note under the article.' }
+      - { label: Photo search, name: imageQuery, widget: string, required: false, hint: 'Pexels search used when there is no cover image.' }
+      - { label: Topic ID, name: topicId, widget: hidden }

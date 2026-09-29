@@ -104,6 +104,7 @@ title: "<compelling, specific, <= 70 chars, includes the main keyword>"
 description: "<meta description, 140–160 chars>"
 category: <one of: ${CATEGORIES.join(', ')}>
 tags: [<3–6 short lowercase tags>]
+imageQuery: "<3–6 word stock-photo search for a real-world scene that fits the article, e.g. 'architect reviewing floor plans', 'woodworking workshop table saw', 'modern kitchen interior'. No brand names, logos or software screenshots.>"
 sources:
   - title: "<source title>"
     url: "<source url you actually used>"
@@ -222,6 +223,7 @@ function savePost(raw, topic, published) {
     tags: data.tags.map((t) => String(t).toLowerCase()).slice(0, 6),
     aiAssisted: true,
     ...(topic ? { topicId: topic.id } : {}),
+    ...(typeof data.imageQuery === 'string' && data.imageQuery.trim() ? { imageQuery: data.imageQuery.trim().slice(0, 80) } : {}),
     sources: data.sources.slice(0, 8),
   };
 
