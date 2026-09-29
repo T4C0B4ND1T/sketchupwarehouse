@@ -5,12 +5,15 @@ import AdZone from '../components/AdZone.astro';
 import Newsletter from '../components/Newsletter.astro';
 import Section from '../components/Section.astro';
 import Icon from '../components/Icon.astro';
-import { getPublishedPosts } from '../lib/posts';
+import { Image } from 'astro:assets';
+import { getPublishedPosts, postUrl } from '../lib/posts';
 import { SITE, CATEGORIES } from '../site.config';
 
 const posts = await getPublishedPosts();
 const latest = posts.slice(0, SITE.postsPerPage);
 const topics = Object.entries(CATEGORIES);
+// Hero mosaic: the newest articles that have a cover photo (up to 3).
+const featured = posts.filter((p) => p.data.cover).slice(0, 3);
 const sourcesCited = posts.reduce((n, p) => n + p.data.sources.length, 0);
 const stats = [
   { value: posts.length, label: 'Articles' },
@@ -37,14 +40,44 @@ const jsonLd = {
         <a class="btn btn--secondary" href="#topics">Browse topics</a>
       </div>
     </div>
-    <div class="composition swiss-grid-pattern" aria-hidden="true">
-      <div class="c-post"></div>
-      <div class="c-circle"></div>
-      <div class="c-square swiss-dots"></div>
-      <div class="c-block"></div>
-      <div class="c-bar"></div>
-      <div class="c-caption">Fig. 01 — Push / Pull</div>
-    </div>
+    {featured.length > 0 ? (
+      <div class="mosaic">
+        {featured.map((post, i) => (
+          <a class="tile" href={postUrl(post)}>
+            <Image
+              src={post.data.cover!.src}
+              inferSize={typeof post.data.cover!.src === 'string'}
+              alt=""
+              widths={i === 0 ? [480, 720, 960] : [360, 480]}
+              sizes={i === 0 ? '(min-width: 1024px) 480px, 100vw' : '(min-width: 1024px) 240px, 50vw'}
+              loading={i === 0 ? 'eager' : 'lazy'}
+            />
+            <span class="tile-label">
+              <span class="label"><b>{String(i + 1).padStart(2, '0')}.</b> {CATEGORIES[post.data.category].title}</span>
+              <span class="tile-title">{post.data.title}</span>
+            </span>
+          </a>
+        ))}
+        {featured.length < 3 && (
+          <div class="tile tile--art composition swiss-grid-pattern" aria-hidden="true" style={`--rest: ${3 - featured.length}`}>
+            <div class="c-post"></div>
+            <div class="c-circle"></div>
+            <div class="c-square swiss-dots"></div>
+            <div class="c-block"></div>
+            <div class="c-bar"></div>
+          </div>
+        )}
+      </div>
+    ) : (
+      <div class="composition swiss-grid-pattern" aria-hidden="true">
+        <div class="c-post"></div>
+        <div class="c-circle"></div>
+        <div class="c-square swiss-dots"></div>
+        <div class="c-block"></div>
+        <div class="c-bar"></div>
+        <div class="c-caption">Fig. 01 — Push / Pull</div>
+      </div>
+    )}
   </section>
 
   <div class="stats">
