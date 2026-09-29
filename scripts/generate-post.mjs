@@ -160,7 +160,7 @@ Write genuinely useful, accurate, people-first articles. Standards:
 - Do not start the body with an H1 or repeat the title. Start with a 2–3 sentence intro that answers the reader's question fast.
 - End with a short "## FAQ" section of 3–4 real questions people search for.
 - Length: 1,000–1,800 words.
-- SketchUp and 3D Warehouse are Trimble trademarks; this site is not affiliated with Trimble.
+- Don't add a trademark or "not affiliated with Trimble" note; the site footer already carries it.
 - When recommending physical products (mice, laptops, GPUs, 3D printers), you may link to an Amazon search URL of the form https://www.amazon.com/s?k=product+name — never fabricate product-page URLs.
 
 Output format — return ONLY the finished file, nothing before or after it:
@@ -260,7 +260,11 @@ function parseArticle(raw) {
   const m = text.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
   if (!m) throw new Error('Malformed frontmatter in model output.');
   const data = YAML.parse(m[1]);
-  const body = m[2].trim();
+  // The footer already has the trademark notice; drop a closing one the writer added anyway.
+  const body = m[2]
+    .trim()
+    .replace(/\n+[*_]*[^\n]*\bTrimble trademarks?\b[^\n]*$/i, '')
+    .trim();
 
   const problems = [];
   if (typeof data.title !== 'string' || data.title.length < 10 || data.title.length > 110) problems.push('title');

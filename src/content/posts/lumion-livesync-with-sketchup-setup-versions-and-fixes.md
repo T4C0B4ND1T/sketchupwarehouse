@@ -133,5 +133,3 @@ It depends on your Lumion version. Lumion's table lists SketchUp 2026 and 2025 w
 ### Why did my LiveSync connection break after I renamed the file?
 
 Lumion matches models by file name and location. Restore the original name, use the Re-connect to LiveSync button if the name is similar, or re-import a .DAE with the original name.
-
-*SketchUp and 3D Warehouse are Trimble trademarks. This site is not affiliated with Trimble.*
