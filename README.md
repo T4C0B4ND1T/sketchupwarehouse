@@ -57,6 +57,12 @@ Suggested order:
 3. **Right away:** Amazon Associates (hardware articles), plus the Chaos (V-Ray/Enscape) and D5 affiliate programs if they're accepting partners.
 4. **At about 10k sessions/month:** move from AdSense to Journey by Mediavine or Ezoic, which usually pay about 2–3× more per visitor.
 
+## New-article emails
+
+Each time *Generate article* publishes an article, it waits for the deploy and then opens a GitHub issue labeled **new-article** that @mentions you. The issue includes the link, topic, length, cover credit and a short review checklist. GitHub emails you about the mention, which is on by default: *github.com → Settings → Notifications → "@mentions" → Email*. Close the issue once you've looked the article over.
+
+In review mode (`PUBLISH_MODE=review`), the pull request itself notifies you instead. GitHub also emails you when a scheduled workflow fails.
+
 ## Admin: write and edit articles yourself
 
 Go to **https://sketchupwarehouse.com/admin/** to write new articles, edit or delete existing ones (including the AI-written ones), and upload your own images. It runs [Sveltia CMS](https://sveltiacms.app), a free editor that runs in your browser. When you save, it commits to this repository and the site redeploys in about a minute.
