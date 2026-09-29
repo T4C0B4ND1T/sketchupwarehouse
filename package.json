@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "generate": "node scripts/generate-post.mjs",
-    "generate:dry": "node scripts/generate-post.mjs --dry-run"
+    "generate:dry": "node scripts/generate-post.mjs --dry-run",
+    "og-image": "node scripts/og-image.mjs"
   },
   "engines": {
     "node": ">=22"
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.128.0",
+    "playwright": "^1.63.0",
     "yaml": "^2.9.1"
   }
 }
