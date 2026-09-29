@@ -93,6 +93,9 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ github.token }}
+          # Article requests start this workflow from the "Article request"
+          # workflow, so the actor is the GitHub Actions bot, not a person.
+          allowed_bots: github-actions
           prompt: Read .article/prompt.md and follow its instructions exactly. Finish by writing the article to .article/draft.md.
           claude_args: >-
             --allowedTools "WebSearch,WebFetch,Read,Write,Glob,Grep"
