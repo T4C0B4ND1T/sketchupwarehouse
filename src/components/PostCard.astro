@@ -12,7 +12,7 @@ const cat = CATEGORIES[post.data.category];
 <article class={post.data.cover ? 'card card--media' : 'card'}>
   {post.data.cover && (
     <div class="card-media">
-      <Image src={post.data.cover.src} alt="" widths={[480, 720]} sizes="(min-width: 1024px) 480px, 100vw" />
+      <Image src={post.data.cover.src} inferSize={typeof post.data.cover.src === 'string'} alt="" widths={[480, 720]} sizes="(min-width: 1024px) 480px, 100vw" />
     </div>
   )}
   <div class="card-top">

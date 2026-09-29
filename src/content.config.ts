@@ -18,13 +18,14 @@ const posts = defineCollection({
     sources: z.array(z.object({ title: z.string(), url: z.string().url() })).default([]),
     // Stock-photo search the image fetcher uses (scripts/add-images.mjs).
     imageQuery: z.string().optional(),
-    // Cover photo, stored next to the posts and optimized at build time.
+    // Cover photo: a file in ./images (uploaded in /admin or fetched from
+    // Pexels) or a link to an image elsewhere. Both are optimized at build time.
     cover: z
       .object({
-        src: image(),
+        src: z.union([z.string().url(), image()]),
         alt: z.string(),
-        credit: z.string(),
-        creditUrl: z.string().url(),
+        credit: z.string().optional(),
+        creditUrl: z.string().url().optional(),
         pexelsId: z.number().optional(),
       })
       .optional(),

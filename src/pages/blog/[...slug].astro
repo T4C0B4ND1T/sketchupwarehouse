@@ -24,7 +24,7 @@ const toc = headings.filter((h) => h.depth === 2);
 const url = new URL(Astro.url.pathname, Astro.site).toString();
 // Social preview: the cover cropped to the standard 1200×630 share size.
 const ogImage = data.cover
-  ? (await getImage({ src: data.cover.src, width: 1200, height: 630, fit: 'cover', format: 'jpg' })).src
+  ? (await getImage({ src: data.cover.src, inferSize: typeof data.cover.src === 'string', width: 1200, height: 630, fit: 'cover', format: 'jpg' })).src
   : undefined;
 
 const jsonLd = {
@@ -70,13 +70,20 @@ const jsonLd = {
       <figure class="article-cover">
         <Image
           src={data.cover.src}
+          inferSize={typeof data.cover.src === 'string'}
           alt={data.cover.alt}
           widths={[640, 960, 1440]}
           sizes="(min-width: 1440px) 1432px, 100vw"
           loading="eager"
           fetchpriority="high"
         />
-        <figcaption>Photo: <a href={data.cover.creditUrl} rel="noopener">{data.cover.credit} / Pexels</a></figcaption>
+        {data.cover.credit && (
+          <figcaption>
+            Photo: {data.cover.creditUrl
+              ? <a href={data.cover.creditUrl} rel="noopener">{data.cover.credit}{data.cover.pexelsId && ' / Pexels'}</a>
+              : data.cover.credit}
+          </figcaption>
+        )}
       </figure>
     )}
 

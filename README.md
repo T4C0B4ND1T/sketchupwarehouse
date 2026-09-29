@@ -57,6 +57,26 @@ Suggested order:
 3. **Right away:** Amazon Associates (hardware articles), plus the Chaos (V-Ray/Enscape) and D5 affiliate programs if they're accepting partners.
 4. **At about 10k sessions/month:** move from AdSense to Journey by Mediavine or Ezoic, which usually pay about 2–3× more per visitor.
 
+## Admin: write and edit articles yourself
+
+Go to **https://sketchupwarehouse.com/admin/** to write new articles, edit or delete existing ones (including the AI-written ones), and upload your own images. It runs [Sveltia CMS](https://sveltiacms.app), a free editor that runs in your browser. When you save, it commits to this repository and the site redeploys in about a minute.
+
+**Sign in (first time):**
+1. On the admin page, click **Sign In with Token**. The dialog links to GitHub's token page with the right permission already selected.
+2. Alternatively, create a *fine-grained personal access token* yourself at GitHub → Settings → Developer settings. Give it **Only select repositories → sketchupwarehouse** and **Contents: Read and write**, and set an expiry you're comfortable with.
+3. Paste the token. It's stored only in your browser. Anyone with the token can edit the repository, so don't share it.
+
+**Images:**
+- **Cover image:** upload a photo, or paste a link to an image hosted elsewhere (https://…). If you leave it empty, a Pexels photo is added automatically the next time *Generate article* or *Add cover photos* runs.
+- **Images in the article text:** use the image button in the editor.
+- Uploaded images go to `src/content/posts/images/` and are resized and converted to WebP automatically, so large photos from a phone or camera are fine.
+- Images linked from other sites are downloaded and optimized at build time. Only link images you have the right to use.
+
+**Tips:**
+- Tick **Draft** to save an article without publishing it.
+- A future **Publish date** schedules the article; it goes live that morning.
+- For your own articles, leave **Drafted with AI** off.
+
 ## Cover photos
 
 Each article gets a free stock photo from [Pexels](https://www.pexels.com). The photo appears under the article header, on the article's card in lists, and as its social preview image. Pexels photos are free for commercial use. Each photo is credited to its photographer, and the About page credits Pexels.
@@ -64,7 +84,7 @@ Each article gets a free stock photo from [Pexels](https://www.pexels.com). The 
 - **Setup:** create a free API key at [pexels.com/api](https://www.pexels.com/api/). Add it under *Settings → Secrets and variables → Actions → Secrets* as `PEXELS_API_KEY`.
 - **Existing articles:** go to *Actions → Add cover photos → Run workflow*. It adds a photo to every article that doesn't have one, then redeploys.
 - **New articles:** the writer suggests an `imageQuery` for each article, and *Generate article* fetches the photo automatically. If the key isn't set, the article still publishes without a photo.
-- **Change a photo:** delete the `cover:` block from the article's front matter and its file in `src/content/posts/images/`. Edit `imageQuery` if you want a different search, then run *Add cover photos* again.
+- **Change a photo:** replace it in **/admin**. To get a different Pexels photo instead, clear the cover image (and edit **Photo search** if you like), then run *Add cover photos* again.
 
 ## Ad zones
 
