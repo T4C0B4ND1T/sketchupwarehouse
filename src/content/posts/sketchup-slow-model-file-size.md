@@ -16,6 +16,12 @@ sources:
     url: https://help.sketchup.com/en
   - title: SketchUp Community Forums
     url: https://forums.sketchup.com/
+cover:
+  src: ./images/sketchup-slow-model-file-size.jpg
+  alt: Architect evaluating a building design on a computer screen in an office setting.
+  credit: Grove Brands
+  creditUrl: https://www.pexels.com/photo/architect-working-on-computer-15764110/
+  pexelsId: 15764110
 ---
 
 Laggy orbiting, long saves and a spinning cursor usually come down to a handful of causes: too much geometry, too many large textures, too many visible effects, or graphics drivers that aren't pulling their weight. Work through the fixes below in order — the first five solve most problems.
