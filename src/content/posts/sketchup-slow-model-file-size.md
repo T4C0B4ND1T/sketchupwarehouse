@@ -1,17 +1,27 @@
 ---
-title: "Why Is My SketchUp Model So Slow? 12 Fixes That Work"
-description: "A slow SketchUp model is almost always fixable. Twelve practical ways to cut file size, reduce lag when orbiting and keep large projects responsive."
+title: Why Is My SketchUp Model So Slow? 12 Fixes That Work
+description: A slow SketchUp model is almost always fixable. Twelve practical ways to cut file size, reduce lag when orbiting and keep large projects responsive.
 pubDate: 2026-09-26
 category: tutorials
-tags: [performance, file size, troubleshooting, tips]
-imageQuery: "computer workstation multiple monitors"
+tags:
+  - performance
+  - file size
+  - troubleshooting
+  - tips
+imageQuery: computer workstation multiple monitors
 aiAssisted: true
 topicId: sketchup-slow-model-file-size
 sources:
-  - title: "SketchUp Help Center"
-    url: "https://help.sketchup.com/en"
-  - title: "SketchUp Community Forums"
-    url: "https://forums.sketchup.com/"
+  - title: SketchUp Help Center
+    url: https://help.sketchup.com/en
+  - title: SketchUp Community Forums
+    url: https://forums.sketchup.com/
+cover:
+  src: ./images/sketchup-slow-model-file-size.jpg
+  alt: Trader analyzing financial data on multiple monitors in an office setting.
+  credit: AlphaTradeZone
+  creditUrl: https://www.pexels.com/photo/man-in-blue-and-white-stripes-shirt-in-front-of-black-computer-monitor-5831264/
+  pexelsId: 5831264
 ---
 
 Laggy orbiting, long saves and a spinning cursor usually come down to a handful of causes: too much geometry, too many large textures, too many visible effects, or graphics drivers that aren't pulling their weight. Work through the fixes below in order — the first five solve most problems.

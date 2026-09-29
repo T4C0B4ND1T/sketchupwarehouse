@@ -1,17 +1,27 @@
 ---
-title: "How to Find, Download and Clean Up 3D Warehouse Models"
-description: "3D Warehouse has millions of free SketchUp models, but quality varies. How to find good ones, download them properly and keep them from slowing your model down."
+title: How to Find, Download and Clean Up 3D Warehouse Models
+description: 3D Warehouse has millions of free SketchUp models, but quality varies. How to find good ones, download them properly and keep them from slowing your model down.
 pubDate: 2026-09-27
 category: tutorials
-tags: [3d warehouse, components, performance, beginners]
-imageQuery: "modern furnished living room interior"
+tags:
+  - 3d warehouse
+  - components
+  - performance
+  - beginners
+imageQuery: modern furnished living room interior
 aiAssisted: true
 topicId: 3d-warehouse-sketchup-download
 sources:
-  - title: "3D Warehouse"
-    url: "https://3dwarehouse.sketchup.com/"
-  - title: "SketchUp Help Center"
-    url: "https://help.sketchup.com/en"
+  - title: 3D Warehouse
+    url: https://3dwarehouse.sketchup.com/
+  - title: SketchUp Help Center
+    url: https://help.sketchup.com/en
+cover:
+  src: ./images/3d-warehouse-sketchup-download.jpg
+  alt: Comfortable couch with pillows and wooden table with soft chairs in modern studio apartment with kitchen zone in daylight
+  credit: Max Vakhtbovych
+  creditUrl: https://www.pexels.com/photo/modern-studio-apartment-interior-with-sofa-and-kitchen-zone-6492402/
+  pexelsId: 6492402
 ---
 
 3D Warehouse is Trimble's free online library of SketchUp models — furniture, fixtures, people, vehicles, trees and a huge range of manufacturer products. It can save hours on every project, but it's also the fastest way to turn a snappy model into a sluggish one. Here's how to use it well.

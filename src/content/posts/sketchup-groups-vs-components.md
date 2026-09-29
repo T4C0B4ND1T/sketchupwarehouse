@@ -1,17 +1,27 @@
 ---
 title: "Groups vs Components in SketchUp: When to Use Each"
-description: "Groups and components both keep SketchUp geometry from sticking together, but they behave very differently. Here's when to use each and the mistakes to avoid."
+description: Groups and components both keep SketchUp geometry from sticking together, but they behave very differently. Here's when to use each and the mistakes to avoid.
 pubDate: 2026-09-28
 category: tutorials
-tags: [groups, components, beginners, modeling]
-imageQuery: "woodworking workshop furniture making"
+tags:
+  - groups
+  - components
+  - beginners
+  - modeling
+imageQuery: woodworking workshop furniture making
 aiAssisted: true
 topicId: sketchup-groups-vs-components
 sources:
-  - title: "SketchUp Help Center"
-    url: "https://help.sketchup.com/en"
-  - title: "SketchUp Community Forums"
-    url: "https://forums.sketchup.com/"
+  - title: SketchUp Help Center
+    url: https://help.sketchup.com/en
+  - title: SketchUp Community Forums
+    url: https://forums.sketchup.com/
+cover:
+  src: ./images/sketchup-groups-vs-components.jpg
+  alt: Unrecognizable male artisan using belt and disc sander to shape wooden detail while working near anonymous coworker in workshop with stack of wooden boards
+  credit: Anna Shvets
+  creditUrl: https://www.pexels.com/photo/crop-carpenter-grinding-round-piece-of-wood-in-joinery-5710910/
+  pexelsId: 5710910
 ---
 
 If you've ever pulled a wall in SketchUp and watched the floor come with it, you've met "sticky geometry." Groups and components are the two tools that stop it. Both wrap edges and faces into a protected container — the difference is that **every copy of a component is linked**, while every group is on its own.
