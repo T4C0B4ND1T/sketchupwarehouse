@@ -1,5 +1,5 @@
 {
-  "_readme": "Evergreen topic queue. The generator writes the first topic whose id is not yet used by a post (frontmatter topicId). Reorder to change priority; append to add more.",
+  "_readme": "Topic list for automated articles. Edit it at sketchupwarehouse.com/admin/ (Topic list) or here. The generator writes the first topic that isn't paused and has no post yet, top to bottom. Only title is required: category, keyword, notes and link are optional. The generator fills in id and post when it writes a topic; don't edit those.",
   "topics": [
     {
       "id": "sketchup-for-beginners",
@@ -7,7 +7,8 @@
       "title": "SketchUp for Beginners: The First 10 Tools to Master",
       "keyword": "sketchup for beginners",
       "angle": "Tool-by-tool walkthrough with shortcuts and a mini practice project.",
-      "slug": "sketchup-for-beginners"
+      "slug": "sketchup-for-beginners",
+      "post": "sketchup-for-beginners"
     },
     {
       "id": "sketchup-groups-vs-components",
@@ -15,7 +16,34 @@
       "title": "How to Use Groups vs Components in SketchUp",
       "keyword": "sketchup groups vs components",
       "angle": "When to use each, nesting, making unique, common mistakes.",
-      "slug": "sketchup-groups-vs-components"
+      "slug": "sketchup-groups-vs-components",
+      "post": "sketchup-groups-vs-components"
+    },
+    {
+      "id": "sketchup-slow-model-file-size",
+      "category": "tutorials",
+      "title": "How to Reduce SketchUp File Size and Speed Up a Slow Model",
+      "keyword": "sketchup slow model file size",
+      "angle": "Purge, proxies, component instancing, textures, hidden geometry.",
+      "slug": "sketchup-slow-model-file-size",
+      "post": "sketchup-slow-model-file-size"
+    },
+    {
+      "id": "3d-warehouse-sketchup-download",
+      "category": "tutorials",
+      "title": "How to Download and Use Models from 3D Warehouse",
+      "keyword": "3d warehouse sketchup download",
+      "angle": "Finding quality models, checking polycount, licensing, cleaning up.",
+      "slug": "3d-warehouse-sketchup-download",
+      "post": "3d-warehouse-sketchup-download"
+    },
+    {
+      "id": "how-to-get-a-sketchup-model-into-revit-and-keep-it-clean",
+      "category": "workflows",
+      "title": "How to Get a SketchUp Model into Revit (and Keep It Clean)",
+      "keyword": "sketchup to revit",
+      "angle": "Import vs link, what survives (faces, materials, components), clean-up before export, file formats, when to rebuild natively.",
+      "slug": "how-to-get-a-sketchup-model-into-revit-and-keep-it-clean"
     },
     {
       "id": "sketchup-keyboard-shortcuts",
@@ -26,12 +54,28 @@
       "slug": "sketchup-keyboard-shortcuts"
     },
     {
+      "id": "v-ray-for-sketchup-lighting-sun-dome-ies-and-mesh-lights",
+      "category": "rendering",
+      "title": "V-Ray for SketchUp Lighting: Sun, Dome, IES and Mesh Lights",
+      "keyword": "vray sketchup lighting",
+      "angle": "Each light type, when to use it, realistic intensities, HDRI dome setup, common overexposure mistakes.",
+      "slug": "v-ray-for-sketchup-lighting-sun-dome-ies-and-mesh-lights"
+    },
+    {
       "id": "sketchup-follow-me-tool",
       "category": "tutorials",
       "title": "How to Use the Follow Me Tool in SketchUp",
       "keyword": "sketchup follow me tool",
       "angle": "Moldings, pipes, lathe-style round objects, fixing faceting.",
       "slug": "sketchup-follow-me-tool"
+    },
+    {
+      "id": "lumion-livesync-for-sketchup-setup-and-workflow",
+      "category": "rendering",
+      "title": "Lumion LiveSync for SketchUp: Setup and Workflow",
+      "keyword": "lumion livesync sketchup",
+      "angle": "Installing the plugin, what syncs live, materials and layers, when to export a .skp instead, version compatibility.",
+      "slug": "lumion-livesync-for-sketchup-setup-and-workflow"
     },
     {
       "id": "sketchup-tags-layers",
@@ -42,12 +86,28 @@
       "slug": "sketchup-tags-layers"
     },
     {
+      "id": "sketchup-vs-rhino-which-should-designers-learn",
+      "category": "workflows",
+      "title": "SketchUp vs Rhino: Which Should Designers Learn?",
+      "keyword": "sketchup vs rhino",
+      "angle": "Direct modeling vs NURBS, Grasshopper, pricing, industries, learning curve; when to use both together.",
+      "slug": "sketchup-vs-rhino-which-should-designers-learn"
+    },
+    {
       "id": "sketchup-reversed-faces",
       "category": "tutorials",
       "title": "How to Fix Reversed Faces in SketchUp",
       "keyword": "sketchup reversed faces",
       "angle": "Why blue/grey faces matter for rendering and 3D printing; fixes and extensions.",
       "slug": "sketchup-reversed-faces"
+    },
+    {
+      "id": "revit-families-vs-sketchup-components-what-carries-over",
+      "category": "workflows",
+      "title": "Revit Families vs SketchUp Components: What Carries Over",
+      "keyword": "revit families vs sketchup components",
+      "angle": "How each works (parameters, types, instances, Dynamic/Live Components), what converts between them and what doesn't.",
+      "slug": "revit-families-vs-sketchup-components-what-carries-over"
     },
     {
       "id": "sketchup-solid-for-3d-printing",
@@ -58,12 +118,28 @@
       "slug": "sketchup-solid-for-3d-printing"
     },
     {
+      "id": "how-to-manage-update-and-uninstall-sketchup-extensions",
+      "category": "extensions",
+      "title": "How to Manage, Update and Uninstall SketchUp Extensions",
+      "keyword": "manage sketchup extensions",
+      "angle": "Extension Manager, Extension Warehouse updates, disabling vs uninstalling, finding plugin folders, troubleshooting load errors.",
+      "slug": "how-to-manage-update-and-uninstall-sketchup-extensions"
+    },
+    {
       "id": "sketchup-import-floor-plan-scale",
       "category": "tutorials",
       "title": "How to Import a PDF or Image and Scale It in SketchUp",
       "keyword": "sketchup import floor plan scale",
       "angle": "Tracing a floor plan accurately with the Tape Measure resize trick.",
       "slug": "sketchup-import-floor-plan-scale"
+    },
+    {
+      "id": "how-to-make-your-own-components-in-sketchup-axes-glue-and-cut-openings",
+      "category": "tutorials",
+      "title": "How to Make Your Own Components in SketchUp (Axes, Glue and Cut Openings)",
+      "keyword": "how to make a component in sketchup",
+      "angle": "Make Component dialog options explained, setting axes, glue to, cut opening for doors/windows, replacing and reloading.",
+      "slug": "how-to-make-your-own-components-in-sketchup-axes-glue-and-cut-openings"
     },
     {
       "id": "sketchup-curved-surfaces",
@@ -74,12 +150,28 @@
       "slug": "sketchup-curved-surfaces"
     },
     {
+      "id": "chaos-cosmos-in-sketchup-free-3d-assets-for-v-ray-and-enscape",
+      "category": "rendering",
+      "title": "Chaos Cosmos in SketchUp: Free 3D Assets for V-Ray and Enscape",
+      "keyword": "chaos cosmos sketchup",
+      "angle": "What Cosmos is, which products include it, placing assets, proxies and render-ready materials, licensing notes.",
+      "slug": "chaos-cosmos-in-sketchup-free-3d-assets-for-v-ray-and-enscape"
+    },
+    {
       "id": "sketchup-sandbox-terrain",
       "category": "tutorials",
       "title": "Sandbox Tools in SketchUp: Modeling Terrain Step by Step",
       "keyword": "sketchup sandbox terrain",
       "angle": "From contours and from scratch, stamping a building pad.",
       "slug": "sketchup-sandbox-terrain"
+    },
+    {
+      "id": "how-to-import-autocad-dwg-plans-into-sketchup-and-clean-them-up",
+      "category": "tutorials",
+      "title": "How to Import AutoCAD DWG Plans into SketchUp and Clean Them Up",
+      "keyword": "import dwg into sketchup",
+      "angle": "Import options and units, purging CAD layers, fixing gaps so faces form, extensions that help, tracing vs extruding.",
+      "slug": "how-to-import-autocad-dwg-plans-into-sketchup-and-clean-them-up"
     },
     {
       "id": "sketchup-scenes-animation",
@@ -90,12 +182,28 @@
       "slug": "sketchup-scenes-animation"
     },
     {
+      "id": "grasshopper-and-sketchup-getting-parametric-designs-into-your-model",
+      "category": "workflows",
+      "title": "Grasshopper and SketchUp: Getting Parametric Designs into Your Model",
+      "keyword": "grasshopper sketchup",
+      "angle": "How Grasshopper geometry gets into SketchUp (Rhino export, Speckle and other connectors), keeping it editable, when to model parametrically in SketchUp instead.",
+      "slug": "grasshopper-and-sketchup-getting-parametric-designs-into-your-model"
+    },
+    {
       "id": "how-to-model-stairs-in-sketchup",
       "category": "tutorials",
       "title": "How to Model Stairs in SketchUp",
       "keyword": "how to model stairs in sketchup",
       "angle": "Straight run with code-friendly rise/run, using arrays.",
       "slug": "how-to-model-stairs-in-sketchup"
+    },
+    {
+      "id": "enscape-materials-in-sketchup-the-settings-that-actually-matter",
+      "category": "rendering",
+      "title": "Enscape Materials in SketchUp: The Settings That Actually Matter",
+      "keyword": "enscape materials sketchup",
+      "angle": "Albedo, roughness, bump/normal, reflections, grass and water, transparency; working from SketchUp's material editor.",
+      "slug": "enscape-materials-in-sketchup-the-settings-that-actually-matter"
     },
     {
       "id": "how-to-make-a-roof-in-sketchup",
@@ -106,6 +214,14 @@
       "slug": "how-to-make-a-roof-in-sketchup"
     },
     {
+      "id": "where-to-find-sketchup-plugins-extension-warehouse-vs-sketchucation-and-others",
+      "category": "extensions",
+      "title": "Where to Find SketchUp Plugins: Extension Warehouse vs SketchUcation and Others",
+      "keyword": "where to download sketchup plugins",
+      "angle": "Official vs community stores, trust and safety, licensing models, installing from each.",
+      "slug": "where-to-find-sketchup-plugins-extension-warehouse-vs-sketchucation-and-others"
+    },
+    {
       "id": "sketchup-section-planes",
       "category": "tutorials",
       "title": "Section Planes in SketchUp: Cuts, Fills and Exporting to LayOut",
@@ -114,12 +230,12 @@
       "slug": "sketchup-section-planes"
     },
     {
-      "id": "sketchup-slow-model-file-size",
-      "category": "tutorials",
-      "title": "How to Reduce SketchUp File Size and Speed Up a Slow Model",
-      "keyword": "sketchup slow model file size",
-      "angle": "Purge, proxies, component instancing, textures, hidden geometry.",
-      "slug": "sketchup-slow-model-file-size"
+      "id": "sketchup-to-3ds-max-moving-models-without-losing-materials",
+      "category": "workflows",
+      "title": "SketchUp to 3ds Max: Moving Models Without Losing Materials",
+      "keyword": "sketchup to 3ds max",
+      "angle": "Direct .skp import in 3ds Max, FBX, instancing, material conversion (V-Ray to V-Ray), scale and smoothing groups.",
+      "slug": "sketchup-to-3ds-max-moving-models-without-losing-materials"
     },
     {
       "id": "sketchup-layout-tutorial",
@@ -130,12 +246,28 @@
       "slug": "sketchup-layout-tutorial"
     },
     {
+      "id": "chaos-vantage-with-sketchup-real-time-ray-tracing-explained",
+      "category": "rendering",
+      "title": "Chaos Vantage with SketchUp: Real-Time Ray Tracing Explained",
+      "keyword": "chaos vantage sketchup",
+      "angle": "What Vantage is, live link through V-Ray for SketchUp, hardware requirements, when it beats Enscape or V-Ray GPU.",
+      "slug": "chaos-vantage-with-sketchup-real-time-ray-tracing-explained"
+    },
+    {
       "id": "sketchup-dimensions",
       "category": "tutorials",
       "title": "How to Dimension a Model in SketchUp",
       "keyword": "sketchup dimensions",
       "angle": "Dimension tool, text, units, styles, LayOut alternative.",
       "slug": "sketchup-dimensions"
+    },
+    {
+      "id": "nested-components-in-sketchup-organizing-complex-assemblies",
+      "category": "tutorials",
+      "title": "Nested Components in SketchUp: Organizing Complex Assemblies",
+      "keyword": "sketchup nested components",
+      "angle": "Hierarchies, Outliner, editing context, making unique vs editing all, performance tips.",
+      "slug": "nested-components-in-sketchup-organizing-complex-assemblies"
     },
     {
       "id": "sketchup-materials-textures",
@@ -146,12 +278,12 @@
       "slug": "sketchup-materials-textures"
     },
     {
-      "id": "3d-warehouse-sketchup-download",
-      "category": "tutorials",
-      "title": "How to Download and Use Models from 3D Warehouse",
-      "keyword": "3d warehouse sketchup download",
-      "angle": "Finding quality models, checking polycount, licensing, cleaning up.",
-      "slug": "3d-warehouse-sketchup-download"
+      "id": "how-to-prepare-a-sketchup-model-for-lumion",
+      "category": "rendering",
+      "title": "How to Prepare a SketchUp Model for Lumion",
+      "keyword": "prepare sketchup model for lumion",
+      "angle": "Front/back faces, tags to separate materials, z-fighting, polygon count, unique materials per surface type, export checklist.",
+      "slug": "how-to-prepare-a-sketchup-model-for-lumion"
     },
     {
       "id": "sketchup-array-copy",
@@ -162,12 +294,28 @@
       "slug": "sketchup-array-copy"
     },
     {
+      "id": "how-to-move-models-between-rhino-and-sketchup",
+      "category": "workflows",
+      "title": "How to Move Models Between Rhino and SketchUp",
+      "keyword": "rhino to sketchup",
+      "angle": "Import/export formats and which SketchUp editions support them, curve and mesh quality, units, layers to tags, materials.",
+      "slug": "how-to-move-models-between-rhino-and-sketchup"
+    },
+    {
       "id": "sketchup-styles",
       "category": "tutorials",
       "title": "SketchUp Styles: How to Make Your Model Look Hand-Drawn",
       "keyword": "sketchup styles",
       "angle": "Style builder, edge settings, watermarks.",
       "slug": "sketchup-styles"
+    },
+    {
+      "id": "v-ray-for-sketchup-render-settings-explained-quality-vs-speed",
+      "category": "rendering",
+      "title": "V-Ray for SketchUp Render Settings Explained: Quality vs Speed",
+      "keyword": "vray sketchup render settings",
+      "angle": "Interactive vs production, CPU vs GPU, noise limit, denoisers, resolution and time targets, recommended starting presets.",
+      "slug": "v-ray-for-sketchup-render-settings-explained-quality-vs-speed"
     },
     {
       "id": "sketchup-solid-tools",
@@ -178,12 +326,28 @@
       "slug": "sketchup-solid-tools"
     },
     {
+      "id": "sketchup-plugins-not-working-after-an-update-how-to-fix-them",
+      "category": "extensions",
+      "title": "SketchUp Plugins Not Working After an Update? How to Fix Them",
+      "keyword": "sketchup plugins not working",
+      "angle": "Compatibility with new SketchUp versions, Ruby errors, reinstalling, load-error dialog, contacting developers.",
+      "slug": "sketchup-plugins-not-working-after-an-update-how-to-fix-them"
+    },
+    {
       "id": "sketchup-intersect-faces",
       "category": "tutorials",
       "title": "Intersect Faces in SketchUp Explained",
       "keyword": "sketchup intersect faces",
       "angle": "Use cases like complex cuts and domes.",
       "slug": "sketchup-intersect-faces"
+    },
+    {
+      "id": "live-components-in-sketchup-parametric-objects-without-coding",
+      "category": "tutorials",
+      "title": "Live Components in SketchUp: Parametric Objects Without Coding",
+      "keyword": "sketchup live components",
+      "angle": "What Live Components are, where to find them, configuring parameters, how they differ from Dynamic Components and Revit families.",
+      "slug": "live-components-in-sketchup-parametric-objects-without-coding"
     },
     {
       "id": "sketchup-export-dwg",
@@ -194,12 +358,28 @@
       "slug": "sketchup-export-dwg"
     },
     {
+      "id": "lumion-vs-enscape-for-sketchup-users",
+      "category": "rendering",
+      "title": "Lumion vs Enscape for SketchUp Users",
+      "keyword": "lumion vs enscape",
+      "angle": "Workflow (live link vs separate app), quality, asset libraries, animation, hardware, pricing; which suits which projects.",
+      "slug": "lumion-vs-enscape-for-sketchup-users"
+    },
+    {
       "id": "sketchup-import-revit-ifc",
       "category": "tutorials",
       "title": "How to Import Revit and IFC Files into SketchUp",
       "keyword": "sketchup import revit ifc",
       "angle": "Current import options and cleanup.",
       "slug": "sketchup-import-revit-ifc"
+    },
+    {
+      "id": "how-to-turn-a-sketchup-model-into-a-revit-family",
+      "category": "workflows",
+      "title": "How to Turn a SketchUp Model into a Revit Family",
+      "keyword": "sketchup to revit family",
+      "angle": "Preparing geometry, importing into the Family Editor, adding parameters and materials, when to model the family natively instead.",
+      "slug": "how-to-turn-a-sketchup-model-into-a-revit-family"
     },
     {
       "id": "sketchup-free-vs-pro",
@@ -210,12 +390,28 @@
       "slug": "sketchup-free-vs-pro"
     },
     {
+      "id": "v-ray-proxies-in-sketchup-heavy-trees-and-furniture-without-the-lag",
+      "category": "rendering",
+      "title": "V-Ray Proxies in SketchUp: Heavy Trees and Furniture Without the Lag",
+      "keyword": "vray proxy sketchup",
+      "angle": "Creating and importing proxies, preview modes, Cosmos assets, scattering, keeping file size down.",
+      "slug": "v-ray-proxies-in-sketchup-heavy-trees-and-furniture-without-the-lag"
+    },
+    {
       "id": "sketchup-kitchen-design",
       "category": "tutorials",
       "title": "How to Model a Kitchen in SketchUp",
       "keyword": "sketchup kitchen design",
       "angle": "Cabinet components, dynamic components, appliances from 3D Warehouse.",
       "slug": "sketchup-kitchen-design"
+    },
+    {
+      "id": "best-sketchup-plugins-for-walls-doors-and-windows",
+      "category": "extensions",
+      "title": "Best SketchUp Plugins for Walls, Doors and Windows",
+      "keyword": "sketchup plugins for walls doors windows",
+      "angle": "Compare the main building-element extensions: features, parametric editing, pricing, who each suits.",
+      "slug": "best-sketchup-plugins-for-walls-doors-and-windows"
     },
     {
       "id": "sketchup-dynamic-components",
@@ -226,12 +422,28 @@
       "slug": "sketchup-dynamic-components"
     },
     {
+      "id": "building-a-component-library-for-your-sketchup-office",
+      "category": "workflows",
+      "title": "Building a Component Library for Your SketchUp Office",
+      "keyword": "sketchup component library",
+      "angle": "Folder structure, naming, the Components panel and local collections, sharing with a team, keeping it lightweight.",
+      "slug": "building-a-component-library-for-your-sketchup-office"
+    },
+    {
       "id": "sketchup-ipad",
       "category": "tutorials",
       "title": "How to Use SketchUp on iPad",
       "keyword": "sketchup ipad",
       "angle": "Apple Pencil workflows, AR, limitations.",
       "slug": "sketchup-ipad"
+    },
+    {
+      "id": "enscape-videos-and-panoramas-from-sketchup",
+      "category": "rendering",
+      "title": "Enscape Videos and Panoramas from SketchUp",
+      "keyword": "enscape video sketchup",
+      "angle": "Keyframe video paths, render settings, 360° panoramas and web standalones, exporting for clients.",
+      "slug": "enscape-videos-and-panoramas-from-sketchup"
     },
     {
       "id": "sketchup-geolocation",
@@ -242,12 +454,28 @@
       "slug": "sketchup-geolocation"
     },
     {
+      "id": "sketchup-and-autocad-together-a-hybrid-drafting-workflow",
+      "category": "workflows",
+      "title": "SketchUp and AutoCAD Together: A Hybrid Drafting Workflow",
+      "keyword": "sketchup and autocad workflow",
+      "angle": "Which tool does what, round-tripping DWG, LayOut vs AutoCAD for documents, keeping layers and scale consistent.",
+      "slug": "sketchup-and-autocad-together-a-hybrid-drafting-workflow"
+    },
+    {
       "id": "sketchup-shadow-study",
       "category": "tutorials",
       "title": "Shadow Studies in SketchUp",
       "keyword": "sketchup shadow study",
       "angle": "Setting date/time, animating shadows, exporting.",
       "slug": "sketchup-shadow-study"
+    },
+    {
+      "id": "v-ray-scatter-and-fur-in-sketchup-grass-carpets-and-forests",
+      "category": "rendering",
+      "title": "V-Ray Scatter and Fur in SketchUp: Grass, Carpets and Forests",
+      "keyword": "vray scatter sketchup",
+      "angle": "Scatter setup, fur for grass and rugs, density and randomness, performance; which V-Ray versions include it.",
+      "slug": "v-ray-scatter-and-fur-in-sketchup-grass-carpets-and-forests"
     },
     {
       "id": "sketchup-match-photo",
@@ -258,12 +486,28 @@
       "slug": "sketchup-match-photo"
     },
     {
+      "id": "generate-report-in-sketchup-schedules-and-quantities-from-components",
+      "category": "tutorials",
+      "title": "Generate Report in SketchUp: Schedules and Quantities from Components",
+      "keyword": "sketchup generate report",
+      "angle": "Component attributes, classification, building a report template, exporting to CSV; how it compares to Revit schedules.",
+      "slug": "generate-report-in-sketchup-schedules-and-quantities-from-components"
+    },
+    {
       "id": "sketchup-soften-edges",
       "category": "tutorials",
       "title": "Soften and Smooth Edges in SketchUp",
       "keyword": "sketchup soften edges",
       "angle": "Soften/smooth dialog, why models look faceted.",
       "slug": "sketchup-soften-edges"
+    },
+    {
+      "id": "lumion-vs-twinmotion-for-sketchup-models",
+      "category": "rendering",
+      "title": "Lumion vs Twinmotion for SketchUp Models",
+      "keyword": "lumion vs twinmotion",
+      "angle": "Import paths from SketchUp, live sync, visual quality, assets, pricing and licensing, learning curve.",
+      "slug": "lumion-vs-twinmotion-for-sketchup-models"
     },
     {
       "id": "sketchup-z-fighting",
@@ -274,12 +518,28 @@
       "slug": "sketchup-z-fighting"
     },
     {
+      "id": "speckle-for-sketchup-sharing-models-with-revit-rhino-and-grasshopper",
+      "category": "workflows",
+      "title": "Speckle for SketchUp: Sharing Models with Revit, Rhino and Grasshopper",
+      "keyword": "speckle sketchup",
+      "angle": "What Speckle is, installing the SketchUp connector, sending and receiving, what data survives, free vs paid.",
+      "slug": "speckle-for-sketchup-sharing-models-with-revit-rhino-and-grasshopper"
+    },
+    {
       "id": "best-free-sketchup-extensions",
       "category": "extensions",
       "title": "The Best Free SketchUp Extensions",
       "keyword": "best free sketchup extensions",
       "angle": "Roundup with what each does and where to get it (Extension Warehouse, SketchUcation).",
       "slug": "best-free-sketchup-extensions"
+    },
+    {
+      "id": "how-to-speed-up-v-ray-renders-in-sketchup",
+      "category": "rendering",
+      "title": "How to Speed Up V-Ray Renders in SketchUp",
+      "keyword": "speed up vray sketchup",
+      "angle": "Denoising, light cache, noise limit, GPU rendering, proxies and texture sizes, render regions, cloud rendering.",
+      "slug": "how-to-speed-up-v-ray-renders-in-sketchup"
     },
     {
       "id": "sketchup-extensions-for-architects",
@@ -290,12 +550,28 @@
       "slug": "sketchup-extensions-for-architects"
     },
     {
+      "id": "ifc-and-classification-in-sketchup-making-components-bim-ready",
+      "category": "workflows",
+      "title": "IFC and Classification in SketchUp: Making Components BIM-Ready",
+      "keyword": "sketchup ifc classification",
+      "angle": "Classifier tool, IFC types, exporting IFC, what Revit and other BIM tools read, common pitfalls.",
+      "slug": "ifc-and-classification-in-sketchup-making-components-bim-ready"
+    },
+    {
       "id": "sketchup-woodworking-extensions",
       "category": "extensions",
       "title": "Best SketchUp Extensions for Woodworking",
       "keyword": "sketchup woodworking extensions",
       "angle": "Cut lists, joinery, OpenCutList etc.",
       "slug": "sketchup-woodworking-extensions"
+    },
+    {
+      "id": "best-sketchup-plugins-for-faster-modeling",
+      "category": "extensions",
+      "title": "Best SketchUp Plugins for Faster Modeling",
+      "keyword": "best sketchup plugins for modeling",
+      "angle": "Selection, alignment, array, and editing extensions that save the most time; free vs paid picks.",
+      "slug": "best-sketchup-plugins-for-faster-modeling"
     },
     {
       "id": "opencutlist-sketchup",
@@ -306,6 +582,14 @@
       "slug": "opencutlist-sketchup"
     },
     {
+      "id": "chaos-cloud-rendering-from-sketchup-is-it-worth-it",
+      "category": "rendering",
+      "title": "Chaos Cloud Rendering from SketchUp: Is It Worth It?",
+      "keyword": "chaos cloud rendering sketchup",
+      "angle": "How submitting from V-Ray for SketchUp works, credits and cost, turnaround, when it beats a local render.",
+      "slug": "chaos-cloud-rendering-from-sketchup-is-it-worth-it"
+    },
+    {
       "id": "profile-builder-sketchup",
       "category": "extensions",
       "title": "Profile Builder Review: Parametric Assemblies in SketchUp",
@@ -314,12 +598,28 @@
       "slug": "profile-builder-sketchup"
     },
     {
+      "id": "v-ray-materials-in-sketchup-building-realistic-materials-from-scratch",
+      "category": "rendering",
+      "title": "V-Ray Materials in SketchUp: Building Realistic Materials from Scratch",
+      "keyword": "vray materials sketchup",
+      "angle": "Diffuse, reflection, glossiness, bump/normal maps, the V-Ray material library, converting SketchUp materials.",
+      "slug": "v-ray-materials-in-sketchup-building-realistic-materials-from-scratch"
+    },
+    {
       "id": "sketchup-roof-extension",
       "category": "extensions",
       "title": "Best Roof Extensions for SketchUp",
       "keyword": "sketchup roof extension",
       "angle": "Compare popular roof plugins.",
       "slug": "sketchup-roof-extension"
+    },
+    {
+      "id": "where-to-find-manufacturer-sketchup-components-and-revit-families",
+      "category": "tutorials",
+      "title": "Where to Find Manufacturer SketchUp Components and Revit Families",
+      "keyword": "manufacturer sketchup models",
+      "angle": "3D Warehouse catalogs, manufacturer sites, BIM object libraries that offer both .skp and Revit families, checking quality before use.",
+      "slug": "where-to-find-manufacturer-sketchup-components-and-revit-families"
     },
     {
       "id": "install-sketchup-extension-rbz",

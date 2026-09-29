@@ -1,0 +1,95 @@
+name: Article request
+
+# Handles issues opened with the "Article request" form: either starts
+# "Generate article" for a draft you approve, or adds the topic to
+# content-queue/topics.json. Only the repository owner's issues are acted on.
+# Add the `retry` label to an existing request to run it again.
+on:
+  issues:
+    types: [opened, labeled]
+
+permissions:
+  contents: write
+  issues: write
+  actions: write
+
+concurrency:
+  # Serializes edits to topics.json; each run is quick.
+  group: article-request
+  cancel-in-progress: false
+
+jobs:
+  request:
+    if: >-
+      github.event.issue.author_association == 'OWNER' &&
+      (startsWith(github.event.issue.title, '[Article]') || contains(github.event.issue.labels.*.name, 'article-request')) &&
+      (github.event.action == 'opened' ||
+       (github.event.label.name == 'retry' && github.event.sender.login == github.repository_owner))
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      ISSUE: ${{ github.event.issue.number }}
+      BASE: ${{ github.event.repository.default_branch }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Make sure the labels exist
+        run: |
+          gh label create article-request --color 1d76db --description "Article request form" 2>/dev/null || true
+          gh label create retry --color fbca04 --description "Run an article request again" 2>/dev/null || true
+
+      - name: Read the request
+        id: req
+        run: node scripts/topic-request.mjs
+
+      - name: Clear the retry label
+        if: github.event.action == 'labeled'
+        run: gh issue edit "$ISSUE" --remove-label retry
+
+      - name: Start writing the article
+        if: steps.req.outputs.add == 'false'
+        env:
+          TOPIC: ${{ steps.req.outputs.topic }}
+          LINK: ${{ steps.req.outputs.link }}
+          NOTES: ${{ steps.req.outputs.notes }}
+          CATEGORY: ${{ steps.req.outputs.category || 'auto' }}
+        run: |
+          gh workflow run generate.yml --ref "$BASE" \
+            -f topic="$TOPIC" -f link="$LINK" -f notes="$NOTES" -f category="$CATEGORY" -f issue="$ISSUE"
+          gh issue comment "$ISSUE" --body "Researching and writing this now. It usually takes 5–15 minutes; I'll post the draft here for your approval."
+
+      - name: Add to the topic list
+        if: steps.req.outputs.add == 'true'
+        id: add
+        run: |
+          node scripts/topic-request.mjs --add
+          git config user.name "sketchupwarehouse-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content-queue/topics.json
+          git commit -m "Add topic to the list (#$ISSUE)"
+          git push origin "HEAD:$BASE"
+
+      - name: Confirm the topic was added
+        if: steps.req.outputs.add == 'true'
+        env:
+          TITLE: ${{ steps.add.outputs.title }}
+          POSITION: ${{ steps.add.outputs.position }}
+        run: |
+          gh issue comment "$ISSUE" --body "Added **$TITLE** to the topic list (position $POSITION). Scheduled posts take topics from the top, so move it up in /admin → Topic list to have it written sooner."
+          gh issue close "$ISSUE" --reason completed
+
+      - name: Report a problem
+        if: failure()
+        env:
+          ERROR: ${{ steps.add.outputs.error || steps.req.outputs.error }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh issue comment "$ISSUE" --body "I couldn't act on this request: ${ERROR:-see the log at $RUN_URL}
+
+          Edit the issue to fix it, then add the \`retry\` label."

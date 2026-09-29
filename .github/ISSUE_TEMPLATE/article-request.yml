@@ -1,0 +1,48 @@
+name: Article request
+description: Have an article researched and written for your approval, or add a topic to the automated list.
+title: '[Article] '
+labels: [article-request]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Give a topic, a link to an article to start from, or both. Only the repository owner's requests are acted on.
+  - type: dropdown
+    id: action
+    attributes:
+      label: What should happen?
+      options:
+        - Write it now and send me a draft to approve
+        - Add it to the topic list for a scheduled post
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: topic
+    attributes:
+      label: Topic
+      description: Leave empty if you're giving a link.
+      placeholder: Lumion LiveSync with SketchUp 2026
+  - type: input
+    id: link
+    attributes:
+      label: Link to an article
+      description: Optional. It's used as a starting point and cited; the article is written from scratch.
+      placeholder: https://…
+  - type: textarea
+    id: notes
+    attributes:
+      label: Angle or notes
+      description: Optional. What to focus on, who it's for, anything to include or avoid.
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Let the writer choose
+        - tutorials
+        - extensions
+        - rendering
+        - workflows
+        - hardware
+      default: 0

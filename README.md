@@ -30,7 +30,7 @@ With Claude Code, each run shares your plan's usage limits with your own Claude 
    Then, in *Settings → Pages*, set the custom domain to `sketchupwarehouse.com` and tick **Enforce HTTPS**. (`public/CNAME` is already committed.)
 3. **Connect your Claude subscription.** On your computer, install Claude Code (`npm install -g @anthropic-ai/claude-code`), then run `claude setup-token` and sign in with your Claude account. Copy the token it prints and add it under *Settings → Secrets and variables → Actions → Secrets* as `CLAUDE_CODE_OAUTH_TOKEN`.
    - *Alternative, pay-per-use API:* create a key at [console.anthropic.com](https://console.anthropic.com) with web search enabled. Add it as the secret `ANTHROPIC_API_KEY`, and set the repository variable `ARTICLE_ENGINE` to `api`.
-4. **Allow the bot to push.** *Settings → Actions → General → Workflow permissions → Read and write*. Also tick "Allow GitHub Actions to create pull requests" if you plan to use review mode.
+4. **Allow the bot to push.** *Settings → Actions → General → Workflow permissions → Read and write*. Also tick "Allow GitHub Actions to create pull requests". Article requests and review mode need it.
 5. **Test it.** *Actions → Generate article → Run workflow*. After a few minutes a new article should be live.
 
 ## Turning on revenue
@@ -56,6 +56,31 @@ Suggested order:
 2. **After about 25–30 articles (roughly 6–8 weeks):** apply for AdSense. For EU/UK visitors, turn on Google's free consent message under *Privacy & messaging* in AdSense.
 3. **Right away:** Amazon Associates (hardware articles), plus the Chaos (V-Ray/Enscape) and D5 affiliate programs if they're accepting partners.
 4. **At about 10k sessions/month:** move from AdSense to Journey by Mediavine or Ezoic, which usually pay about 2–3× more per visitor.
+
+## Request an article
+
+Give a topic or a link to an article. It gets researched and written, and it's published only after you approve it.
+
+**From your phone or browser (easiest):** open a new issue in this repository and choose **Article request**. Enter a topic, a link, or both, and optionally an angle and category. Then pick what should happen:
+- **Write it now and send me a draft to approve.** Within about 5–15 minutes a comment on the issue links to a pull request with the draft, its word count and its sources. Read it in *Files changed*. **Merge** the pull request to publish it (the issue closes too), or **close** it to reject it.
+- **Add it to the topic list for a scheduled post.** The topic goes to the end of the list (see below) and the issue closes.
+
+If something goes wrong, the issue gets a comment explaining why. Fix the issue text and add the `retry` label to run it again. Only issues you open are acted on.
+
+**From the Actions tab:** *Actions → Generate article → Run workflow*, then fill in **topic** and/or **link**. Requested articles always wait for your approval as a pull request, whatever `PUBLISH_MODE` is set to.
+
+**Links:** the linked article is a starting point. It's read, checked against official docs and cited, and the post is written from scratch in the site's own words.
+
+## Topic list
+
+Scheduled articles come from a running list of topics that you can keep adding to and editing. Edit it at **https://sketchupwarehouse.com/admin/** → **Topic list** (or in `content-queue/topics.json`).
+- **Adding a topic:** only a topic is required. Category, search keyword, angle/notes and a link are optional; the writer fills in anything left empty.
+- **Order:** each run writes the first topic that isn't paused and hasn't been written yet, top to bottom. Drag topics to reorder them.
+- **Paused:** keeps a topic in the list but skips it.
+- **Written as:** filled in automatically with the article's file name once it's written. Clear it to have the topic written again.
+- **Review mode:** with `PUBLISH_MODE=review`, a topic waiting in an open pull request isn't picked again. If you close that pull request without merging, the topic goes back in line; pause it if you don't want it.
+
+The list covers SketchUp itself plus the tools SketchUp users work alongside: Autodesk (Revit, AutoCAD, 3ds Max), Chaos (V-Ray, Enscape, Vantage, Cosmos), Lumion, Twinmotion, D5, Rhino and Grasshopper, extensions and plugins, components and Revit families. Every article is written from the SketchUp user's point of view.
 
 ## New-article emails
 
@@ -127,7 +152,7 @@ To switch a zone off, set `enabled: false` for it in `AD_ZONES` in `src/site.con
 Google demotes sites that publish large amounts of low-value AI text. The generator is set up to avoid that:
 
 - It researches with web search and must cite sources. Articles with no sources, fewer than 700 words, or broken front matter are rejected, and nothing gets published.
-- It picks from a curated list of real search-intent topics in `content-queue/topics.json` (87 topics to start). You can reorder or add topics at any time.
+- It picks from a curated list of real search-intent topics (the [Topic list](#topic-list), 124 topics to start). You can reorder or add topics at any time.
 - Posts are labeled as AI-assisted and link to the editorial standards on `/about/`.
 - It publishes about 4 articles a week instead of hundreds.
 - **Best thing you can add:** spend 10 minutes a week reading new posts, or set `PUBLISH_MODE=review` and merge the PRs. Adding your own screenshots and experience is what makes a niche site stand out in search.
@@ -139,6 +164,8 @@ npm install
 npm run dev                                   # http://localhost:4321
 ANTHROPIC_API_KEY=... npm run generate:dry    # print an article without saving it
 ANTHROPIC_API_KEY=... npm run generate -- --news
+ANTHROPIC_API_KEY=... npm run generate -- --topic "Lumion LiveSync with SketchUp"   # a topic you pick
+ANTHROPIC_API_KEY=... npm run generate -- --link https://example.com/article          # start from a link
 
 # Claude Code engine, as the Action runs it:
 node scripts/generate-post.mjs --prepare        # writes .article/prompt.md

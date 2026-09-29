@@ -9,10 +9,31 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: 'evergreen or news'
+        description: 'evergreen (next topic from the list) or news. Ignored when you give a topic or link.'
         type: choice
         options: [evergreen, news]
         default: evergreen
+      topic:
+        description: 'Write about this topic (optional). Sent to you for approval as a pull request.'
+        type: string
+        required: false
+      link:
+        description: 'Or start from this article link (optional).'
+        type: string
+        required: false
+      notes:
+        description: 'Angle or notes for the writer (optional).'
+        type: string
+        required: false
+      category:
+        description: 'Category for a requested article (auto lets the writer pick).'
+        type: choice
+        options: [auto, tutorials, extensions, rendering, workflows, hardware]
+        default: auto
+      issue:
+        description: 'Article request issue number to report back to (set automatically).'
+        type: string
+        required: false
 
 permissions:
   contents: write
@@ -22,7 +43,9 @@ permissions:
   id-token: write
 
 concurrency:
-  group: generate
+  # Requests run in their own group: a queued run in a shared group would be
+  # replaced (and lost) when another request arrived.
+  group: ${{ (inputs.topic || inputs.link) && format('request-{0}', github.run_id) || 'generate' }}
   cancel-in-progress: false
 
 jobs:
@@ -48,11 +71,20 @@ jobs:
         env:
           # "claude-code" (default) bills your Claude subscription; "api" bills an Anthropic API key.
           ENGINE: ${{ vars.ARTICLE_ENGINE || 'claude-code' }}
+          REQUEST_TOPIC: ${{ inputs.topic }}
+          REQUEST_LINK: ${{ inputs.link }}
+          REQUEST_NOTES: ${{ inputs.notes }}
+          REQUEST_CATEGORY: ${{ inputs.category != 'auto' && inputs.category || '' }}
         run: |
           NEWS=""
-          if [ "${{ github.event.schedule }}" = "7 14 * * 2" ] || [ "${{ inputs.mode }}" = "news" ]; then NEWS="--news"; fi
+          if [ -z "$REQUEST_TOPIC$REQUEST_LINK" ]; then
+            if [ "${{ github.event.schedule }}" = "7 14 * * 2" ] || [ "${{ inputs.mode }}" = "news" ]; then NEWS="--news"; fi
+          fi
           echo "news=$NEWS" >> "$GITHUB_OUTPUT"
           echo "engine=$ENGINE" >> "$GITHUB_OUTPUT"
+          # Topics already waiting for review on an article/* branch aren't picked again.
+          PENDING_TOPICS=$(git ls-remote --heads origin 'refs/heads/article/*' | sed 's#.*refs/heads/article/##' | paste -sd, -)
+          echo "PENDING_TOPICS=$PENDING_TOPICS" >> "$GITHUB_ENV"
           if [ "$ENGINE" = "claude-code" ]; then node scripts/generate-post.mjs --prepare $NEWS; fi
 
       - name: Write article with Claude Code
@@ -73,6 +105,10 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
           CLAUDE_EFFORT: ${{ vars.CLAUDE_EFFORT }}
+          REQUEST_TOPIC: ${{ inputs.topic }}
+          REQUEST_LINK: ${{ inputs.link }}
+          REQUEST_NOTES: ${{ inputs.notes }}
+          REQUEST_CATEGORY: ${{ inputs.category != 'auto' && inputs.category || '' }}
         run: |
           if [ "${{ steps.job.outputs.engine }}" = "claude-code" ]; then
             node scripts/generate-post.mjs --finalize
@@ -93,27 +129,51 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TITLE: ${{ steps.gen.outputs.title }}
-          SLUG: ${{ steps.gen.outputs.slug }}
+          TOPIC: ${{ steps.gen.outputs.topic }}
           # "auto" publishes straight to the default branch; "review" opens a PR for you to merge.
-          MODE: ${{ vars.PUBLISH_MODE || 'auto' }}
+          # Articles you ask for (topic or link) always wait for your approval.
+          MODE: ${{ (inputs.topic || inputs.link) && 'review' || vars.PUBLISH_MODE || 'auto' }}
           BASE: ${{ github.event.repository.default_branch || github.ref_name }}
+          ISSUE: ${{ inputs.issue }}
         run: |
           git config user.name "sketchupwarehouse-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/content/posts content-queue/topics.json
+          git commit -m "New article: $TITLE"
           if [ "$MODE" = "review" ]; then
-            git switch -c "article/$SLUG"
-            git add src/content/posts
-            git commit -m "New article: $TITLE"
-            git push -u origin "article/$SLUG"
-            gh pr create --base "$BASE" --title "New article: $TITLE" \
-              --body "Auto-generated draft. Review for accuracy, then merge to publish."
+            BRANCH="article/$TOPIC"
+            if [ -n "$(git ls-remote --heads origin "refs/heads/$BRANCH")" ]; then BRANCH="$BRANCH-${{ github.run_id }}"; fi
+            git push -u origin "HEAD:refs/heads/$BRANCH"
+            BODY=.article/pr.md
+            if [ -n "$ISSUE" ]; then printf '\nCloses #%s\n' "$ISSUE" >> "$BODY"; fi
+            PR_URL=$(gh pr create --base "$BASE" --head "$BRANCH" --title "New article: $TITLE" --body-file "$BODY")
+            echo "pr=$PR_URL" >> "$GITHUB_OUTPUT"
             echo "published=false" >> "$GITHUB_OUTPUT"
+            echo "Draft ready for review: $PR_URL" >> "$GITHUB_STEP_SUMMARY"
           else
-            git add src/content/posts
-            git commit -m "New article: $TITLE"
+            # Picks up edits made meanwhile (e.g. to the topic list in /admin).
+            git pull --rebase origin "$BASE"
             git push origin "HEAD:$BASE"
             echo "published=true" >> "$GITHUB_OUTPUT"
             echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Report back on the request
+        if: always() && inputs.issue != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ inputs.issue }}
+          PR_URL: ${{ steps.publish.outputs.pr }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -n "$PR_URL" ]; then
+            gh issue comment "$ISSUE" --body "The draft is ready for your review: $PR_URL
+
+          Merge it to publish, or close it to reject. Merging also closes this issue."
+          else
+            gh issue comment "$ISSUE" --body "Writing this article failed, so nothing was published. The log explains why: $RUN_URL
+
+          To try again, edit the request if needed and add the \`retry\` label, or open a new request."
           fi
 
   # Pushes made with GITHUB_TOKEN don't trigger other workflows, so deploy explicitly.
