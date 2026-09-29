@@ -4,11 +4,23 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
+    <meta name="referrer" content="same-origin" />
+    <!--
+      Content Security Policy: this page may only run the pinned editor from
+      unpkg and only talk to GitHub. Based on Sveltia CMS's recommended policy
+      for the GitHub backend (sveltiacms.app/en/docs/security).
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' 'unsafe-inline'; font-src 'self' https://cdn.jsdelivr.net; img-src 'self' blob: data: https:; media-src blob:; frame-src blob:; worker-src 'self' blob:; connect-src 'self' blob: data: https://unpkg.com https://api.github.com https://www.githubstatus.com; manifest-src blob:; object-src 'none'; base-uri 'self'; form-action 'none'"
+    />
     <title>SketchUp Warehouse Admin</title>
   </head>
   <body>
     <!-- Sveltia CMS: a Git-based editor. Saving an article commits it to the
-         repository, which triggers the normal deploy. See README "Admin". -->
-    <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
+         repository, which triggers the normal deploy. See README "Admin".
+         Pinned with an integrity hash; update with `node scripts/update-admin.mjs`
+         (the "Update admin editor" workflow does this monthly). -->
+    <script src="https://unpkg.com/@sveltia/cms@0.223.0/dist/sveltia-cms.js" integrity="sha384-kGBT9JIpQwruwT9A4VINu7Zmzw3Qttn/tO+EBFTddw1/PFUnt4074uXE9RNhX3N3" crossorigin="anonymous"></script>
   </body>
 </html>

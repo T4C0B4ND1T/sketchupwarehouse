@@ -62,9 +62,19 @@ Suggested order:
 Go to **https://sketchupwarehouse.com/admin/** to write new articles, edit or delete existing ones (including the AI-written ones), and upload your own images. It runs [Sveltia CMS](https://sveltiacms.app), a free editor that runs in your browser. When you save, it commits to this repository and the site redeploys in about a minute.
 
 **Sign in (first time):**
-1. On the admin page, click **Sign In with Token**. The dialog links to GitHub's token page with the right permission already selected.
+1. On the admin page, click **Sign In Using Access Token**. The dialog links to GitHub's token page with the right permission already selected.
 2. Alternatively, create a *fine-grained personal access token* yourself at GitHub → Settings → Developer settings. Give it **Only select repositories → sketchupwarehouse** and **Contents: Read and write**, and set an expiry you're comfortable with.
 3. Paste the token. It's stored only in your browser. Anyone with the token can edit the repository, so don't share it.
+
+**Security:**
+- **What the public sees:** `/admin/` shows only a sign-in screen. Changing anything needs a GitHub token with write access to this repository. The page is hidden from search engines.
+- **Pinned editor:** the editor is pinned to an exact version with an integrity hash, so browsers refuse to run it if the file on the CDN is ever altered.
+- **Restricted page:** a Content Security Policy only lets the page run that pinned editor and talk to GitHub.
+- **Keeping it current:** the *Update admin editor* workflow checks for new releases monthly and opens a PR. Before pinning, it verifies the CDN file matches the official npm package. To update by hand, run `node scripts/update-admin.mjs`.
+- **Your part:**
+  - Turn on 2-factor authentication on your GitHub account.
+  - Give the token a 30–90 day expiry.
+  - Click **Sign Out** (top-right menu) when you're done. The token is stored in your browser for the whole `sketchupwarehouse.com` site, so signing out removes it.
 
 **Images:**
 - **Cover image:** upload a photo, or paste a link to an image hosted elsewhere (https://…). If you leave it empty, a Pexels photo is added automatically the next time *Generate article* or *Add cover photos* runs.

@@ -6,6 +6,8 @@ backend:
   name: github
   repo: T4C0B4ND1T/sketchupwarehouse
   branch: main
+  # Only token sign-in: "Sign In with GitHub" would need an OAuth server.
+  auth_methods: [token]
   commit_messages:
     create: 'Add article: {{slug}}'
     update: 'Edit article: {{slug}}'
@@ -18,8 +20,10 @@ display_url: https://sketchupwarehouse.com
 
 # Uploaded images are stored next to the articles, so Astro optimizes them
 # (resized, converted to WebP) the same way as the automatic cover photos.
+# The top-level folder must be absolute; the Articles collection below writes
+# paths relative to the article (./images/…), which is what Astro expects.
 media_folder: /src/content/posts/images
-public_folder: ./images
+public_folder: /src/content/posts/images
 
 output:
   # Astro's schema expects missing optional fields, not empty strings.
