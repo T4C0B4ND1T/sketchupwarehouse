@@ -1,0 +1,22 @@
+name: Clean up article branch
+
+# Deletes an article/* review branch when its pull request is merged or closed.
+# Until then its topic counts as pending and isn't written again; after a
+# rejection the topic is picked again by a later run (pause it in /admin →
+# Topic list if you don't want that).
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: startsWith(github.event.pull_request.head.ref, 'article/') && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: gh api -X DELETE "repos/${{ github.repository }}/git/refs/heads/$BRANCH" || echo "Branch already deleted."

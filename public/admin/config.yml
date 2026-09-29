@@ -95,3 +95,41 @@ collections:
       - { label: Drafted with AI, name: aiAssisted, widget: boolean, default: false, hint: 'Shows the AI-assistance note under the article.' }
       - { label: Photo search, name: imageQuery, widget: string, required: false, hint: 'Pexels search used when there is no cover image.' }
       - { label: Topic ID, name: topicId, widget: hidden }
+
+  # The list the automated writer takes topics from (scripts/generate-post.mjs),
+  # top to bottom. Keep the fields in sync with content-queue/topics.json.
+  - name: queue
+    label: Topic list
+    files:
+      - name: topics
+        label: Topics for automated articles
+        file: /content-queue/topics.json
+        format: json
+        fields:
+          - { label: Notes, name: _readme, widget: hidden }
+          - label: Topics
+            name: topics
+            widget: list
+            hint: 'Scheduled articles are written from the first topic that is not paused or already written, top to bottom. Drag to reorder.'
+            summary: '{{title}}'
+            collapsed: true
+            fields:
+              - { label: Topic, name: title, widget: string, hint: 'What the article is about. The writer chooses the final headline.' }
+              - label: Category
+                name: category
+                widget: select
+                required: false
+                hint: 'Leave empty to let the writer choose.'
+                options:
+                  - { label: Tutorials, value: tutorials }
+                  - { label: Extensions & Plugins, value: extensions }
+                  - { label: Rendering, value: rendering }
+                  - { label: Industry Workflows, value: workflows }
+                  - { label: Hardware & Setup, value: hardware }
+              - { label: Search keyword, name: keyword, widget: string, required: false, hint: 'The phrase people search for. Optional.' }
+              - { label: Angle or notes, name: angle, widget: text, required: false, hint: 'What to focus on, who it is for, anything to include or avoid.' }
+              - { label: Link to an article, name: link, widget: string, required: false, pattern: ['^https?://', 'Must start with http:// or https://'], hint: 'Optional starting point. It is cited; the article is written from scratch.' }
+              - { label: Paused, name: paused, widget: boolean, required: false, default: false, hint: 'Keep the topic but skip it for now.' }
+              - { label: Written as, name: post, widget: string, required: false, hint: 'Filled in when the article is written (its file name). Clear it to have the topic written again.' }
+              - { label: ID, name: id, widget: hidden }
+              - { label: URL slug, name: slug, widget: hidden }
