@@ -82,6 +82,12 @@ Scheduled articles come from a running list of topics that you can keep adding t
 
 The list covers SketchUp itself plus the tools SketchUp users work alongside: Autodesk (Revit, AutoCAD, 3ds Max), Chaos (V-Ray, Enscape, Vantage, Cosmos), Lumion, Twinmotion, D5, Rhino and Grasshopper, extensions and plugins, components and Revit families. Every article is written from the SketchUp user's point of view.
 
+## New-article emails
+
+Each time *Generate article* publishes an article, it waits for the deploy and then opens a GitHub issue labeled **new-article** that @mentions you. The issue includes the link, topic, length, cover credit and a short review checklist. GitHub emails you about the mention, which is on by default: *github.com → Settings → Notifications → "@mentions" → Email*. Close the issue once you've looked the article over.
+
+In review mode (`PUBLISH_MODE=review`), the pull request itself notifies you instead. GitHub also emails you when a scheduled workflow fails.
+
 ## Admin: write and edit articles yourself
 
 Go to **https://sketchupwarehouse.com/admin/** to write new articles, edit or delete existing ones (including the AI-written ones), and upload your own images. It runs [Sveltia CMS](https://sveltiacms.app), a free editor that runs in your browser. When you save, it commits to this repository and the site redeploys in about a minute.

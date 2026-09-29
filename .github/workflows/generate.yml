@@ -38,6 +38,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
   pages: write
   id-token: write
 
@@ -52,6 +53,9 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       published: ${{ steps.publish.outputs.published }}
+      title: ${{ steps.gen.outputs.title }}
+      slug: ${{ steps.gen.outputs.slug }}
+      sha: ${{ steps.publish.outputs.sha }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -151,6 +155,7 @@ jobs:
             git pull --rebase origin "$BASE"
             git push origin "HEAD:$BASE"
             echo "published=true" >> "$GITHUB_OUTPUT"
+            echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Report back on the request
@@ -176,3 +181,53 @@ jobs:
     needs: generate
     if: needs.generate.outputs.published == 'true'
     uses: ./.github/workflows/deploy.yml
+
+  # Email the owner: a GitHub issue that @mentions them sends a notification
+  # email (on by default). Runs after the deploy so the link already works.
+  notify:
+    needs: [generate, deploy]
+    if: needs.generate.outputs.published == 'true' && needs.deploy.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.generate.outputs.sha }}
+      - name: Open "New article" issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TITLE: ${{ needs.generate.outputs.title }}
+          SLUG: ${{ needs.generate.outputs.slug }}
+          SHA: ${{ needs.generate.outputs.sha }}
+          OWNER: ${{ github.repository_owner }}
+          SITE: ${{ vars.SITE_URL || 'https://sketchupwarehouse.com' }}
+        run: |
+          FILE="src/content/posts/$SLUG.md"
+          field() { sed -n "/^---$/,/^---$/p" "$FILE" | grep -m1 "^$1:" | sed "s/^$1: *//; s/^['\"]//; s/['\"]$//"; }
+          CATEGORY=$(field category)
+          DESCRIPTION=$(field description)
+          WORDS=$(awk 'f>=2; /^---$/{f++}' "$FILE" | wc -w)
+          CREDIT=$(sed -n '/^cover:/,/^[a-z]/p' "$FILE" | grep -m1 '^  credit:' | sed 's/^  credit: *//')
+          URL="${SITE%/}/blog/$SLUG/"
+          gh label create new-article --color FF3000 --description "Auto-published article, awaiting a quick review" --force >/dev/null
+          BODY=$(cat <<EOF
+          @$OWNER a new article is live.
+
+          ### [$TITLE]($URL)
+          > $DESCRIPTION
+
+          | | |
+          |---|---|
+          | **Topic** | $CATEGORY |
+          | **Length** | about $WORDS words |
+          | **Cover photo** | ${CREDIT:-none} |
+          | **Commit** | $SHA |
+
+          **Quick review**
+          - [ ] Facts, shortcuts and menu names look right
+          - [ ] Cover photo fits the article
+          - [ ] Nothing to change in [/admin](${SITE%/}/admin/)
+
+          Close this issue when you're happy with it, or comment if something needs fixing.
+          EOF
+          )
+          gh issue create --title "New article: $TITLE" --label new-article --body "$BODY"
