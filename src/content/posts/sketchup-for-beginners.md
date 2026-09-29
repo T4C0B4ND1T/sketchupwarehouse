@@ -1,5 +1,5 @@
 ---
-title: "SketchUp for Beginners: The First 10 Tools to Master"
+title: 'SketchUp for Beginners: The First 10 Tools to Master'
 description: New to SketchUp? Learn the 10 essential tools, their default keyboard shortcuts, and a mini practice project that puts them together in about 20 minutes.
 pubDate: 2026-09-28
 updatedDate: 2026-09-28
@@ -10,14 +10,18 @@ tags:
   - tools
   - shortcuts
   - tutorial
-imageQuery: "architect designing 3d model on laptop"
-aiAssisted: true
-topicId: sketchup-for-beginners
+draft: false
+cover:
+  src: ./images/pasted-image-1790686138983.png
+  alt: Sketchup window displayed on laptop
 sources:
   - title: Default Keyboard Shortcuts – SketchUp Help
     url: https://help.sketchup.com/en/default-keyboard-shortcuts
   - title: Softening, Smoothing, and Hiding Geometry – SketchUp Help
     url: https://help.sketchup.com/en/sketchup/softening-smoothing-and-hiding-geometry
+aiAssisted: true
+imageQuery: architect designing 3d model on laptop
+topicId: sketchup-for-beginners
 ---
 
 SketchUp looks like it has dozens of tools, but you can build a surprising amount with just ten. Learn these, memorize their default shortcuts, and finish the practice project at the end, and you will have the core workflow that every other SketchUp skill builds on.
