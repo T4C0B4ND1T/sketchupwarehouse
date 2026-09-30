@@ -43,7 +43,8 @@
       "title": "How to Get a SketchUp Model into Revit (and Keep It Clean)",
       "keyword": "sketchup to revit",
       "angle": "Import vs link, what survives (faces, materials, components), clean-up before export, file formats, when to rebuild natively.",
-      "slug": "how-to-get-a-sketchup-model-into-revit-and-keep-it-clean"
+      "slug": "how-to-get-a-sketchup-model-into-revit-and-keep-it-clean",
+      "post": "how-to-get-a-sketchup-model-into-revit-and-keep-it-clean"
     },
     {
       "id": "sketchup-keyboard-shortcuts",
