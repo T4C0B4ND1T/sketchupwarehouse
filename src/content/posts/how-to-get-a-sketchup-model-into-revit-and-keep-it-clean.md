@@ -1,6 +1,6 @@
 ---
-title: "SketchUp to Revit: Import, Link and Keep Your Model Clean"
-description: "Learn how to get a SketchUp model into Revit: import vs link, SKP vs IFC vs DWG, what survives, clean-up steps, and when to rebuild natively."
+title: 'SketchUp to Revit: Import, Link and Keep Your Model Clean'
+description: 'Learn how to get a SketchUp model into Revit: import vs link, SKP vs IFC vs DWG, what survives, clean-up steps, and when to rebuild natively.'
 pubDate: 2026-09-30
 category: workflows
 tags:
@@ -10,9 +10,13 @@ tags:
   - ifc
   - import
   - bim
-aiAssisted: true
-topicId: how-to-get-a-sketchup-model-into-revit-and-keep-it-clean
-imageQuery: architect reviewing building model on screen
+draft: false
+cover:
+  src: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0zEM704lD4V5WEgbrd7wZcwFievYFr-KGv4OU4Bp_vVruQZvyu8kpoeE&s=10
+  alt: Architect with helmet presenting building blueprints on screen in modern office environment.
+  credit: Gustavo Fring
+  creditUrl: https://www.pexels.com/photo/man-presenting-on-screen-6285129/
+  pexelsId: 6285129
 sources:
   - title: Exporting SketchUp Files to Revit (SketchUp Help Center)
     url: https://help.sketchup.com/en/revit-interoperability/sketchup-to-revit
@@ -20,12 +24,9 @@ sources:
     url: https://help.sketchup.com/en/sketchup/importing-and-exporting-cad-files
   - title: Importing CAD Files (Autodesk Revit Help)
     url: https://help.autodesk.com/cloudhelp/2022/ENU/Revit-Model/files/GUID-E8705303-0610-4A82-9118-0C3A742706D2.htm
-cover:
-  src: ./images/how-to-get-a-sketchup-model-into-revit-and-keep-it-clean.jpg
-  alt: Architect with helmet presenting building blueprints on screen in modern office environment.
-  credit: Gustavo Fring
-  creditUrl: https://www.pexels.com/photo/man-presenting-on-screen-6285129/
-  pexelsId: 6285129
+aiAssisted: true
+imageQuery: architect reviewing building model on screen
+topicId: how-to-get-a-sketchup-model-into-revit-and-keep-it-clean
 ---
 
 The short answer: bring the .skp file into Revit with **Insert > Import CAD** (or **Link CAD**), and use IFC instead when you need the result to behave like real building elements. Revit reads SketchUp geometry as a pile of shapes, not as walls and doors, so how much you prepare the model decides how useful it is afterward.
