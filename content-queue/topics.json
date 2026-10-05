@@ -61,7 +61,8 @@
       "title": "V-Ray for SketchUp Lighting: Sun, Dome, IES and Mesh Lights",
       "keyword": "vray sketchup lighting",
       "angle": "Each light type, when to use it, realistic intensities, HDRI dome setup, common overexposure mistakes.",
-      "slug": "v-ray-for-sketchup-lighting-sun-dome-ies-and-mesh-lights"
+      "slug": "v-ray-for-sketchup-lighting-sun-dome-ies-and-mesh-lights",
+      "post": "v-ray-for-sketchup-lighting-sun-dome-ies-and-mesh-lights"
     },
     {
       "id": "sketchup-follow-me-tool",
