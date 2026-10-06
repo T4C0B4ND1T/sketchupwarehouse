@@ -2,7 +2,7 @@
 import '@fontsource-variable/inter/wght.css';
 import '../styles/global.css';
 import Icon from '../components/Icon.astro';
-import { SITE, MONETIZATION, ANALYTICS, CATEGORIES } from '../site.config';
+import { SITE, MONETIZATION, ANALYTICS, CATEGORIES, VERIFICATION } from '../site.config';
 
 interface Props {
   title?: string;
@@ -40,6 +40,8 @@ const path = Astro.url.pathname;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    {VERIFICATION.google && <meta name="google-site-verification" content={VERIFICATION.google} />}
+    {VERIFICATION.bing && <meta name="msvalidate.01" content={VERIFICATION.bing} />}
 
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:type" content={type} />

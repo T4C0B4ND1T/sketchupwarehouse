@@ -115,8 +115,37 @@ function existingPosts() {
       const raw = fs.readFileSync(path.join(POSTS_DIR, f), 'utf8');
       const fm = raw.match(/^---\n([\s\S]*?)\n---/);
       const data = fm ? YAML.parse(fm[1]) : {};
-      return { slug: f.replace(/\.md$/, ''), title: data.title ?? '', topicId: data.topicId };
+      return {
+        slug: f.replace(/\.md$/, ''),
+        title: data.title ?? '',
+        category: data.category,
+        topicId: data.topicId,
+        live: !data.draft && new Date(data.pubDate).getTime() <= Date.now(),
+      };
     });
+}
+
+// Live articles the writer may link to, so each new post joins the internal link graph.
+function linkablePosts() {
+  const list = existingPosts()
+    .filter((p) => p.live && p.title)
+    .map((p) => `- /blog/${p.slug}/ (${p.category}): ${p.title}`)
+    .join('\n');
+  if (!list) return '';
+  return `
+
+Existing articles on the site:
+${list}
+
+Link to 2–4 of these where they genuinely help the reader (a prerequisite, a deeper dive, the next step), as inline Markdown links with descriptive anchor text, e.g. [groups vs components](/blog/sketchup-groups-vs-components/). Use the exact paths above; never invent a /blog/ link. Skip any that aren't relevant.`;
+}
+
+// Turn /blog/ links to articles that don't exist into plain text, so a bad guess never ships a 404.
+function dropDeadInternalLinks(body) {
+  const live = new Set(existingPosts().filter((p) => p.live).map((p) => p.slug));
+  return body.replace(/\[([^\]]+)\]\((?:https?:\/\/(?:www\.)?sketchupwarehouse\.com)?\/blog\/([^/)#?\s]+)\/?([#?][^)\s]*)?\)/g, (link, text, slug, rest = '') =>
+    live.has(slug) ? `[${text}](/blog/${slug}/${rest})` : text,
+  );
 }
 
 // The first topic that isn't paused, written, or waiting in an open review
@@ -188,7 +217,7 @@ function userPrompt(topic) {
 Pick ONE story that is not already covered by these existing articles:
 ${recent || '(none yet)'}
 
-Write a news article in the "news" category explaining what changed, who it matters to, and what readers should do about it. Cite the primary source. If you cannot find any genuinely new story from the last 14 days, instead write an evergreen "what's new in the current version of SketchUp" explainer based on the latest official release notes.`;
+Write a news article in the "news" category explaining what changed, who it matters to, and what readers should do about it. Cite the primary source. If you cannot find any genuinely new story from the last 14 days, instead write an evergreen "what's new in the current version of SketchUp" explainer based on the latest official release notes.${linkablePosts()}`;
   }
   const lines = ['Write an article on this topic.', ''];
   if (topic.title) lines.push(`Topic: ${topic.title}`);
@@ -207,7 +236,7 @@ Write a news article in the "news" category explaining what changed, who it matt
     );
   }
   if (!topic.keyword) lines.push('', 'Pick the search phrase people most likely use for this topic and use it in the title.');
-  return lines.join('\n');
+  return lines.join('\n') + linkablePosts();
 }
 
 async function callClaude(prompt) {
@@ -261,10 +290,11 @@ function parseArticle(raw) {
   if (!m) throw new Error('Malformed frontmatter in model output.');
   const data = YAML.parse(m[1]);
   // The footer already has the trademark notice; drop a closing one the writer added anyway.
-  const body = m[2]
+  const rawBody = m[2]
     .trim()
     .replace(/\n+[*_]*[^\n]*\bTrimble trademarks?\b[^\n]*$/i, '')
     .trim();
+  const body = dropDeadInternalLinks(rawBody);
 
   const problems = [];
   if (typeof data.title !== 'string' || data.title.length < 10 || data.title.length > 110) problems.push('title');

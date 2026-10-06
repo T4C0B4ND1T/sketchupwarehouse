@@ -6,7 +6,8 @@ import AdZone from '../../components/AdZone.astro';
 import PostCard from '../../components/PostCard.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import Section from '../../components/Section.astro';
-import { getPublishedPosts, formatDate, readingTime, relatedPosts, type Post } from '../../lib/posts';
+import Icon from '../../components/Icon.astro';
+import { getPublishedPosts, formatDate, readingTime, relatedPosts, postUrl, type Post } from '../../lib/posts';
 import { SITE, CATEGORIES } from '../../site.config';
 
 export async function getStaticPaths() {
@@ -20,6 +21,10 @@ const { Content, headings } = await render(post);
 const { data } = post;
 const cat = CATEGORIES[data.category];
 const related = relatedPosts(post, all);
+// Newest posts in the same topic that "Related reading" didn't already show.
+const shown = new Set([post.id, ...related.map((p) => p.id)]);
+const moreInTopic = all.filter((p) => p.data.category === data.category && !shown.has(p.id)).slice(0, 5);
+const topicCount = all.filter((p) => p.data.category === data.category).length;
 const toc = headings.filter((h) => h.depth === 2);
 const url = new URL(Astro.url.pathname, Astro.site).toString();
 // Social preview: the cover cropped to the standard 1200×630 share size.
@@ -112,6 +117,14 @@ const jsonLd = {
               </p>
             )}
           </footer>
+        )}
+
+        {moreInTopic.length > 0 && (
+          <nav class="more-topic" aria-labelledby="more-title">
+            <p class="label" id="more-title">More in {cat.title}</p>
+            <ul>{moreInTopic.map((p) => <li><a href={postUrl(p)}>{p.data.title}</a></li>)}</ul>
+            <a class="hub-link" href={`/category/${data.category}/`}>All {topicCount} {cat.title} articles <Icon name="arrow" class="icon" /></a>
+          </nav>
         )}
 
         <AdZone zone="articleEnd" />
