@@ -53,6 +53,13 @@ export const ANALYTICS = {
   ga4Id: env.PUBLIC_GA4_ID || '',
 };
 
+// Search engine ownership checks. Paste only the content="..." value of the
+// HTML-tag method. Empty = no tag (not needed if you verified by DNS).
+export const VERIFICATION = {
+  google: env.PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+  bing: env.PUBLIC_BING_SITE_VERIFICATION || '',
+};
+
 export const CATEGORIES = {
   tutorials: {
     title: 'Tutorials',

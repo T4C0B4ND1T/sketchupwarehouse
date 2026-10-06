@@ -440,6 +440,13 @@ a.label:hover { color: var(--accent-ink); }
 .toc a { display: grid; grid-template-columns: 2.5em 1fr; gap: 8px; padding: 12px 0; min-height: 44px; font-size: var(--t-sm); font-weight: 600; line-height: 1.35; text-decoration: none; transition: color var(--ease-fast), padding var(--ease-fast); }
 .toc a::before { content: counter(toc, decimal-leading-zero) '.'; font-weight: 800; color: var(--accent-ink); }
 .toc a:hover { color: var(--accent-ink); padding-left: 6px; }
+.more-topic { max-width: var(--read); margin-top: 48px; }
+.more-topic ul { list-style: none; margin: 16px 0 0; padding: 0; border-top: var(--rule-thin) solid var(--border); }
+.more-topic li { border-bottom: var(--rule-thin) solid var(--border); }
+.more-topic li a { display: block; padding: 12px 0; min-height: 44px; font-size: var(--t-sm); font-weight: 600; line-height: 1.35; text-decoration: none; transition: color var(--ease-fast), padding var(--ease-fast); }
+.more-topic li a:hover { color: var(--accent-ink); padding-left: 6px; }
+.more-topic .hub-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; min-height: 44px; font-size: var(--t-sm); font-weight: 800; color: var(--accent-ink); }
+.more-topic .hub-link .icon { width: 1em; height: 1em; }
 
 .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
 .tags span { border: var(--rule-thin) solid var(--border); padding: 4px 10px; font-size: var(--t-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
