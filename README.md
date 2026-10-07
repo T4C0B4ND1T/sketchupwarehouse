@@ -88,6 +88,21 @@ Each time *Generate article* publishes an article, it waits for the deploy and t
 
 In review mode (`PUBLISH_MODE=review`), the pull request itself notifies you instead. GitHub also emails you when a scheduled workflow fails.
 
+## Facebook Page
+
+Each time a deploy makes an article public (an automatic article, a merged draft, or a scheduled one whose date arrives), it's posted to the SketchUp Warehouse Facebook Page with its summary and link. Facebook builds the preview card from the article's title and cover photo. Nothing is posted until you add the token below, and older articles are never re-posted. If a post fails, the deploy's **facebook** job turns red and GitHub emails you; the site itself is already live.
+
+**Setup (once, about 10 minutes, needs your Facebook account):**
+
+1. At [developers.facebook.com](https://developers.facebook.com/apps) → *Create app*. Pick the use case for managing a Page (*"Manage everything on your Page"*), and name it something like *SketchUp Warehouse poster*. In *App settings → Basic*, set the Privacy Policy URL to `https://sketchupwarehouse.com/privacy/`, then switch the app to **Live** (posts from an app in development mode may be hidden from the public).
+2. Open the [Graph API Explorer](https://developers.facebook.com/tools/explorer/), choose your app, and add the permissions `pages_show_list`, `pages_read_engagement` and `pages_manage_posts`. Click *Generate Access Token* and allow it for the SketchUp Warehouse Page.
+3. Make it long-lived: paste that token into the [Access Token Debugger](https://developers.facebook.com/tools/debug/accesstoken/) and click *Extend Access Token*. Copy the new token.
+4. Back in the Graph API Explorer, paste the long-lived token and run `GET me/accounts`. Copy the `access_token` shown next to the SketchUp Warehouse Page. That's the Page token; the debugger should show it *Expires: Never*.
+5. In GitHub: *Settings → Secrets and variables → Actions → Secrets → New repository secret*, named `FACEBOOK_PAGE_TOKEN`, with the Page token as its value.
+6. Test it: *Actions → Share on Facebook → Run workflow*, with the link to any article. The post should appear on the Page within a few seconds.
+
+*Share on Facebook* also shares any older article by hand. The token stops working if you change your Facebook password or remove the app; repeat steps 2–5 then. To stop posting, delete the secret.
+
 ## Admin: write and edit articles yourself
 
 Go to **https://sketchupwarehouse.com/admin/** to write new articles, edit or delete existing ones (including the AI-written ones), and upload your own images. It runs [Sveltia CMS](https://sveltiacms.app), a free editor that runs in your browser. When you save, it commits to this repository and the site redeploys in about a minute.

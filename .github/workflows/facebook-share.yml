@@ -1,0 +1,29 @@
+name: Share on Facebook
+
+# New articles are shared automatically after each deploy. Run this to test
+# the Page token, or to share an older article by hand.
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'Article link, e.g. https://sketchupwarehouse.com/blog/sketchup-follow-me-tool/'
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  share:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Post to Facebook
+        env:
+          URL: ${{ inputs.url }}
+          FACEBOOK_PAGE_TOKEN: ${{ secrets.FACEBOOK_PAGE_TOKEN }}
+          FACEBOOK_GRAPH_VERSION: ${{ vars.FACEBOOK_GRAPH_VERSION }}
+        run: node scripts/facebook-post.mjs --share "$URL"
