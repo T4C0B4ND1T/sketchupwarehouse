@@ -1,0 +1,20 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { componentUrl, formatDate, type Component } from '../lib/posts';
+
+interface Props { item: Component; index?: number }
+const { item, index } = Astro.props;
+---
+<article class="card card--media">
+  <div class="card-media card-media--model">
+    <Image src={item.data.preview.src} alt="" widths={[360, 512]} sizes="(min-width: 1024px) 360px, 100vw" />
+  </div>
+  <div class="card-top">
+    <span class="label">{index !== undefined && <b>{String(index).padStart(2, '0')}.</b>} Free component</span>
+    <Icon name="arrow" class="arrow" />
+  </div>
+  <h3><a href={componentUrl(item)}>{item.data.title}</a></h3>
+  <p>{item.data.description}</p>
+  <time datetime={item.data.pubDate.toISOString()}>{formatDate(item.data.pubDate)}</time>
+</article>

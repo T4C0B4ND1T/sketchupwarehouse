@@ -1,0 +1,115 @@
+---
+import { render } from 'astro:content';
+import { Image, getImage } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import AdZone from '../../components/AdZone.astro';
+import ComponentCard from '../../components/ComponentCard.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import Section from '../../components/Section.astro';
+import Icon from '../../components/Icon.astro';
+import { getPublishedComponents, componentUrl, formatDate, type Component } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const items = await getPublishedComponents();
+  return items.map((item) => ({ params: { slug: item.id }, props: { item, all: items } }));
+}
+
+interface Props { item: Component; all: Component[] }
+const { item, all } = Astro.props;
+const { Content } = await render(item);
+const { data } = item;
+const more = all.filter((c) => c.id !== item.id).slice(0, 3);
+const url = new URL(Astro.url.pathname, Astro.site).toString();
+const downloadUrl = new URL(data.file, Astro.site).toString();
+const fileName = data.file.split('/').pop();
+const ogImage = (await getImage({ src: data.preview.src, width: 512, format: 'png' })).src;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': '3DModel',
+      name: data.title,
+      description: data.description,
+      image: new URL(ogImage, Astro.site).toString(),
+      datePublished: data.pubDate.toISOString(),
+      dateModified: (data.updatedDate ?? data.pubDate).toISOString(),
+      keywords: data.tags.join(', '),
+      isAccessibleForFree: true,
+      encoding: [{ '@type': 'MediaObject', contentUrl: downloadUrl, encodingFormat: 'application/vnd.sketchup.skp' }],
+      ...(data.warehouseUrl ? { sameAs: data.warehouseUrl } : {}),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: Astro.site?.toString() },
+        { '@type': 'ListItem', position: 2, name: 'Components', item: new URL('/components/', Astro.site).toString() },
+        { '@type': 'ListItem', position: 3, name: data.title, item: url },
+      ],
+    },
+  ],
+};
+---
+<Base title={`${data.title} (Free SketchUp Model)`} description={data.description} jsonLd={jsonLd} image={ogImage}>
+  <article class="article">
+    <header class="article-head">
+      <a class="label" href="/components/"><b>→</b> Components</a>
+      <h1>{data.title}</h1>
+      <p class="lede">{data.description}</p>
+      <div class="meta">
+        <time datetime={data.pubDate.toISOString()}>{formatDate(data.pubDate)}</time>
+        {data.updatedDate && <span>Updated {formatDate(data.updatedDate)}</span>}
+        <span>SketchUp .skp</span>
+      </div>
+    </header>
+
+    <div class="model-preview swiss-grid-pattern bg-muted">
+      <Image src={data.preview.src} alt={data.preview.alt} widths={[360, 512]} sizes="(min-width: 640px) 512px, 100vw" loading="eager" fetchpriority="high" />
+    </div>
+
+    <div class="model-actions">
+      <a class="btn" href={data.file} download={fileName}>Download .skp <Icon name="arrow" class="icon" /></a>
+      {data.warehouseUrl && <a class="btn btn--secondary" href={data.warehouseUrl} rel="noopener">View on 3D Warehouse</a>}
+    </div>
+
+    <AdZone zone="pageTop" />
+
+    <div class="article-layout">
+      <div class="article-body">
+        <div class="prose">
+          <Content />
+        </div>
+        <p class="ai-note">
+          Modeled by SketchUp Warehouse with AI assistance. Free to use in personal and commercial projects.
+          Found a problem with the model? <a href="/contact/">Tell us</a>.
+        </p>
+        <AdZone zone="articleEnd" />
+      </div>
+      <aside class="article-aside swiss-grid-pattern bg-muted" aria-label="Model details">
+        <AdZone zone="sidebar" />
+        <div class="sticky">
+          {data.dimensions && (
+            <div>
+              <p class="label">Size</p>
+              <p>{data.dimensions}</p>
+            </div>
+          )}
+          {data.tags.length > 0 && (
+            <div>
+              <p class="label">Tags</p>
+              <div class="tags">{data.tags.map((t) => <span>{t}</span>)}</div>
+            </div>
+          )}
+        </div>
+      </aside>
+    </div>
+  </article>
+
+  {more.length > 0 && (
+    <Section index="→" label="Library" title="More free components" id="more">
+      <div class="grid">{more.map((c, i) => <ComponentCard item={c} index={i + 1} />)}</div>
+    </Section>
+  )}
+
+  <Newsletter />
+</Base>
