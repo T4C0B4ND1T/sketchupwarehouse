@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdZone from '../../components/AdZone.astro';
+import ComponentCard from '../../components/ComponentCard.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import { getPublishedComponents, componentUrl } from '../../lib/posts';
+
+const items = await getPublishedComponents();
+const title = 'Free SketchUp Components';
+const description = 'Free SketchUp models to download: furniture, fixtures and everyday objects, ready to drop into your projects.';
+const url = new URL(Astro.url.pathname, Astro.site).toString();
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      name: title,
+      description,
+      url,
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: items.map((c, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          url: new URL(componentUrl(c), Astro.site).toString(),
+          name: c.data.title,
+        })),
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: Astro.site?.toString() },
+        { '@type': 'ListItem', position: 2, name: 'Components', item: url },
+      ],
+    },
+  ],
+};
+---
+<Base title={title} description={description} jsonLd={jsonLd} noindex={items.length === 0}>
+  <section class="page-hero swiss-grid-pattern bg-muted">
+    <p class="label"><b>→</b> Library · {items.length} {items.length === 1 ? 'model' : 'models'}</p>
+    <h1>Components</h1>
+    <p>{description}</p>
+  </section>
+  <AdZone zone="pageTop" />
+  {items.length > 0
+    ? <div class="grid grid--3 rule-b">{items.map((item, i) => (
+        <>
+          <ComponentCard item={item} index={i + 1} />
+          {i === 5 && items.length > 6 && <AdZone zone="feed" />}
+        </>
+      ))}</div>
+    : <p class="empty rule-b">New components are on the way.</p>}
+  <Newsletter />
+</Base>
