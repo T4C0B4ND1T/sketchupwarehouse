@@ -36,3 +36,16 @@ export function relatedPosts(current: Post, all: Post[], limit = 3): Post[] {
     .slice(0, limit)
     .map((x) => x.p);
 }
+
+export type Component = CollectionEntry<'components'>;
+
+/** Published components, newest first. */
+export async function getPublishedComponents(): Promise<Component[]> {
+  const now = Date.now();
+  const items = await getCollection('components', ({ data }) => !data.draft && data.pubDate.getTime() <= now);
+  return items.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+}
+
+export function componentUrl(item: Component): string {
+  return `/components/${item.id}/`;
+}

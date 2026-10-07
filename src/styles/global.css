@@ -615,3 +615,10 @@ main > .ad .ad-label, .article > .ad .ad-label { max-width: 728px; align-self: c
    404
    ========================================================================== */
 .page-hero.not-found .display { font-size: clamp(6rem, 30vw, 22rem); line-height: 0.8; color: var(--accent); }
+
+/* Free components: model previews are square renders on a plain background */
+.card-media--model { aspect-ratio: auto; height: clamp(240px, 26vw, 360px); background: #f4f5f0; }
+.card-media--model img { object-fit: contain; }
+.model-preview { display: flex; justify-content: center; padding: var(--space) var(--gutter); border-bottom: var(--rule) solid var(--border); }
+.model-preview img { display: block; width: 100%; max-width: 512px; height: auto; background: #f4f5f0; }
+.model-actions { display: flex; flex-wrap: wrap; gap: 16px; padding: 32px var(--gutter); border-bottom: var(--rule) solid var(--border); }

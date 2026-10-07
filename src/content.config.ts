@@ -32,4 +32,25 @@ const posts = defineCollection({
   }),
 });
 
-export const collections = { posts };
+// Free SketchUp components: one Markdown file per model, its .skp in
+// public/downloads/components/ and its preview in ./images.
+const components = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/components' }),
+  schema: ({ image }) => z.object({
+    title: z.string().max(80),
+    description: z.string().max(200),
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
+    draft: z.boolean().default(false),
+    tags: z.array(z.string()).default([]),
+    // Site path of the .skp download, e.g. /downloads/components/side-table.skp
+    file: z.string().regex(/^\/downloads\/components\/[a-z0-9-]+\.skp$/),
+    preview: z.object({ src: image(), alt: z.string() }),
+    // Overall size as modeled, e.g. "18 × 18 × 22 in (W × D × H)".
+    dimensions: z.string().optional(),
+    // Set once the model is live on 3D Warehouse.
+    warehouseUrl: z.string().url().optional(),
+  }),
+});
+
+export const collections = { posts, components };

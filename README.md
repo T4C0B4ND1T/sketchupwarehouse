@@ -133,6 +133,16 @@ Go to **https://sketchupwarehouse.com/admin/** to write new articles, edit or de
 - A future **Publish date** schedules the article; it goes live that morning.
 - For your own articles, leave **Drafted with AI** off.
 
+## Free components
+
+The `/components/` library lists free SketchUp models to download. Each one is three files:
+
+- `src/content/components/<slug>.md`: title, description, `pubDate`, `tags`, optional `dimensions`, plus a short how-to-use body.
+- `src/content/components/images/<slug>.png`: the preview render, referenced as `preview.src: ./images/<slug>.png` with `preview.alt`.
+- `public/downloads/components/<slug>.skp`: the model, referenced as `file: /downloads/components/<slug>.skp`.
+
+When the model is also live on 3D Warehouse, add its page link as `warehouseUrl` and the page shows a "View on 3D Warehouse" button. Set `draft: true` to hold a component back.
+
 ## Cover photos
 
 Each article gets a free stock photo from [Pexels](https://www.pexels.com). The photo appears under the article header, on the article's card in lists, and as its social preview image. Pexels photos are free for commercial use. Each photo is credited to its photographer, and the About page credits Pexels.
