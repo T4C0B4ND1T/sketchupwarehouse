@@ -90,7 +90,7 @@ In review mode (`PUBLISH_MODE=review`), the pull request itself notifies you ins
 
 ## Facebook Page
 
-Each time a deploy makes an article public (an automatic article, a merged draft, or a scheduled one whose date arrives), it's posted to the SketchUp Warehouse Facebook Page with its summary and link. Facebook builds the preview card from the article's title and cover photo. Nothing is posted until you add the token below, and older articles are never re-posted. If a post fails, the deploy's **facebook** job turns red and GitHub emails you; the site itself is already live.
+Each time a deploy makes an article or free component public (an automatic article, a merged draft or component, or a scheduled article whose date arrives), it's posted to the SketchUp Warehouse Facebook Page with its summary and link. Facebook builds the preview card from the page's title and cover or preview image. Nothing is posted until you add the token below, and older pages are never re-posted. If a post fails, the deploy's **facebook** job turns red and GitHub emails you; the site itself is already live.
 
 **Setup (once, about 10 minutes, needs your Facebook account):**
 

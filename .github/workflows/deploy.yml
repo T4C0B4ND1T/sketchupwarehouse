@@ -46,8 +46,8 @@ jobs:
           PUBLIC_CONTACT_EMAIL: ${{ vars.PUBLIC_CONTACT_EMAIL }}
           PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }}
           PUBLIC_BING_SITE_VERIFICATION: ${{ vars.PUBLIC_BING_SITE_VERIFICATION }}
-      # Articles this deploy makes public, for the Facebook job below. Read
-      # before deploying, while the live site still has the old feed.
+      # Articles and components this deploy makes public, for the Facebook job below. Read
+      # before deploying, while the live site still has the old sitemap.
       - name: Find new articles
         id: new
         env:

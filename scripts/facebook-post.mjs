@@ -1,9 +1,10 @@
-// Shares newly published articles on the SketchUp Warehouse Facebook Page.
+// Shares newly published articles and free components on the SketchUp
+// Warehouse Facebook Page.
 //
 //   node scripts/facebook-post.mjs --find
-//     After a build: compares dist/rss.xml with the live site's feed and
-//     prints the articles that this deploy makes public, as JSON. Run before
-//     deploying, while the live feed is still the old one.
+//     After a build: compares dist's sitemap with the live site's and prints
+//     the articles and components this deploy makes public, as JSON. Run
+//     before deploying, while the live sitemap is still the old one.
 //
 //   node scripts/facebook-post.mjs --post
 //     Posts each article in $NEW_POSTS (the JSON from --find) to the Page,
@@ -20,7 +21,7 @@ const SITE = (process.env.SITE_URL || 'https://sketchupwarehouse.com').replace(/
 const GRAPH = `https://graph.facebook.com/${process.env.FACEBOOK_GRAPH_VERSION || 'v23.0'}`;
 const TOKEN = process.env.FACEBOOK_PAGE_TOKEN || '';
 // A deploy normally makes one article public, occasionally a few scheduled
-// ones together. Many more means the feed changed shape (e.g. a new domain),
+// ones together. Many more means URLs changed (e.g. renamed pages),
 // and posting them all would flood the Page, so nothing is posted.
 const MAX_PER_DEPLOY = 5;
 
@@ -33,35 +34,51 @@ const decode = (s) =>
     .replace(/&#39;|&apos;/g, "'")
     .replace(/&amp;/g, '&');
 
-function feedItems(xml) {
-  return [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(([, item]) => {
-    const tag = (name) => decode(item.match(new RegExp(`<${name}>([\\s\\S]*?)</${name}>`))?.[1].trim() ?? '');
-    return { title: tag('title'), link: tag('link'), description: tag('description') };
-  });
+const meta = (html, p) => decode(html.match(new RegExp(`<meta (?:property|name)="${p}" content="([^"]*)"`))?.[1] ?? '');
+const locs = (xml) => [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => decode(m[1].trim()));
+// Articles and free components; listing pages and hubs aren't shared.
+const SHAREABLE = /^\/(blog|components)\/[^/]+\/$/;
+
+// Paths of every page in a sitemap index, read with the given loader.
+async function sitemapPaths(read) {
+  const paths = new Set();
+  for (const sitemap of locs(await read('sitemap-index.xml'))) {
+    for (const loc of locs(await read(new URL(sitemap).pathname.slice(1)))) paths.add(new URL(loc).pathname);
+  }
+  return paths;
 }
 
 async function find() {
-  const built = feedItems(fs.readFileSync('dist/rss.xml', 'utf8'));
+  const built = await sitemapPaths((file) => fs.readFileSync(`dist/${file}`, 'utf8'));
   let live;
   try {
-    const res = await fetch(`${SITE}/rss.xml`, { signal: AbortSignal.timeout(30_000) });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    live = feedItems(await res.text());
+    live = await sitemapPaths(async (file) => {
+      const res = await fetch(`${SITE}/${file}`, { signal: AbortSignal.timeout(30_000) });
+      if (!res.ok) throw new Error(`${file}: HTTP ${res.status}`);
+      return res.text();
+    });
   } catch (err) {
-    console.error(`Couldn't read the live feed (${err.message}), so nothing will be shared this time.`);
+    console.error(`Couldn't read the live sitemap (${err.message}), so nothing will be shared this time.`);
     return [];
   }
-  if (live.length === 0) {
-    console.error('The live feed has no articles yet, so nothing will be shared this time.');
+  if (![...live].some((p) => SHAREABLE.test(p))) {
+    console.error('The live site has no articles yet, so nothing will be shared this time.');
     return [];
   }
-  const seen = new Set(live.map((i) => i.link));
-  const fresh = built.filter((i) => i.link && !seen.has(i.link));
+  const fresh = [...built].filter((p) => SHAREABLE.test(p) && !live.has(p));
   if (fresh.length > MAX_PER_DEPLOY) {
-    console.error(`${fresh.length} articles look new, more than ${MAX_PER_DEPLOY}, so none will be shared.`);
+    console.error(`${fresh.length} pages look new, more than ${MAX_PER_DEPLOY}, so none will be shared.`);
     return [];
   }
-  return fresh;
+  return fresh.map((path) => {
+    const html = fs.readFileSync(`dist${path}index.html`, 'utf8');
+    const description = meta(html, 'og:description');
+    return {
+      link: `${SITE}${path}`,
+      title: meta(html, 'og:title'),
+      description: path.startsWith('/components/') ? `Free SketchUp model: ${description}` : description,
+    };
+  });
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -117,8 +134,7 @@ async function share(url) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`${url} returned HTTP ${res.status}`);
   const html = await res.text();
-  const meta = (p) => decode(html.match(new RegExp(`<meta (?:property|name)="${p}" content="([^"]*)"`))?.[1] ?? '');
-  await post([{ link: url, title: meta('og:title'), description: meta('og:description') }]);
+  await post([{ link: url, title: meta(html, 'og:title'), description: meta(html, 'og:description') }]);
 }
 
 const [mode, arg] = process.argv.slice(2);
