@@ -10,6 +10,8 @@ tags:
   - shadows
   - analysis hub
 aiAssisted: true
+author: rosa
+beat: tuesday-brief
 imageQuery: architect studying building sunlight model
 sources:
   - title: SketchUp Desktop 2026.2 release notes (SketchUp Help Center)

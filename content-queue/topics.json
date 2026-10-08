@@ -1,5 +1,5 @@
 {
-  "_readme": "Topic list for automated articles. Edit it at sketchupwarehouse.com/admin/ (Topic list) or here. The generator writes the first topic that isn't paused and has no post yet, top to bottom. Only title is required: category, keyword, notes and link are optional. The generator fills in id and post when it writes a topic; don't edit those.",
+  "_readme": "Topic list for automated articles. Edit it at sketchupwarehouse.com/admin/ (Topic list) or here. The generator writes the first topic that isn't paused and has no post yet, top to bottom. Only title is required: category, beat, keyword, notes and link are optional. Each scheduled run writes for that day's contributor (src/data/authors.json), taking the first open topic on whichever of their beats has waited longest; a topic without a beat uses its category's default beat. The generator fills in id and post when it writes a topic; don't edit those.",
   "topics": [
     {
       "id": "sketchup-for-beginners",
@@ -103,7 +103,8 @@
       "title": "How to Fix Reversed Faces in SketchUp",
       "keyword": "sketchup reversed faces",
       "angle": "Why blue/grey faces matter for rendering and 3D printing; fixes and extensions.",
-      "slug": "sketchup-reversed-faces"
+      "slug": "sketchup-reversed-faces",
+      "beat": "fix-it"
     },
     {
       "id": "revit-families-vs-sketchup-components-what-carries-over",
@@ -119,7 +120,8 @@
       "title": "How to Make a Model Solid for 3D Printing in SketchUp",
       "keyword": "sketchup solid for 3d printing",
       "angle": "Solid inspector, holes, stray edges, exporting STL.",
-      "slug": "sketchup-solid-for-3d-printing"
+      "slug": "sketchup-solid-for-3d-printing",
+      "beat": "fix-it"
     },
     {
       "id": "how-to-manage-update-and-uninstall-sketchup-extensions",
@@ -167,7 +169,8 @@
       "title": "Sandbox Tools in SketchUp: Modeling Terrain Step by Step",
       "keyword": "sketchup sandbox terrain",
       "angle": "From contours and from scratch, stamping a building pad.",
-      "slug": "sketchup-sandbox-terrain"
+      "slug": "sketchup-sandbox-terrain",
+      "beat": "build-along"
     },
     {
       "id": "how-to-import-autocad-dwg-plans-into-sketchup-and-clean-them-up",
@@ -199,7 +202,8 @@
       "title": "How to Model Stairs in SketchUp",
       "keyword": "how to model stairs in sketchup",
       "angle": "Straight run with code-friendly rise/run, using arrays.",
-      "slug": "how-to-model-stairs-in-sketchup"
+      "slug": "how-to-model-stairs-in-sketchup",
+      "beat": "build-along"
     },
     {
       "id": "enscape-materials-in-sketchup-the-settings-that-actually-matter",
@@ -215,7 +219,8 @@
       "title": "How to Make a Roof in SketchUp (Gable, Hip and Shed)",
       "keyword": "how to make a roof in sketchup",
       "angle": "Manual methods and roof extensions.",
-      "slug": "how-to-make-a-roof-in-sketchup"
+      "slug": "how-to-make-a-roof-in-sketchup",
+      "beat": "build-along"
     },
     {
       "id": "where-to-find-sketchup-plugins-extension-warehouse-vs-sketchucation-and-others",
@@ -367,7 +372,8 @@
       "title": "Lumion vs Enscape for SketchUp Users",
       "keyword": "lumion vs enscape",
       "angle": "Workflow (live link vs separate app), quality, asset libraries, animation, hardware, pricing; which suits which projects.",
-      "slug": "lumion-vs-enscape-for-sketchup-users"
+      "slug": "lumion-vs-enscape-for-sketchup-users",
+      "beat": "head-to-head"
     },
     {
       "id": "sketchup-import-revit-ifc",
@@ -407,7 +413,8 @@
       "title": "How to Model a Kitchen in SketchUp",
       "keyword": "sketchup kitchen design",
       "angle": "Cabinet components, dynamic components, appliances from 3D Warehouse.",
-      "slug": "sketchup-kitchen-design"
+      "slug": "sketchup-kitchen-design",
+      "beat": "build-along"
     },
     {
       "id": "best-sketchup-plugins-for-walls-doors-and-windows",
@@ -487,7 +494,8 @@
       "title": "Match Photo in SketchUp: Model from a Photograph",
       "keyword": "sketchup match photo",
       "angle": "Step by step with pitfalls.",
-      "slug": "sketchup-match-photo"
+      "slug": "sketchup-match-photo",
+      "beat": "build-along"
     },
     {
       "id": "generate-report-in-sketchup-schedules-and-quantities-from-components",
@@ -511,7 +519,8 @@
       "title": "Lumion vs Twinmotion for SketchUp Models",
       "keyword": "lumion vs twinmotion",
       "angle": "Import paths from SketchUp, live sync, visual quality, assets, pricing and licensing, learning curve.",
-      "slug": "lumion-vs-twinmotion-for-sketchup-models"
+      "slug": "lumion-vs-twinmotion-for-sketchup-models",
+      "beat": "head-to-head"
     },
     {
       "id": "sketchup-z-fighting",
@@ -519,7 +528,8 @@
       "title": "How to Fix Z-Fighting and Flickering Faces in SketchUp",
       "keyword": "sketchup z-fighting",
       "angle": "Causes and fixes including camera clipping.",
-      "slug": "sketchup-z-fighting"
+      "slug": "sketchup-z-fighting",
+      "beat": "fix-it"
     },
     {
       "id": "speckle-for-sketchup-sharing-models-with-revit-rhino-and-grasshopper",
@@ -687,7 +697,8 @@
       "title": "Best Rendering Software for SketchUp Compared",
       "keyword": "best rendering software for sketchup",
       "angle": "V-Ray, Enscape, D5, Twinmotion, Lumion, Thea — table of price model, realtime vs offline, hardware.",
-      "slug": "best-rendering-software-for-sketchup"
+      "slug": "best-rendering-software-for-sketchup",
+      "beat": "head-to-head"
     },
     {
       "id": "vray-sketchup-tutorial",
@@ -727,7 +738,8 @@
       "title": "Enscape vs V-Ray for SketchUp",
       "keyword": "enscape vs vray",
       "angle": "Honest comparison by use case.",
-      "slug": "enscape-vs-vray"
+      "slug": "enscape-vs-vray",
+      "beat": "head-to-head"
     },
     {
       "id": "free-rendering-sketchup",
@@ -735,7 +747,8 @@
       "title": "Free Rendering Options for SketchUp",
       "keyword": "free rendering sketchup",
       "angle": "Free tiers and free renderers, limits.",
-      "slug": "free-rendering-sketchup"
+      "slug": "free-rendering-sketchup",
+      "beat": "head-to-head"
     },
     {
       "id": "sketchup-interior-rendering-lighting",

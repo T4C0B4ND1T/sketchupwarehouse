@@ -10,6 +10,8 @@ tags:
   - tips
   - beginners
 aiAssisted: true
+author: dana
+beat: fundamentals
 topicId: sketchup-keyboard-shortcuts
 imageQuery: architect working at desk keyboard
 sources:

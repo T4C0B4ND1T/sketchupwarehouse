@@ -25,6 +25,8 @@ sources:
   - title: Importing CAD Files (Autodesk Revit Help)
     url: https://help.autodesk.com/cloudhelp/2022/ENU/Revit-Model/files/GUID-E8705303-0610-4A82-9118-0C3A742706D2.htm
 aiAssisted: true
+author: rosa
+beat: on-the-job
 imageQuery: architect reviewing building model on screen
 topicId: how-to-get-a-sketchup-model-into-revit-and-keep-it-clean
 ---

@@ -10,6 +10,8 @@ tags:
   - rendering
   - extensions
 aiAssisted: true
+author: theo
+beat: render-lab
 imageQuery: architect working on dual monitors
 sources:
   - title: Download Lumion LiveSync for SketchUp - Lumion Support

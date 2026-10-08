@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import AuthorCard from '../../components/AuthorCard.astro';
+import { getPublishedPosts } from '../../lib/posts';
+import { AUTHORS, PEN_NAME_NOTE } from '../../lib/authors';
+import { SITE } from '../../site.config';
+
+const posts = await getPublishedPosts();
+const count = (id: string) => posts.filter((p) => p.data.author === id).length;
+---
+<Base title="Contributors" description={`Who writes for ${SITE.name}, what each contributor covers, and how articles are made.`}>
+  <section class="page-hero swiss-grid-pattern bg-muted">
+    <p class="label"><b>§</b> Masthead</p>
+    <h1>Contributors</h1>
+    <p>{PEN_NAME_NOTE}</p>
+  </section>
+  <div class="grid rule-b">
+    {AUTHORS.map((a) => <AuthorCard author={a} count={count(a.id)} />)}
+  </div>
+</Base>

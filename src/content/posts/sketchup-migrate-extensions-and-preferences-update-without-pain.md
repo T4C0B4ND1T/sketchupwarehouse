@@ -10,6 +10,8 @@ tags:
   - migration
   - updates
 aiAssisted: true
+author: rosa
+beat: tuesday-brief
 imageQuery: architect working at desk laptop
 sources:
   - title: SketchUp Desktop 2026.2 release notes (SketchUp Help Center)

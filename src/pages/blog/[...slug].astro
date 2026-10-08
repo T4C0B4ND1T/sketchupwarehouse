@@ -7,6 +7,8 @@ import PostCard from '../../components/PostCard.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import Section from '../../components/Section.astro';
 import Icon from '../../components/Icon.astro';
+import Avatar from '../../components/Avatar.astro';
+import { getAuthor, authorUrl } from '../../lib/authors';
 import { getPublishedPosts, formatDate, readingTime, relatedPosts, postUrl, type Post } from '../../lib/posts';
 import { SITE, CATEGORIES } from '../../site.config';
 
@@ -20,6 +22,7 @@ const { post, all } = Astro.props;
 const { Content, headings } = await render(post);
 const { data } = post;
 const cat = CATEGORIES[data.category];
+const author = getAuthor(data.author);
 const related = relatedPosts(post, all);
 // Newest posts in the same topic that "Related reading" didn't already show.
 const shown = new Set([post.id, ...related.map((p) => p.id)]);
@@ -42,7 +45,7 @@ const jsonLd = {
       description: data.description,
       datePublished: data.pubDate.toISOString(),
       dateModified: (data.updatedDate ?? data.pubDate).toISOString(),
-      author: { '@type': 'Organization', name: SITE.author },
+      author: { '@type': 'Person', name: author.name, url: new URL(authorUrl(author), Astro.site).toString() },
       publisher: { '@type': 'Organization', name: SITE.name },
       mainEntityOfPage: url,
       keywords: data.tags.join(', '),
@@ -64,6 +67,7 @@ const jsonLd = {
       <a class="label" href={`/category/${data.category}/`}><b>→</b> {cat.title}</a>
       <h1>{data.title}</h1>
       <p class="lede">{data.description}</p>
+      <a class="byline" href={authorUrl(author)} rel="author"><Avatar author={author} /><span>By {author.name}</span></a>
       <div class="meta">
         <time datetime={data.pubDate.toISOString()}>{formatDate(data.pubDate)}</time>
         {data.updatedDate && <span>Updated {formatDate(data.updatedDate)}</span>}
@@ -113,7 +117,7 @@ const jsonLd = {
             {data.aiAssisted && (
               <p class="ai-note">
                 This article was drafted with AI assistance from the sources listed above and published under our
-                <a href="/about/#editorial-standards">editorial standards</a>. Spot an error? <a href="/contact/">Tell us</a> and we'll fix it.
+                <a href="/about/#editorial-standards">editorial standards</a>.{author.penName && <> {author.name} is one of our <a href="/authors/">house pen names</a>.</>} Spot an error? <a href="/contact/">Tell us</a> and we'll fix it.
               </p>
             )}
           </footer>

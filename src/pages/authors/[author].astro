@@ -1,0 +1,43 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import Avatar from '../../components/Avatar.astro';
+import { getPublishedPosts } from '../../lib/posts';
+import { AUTHORS, PEN_NAME_NOTE, authorUrl, type Author } from '../../lib/authors';
+
+export function getStaticPaths() {
+  return AUTHORS.map((author) => ({ params: { author: author.id }, props: { author } }));
+}
+
+interface Props { author: Author }
+const { author } = Astro.props;
+const posts = (await getPublishedPosts()).filter((p) => p.data.author === author.id);
+const url = new URL(authorUrl(author), Astro.site).toString();
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  url,
+  mainEntity: { '@type': 'Person', name: author.name, description: author.bio, url },
+};
+---
+<Base title={`${author.name}, ${author.role}`} description={author.bio} jsonLd={jsonLd} noindex={posts.length === 0}>
+  <section class="page-hero swiss-grid-pattern bg-muted author-hero">
+    <p class="label"><b>§</b> <a href="/authors/">Contributors</a> · {author.role}</p>
+    <div class="author-hero-name">
+      <Avatar author={author} size="lg" />
+      <h1>{author.name}</h1>
+    </div>
+    <p>{author.bio}</p>
+    {author.penName && <p class="pen-note">{PEN_NAME_NOTE}</p>}
+  </section>
+  {author.beats.length > 0 && (
+    <dl class="beat-list rule-b">
+      {author.beats.map((b) => (
+        <div><dt>{b.name}</dt><dd>{b.description}</dd></div>
+      ))}
+    </dl>
+  )}
+  {posts.length > 0
+    ? <div class="grid grid--3 rule-b">{posts.map((post, i) => <PostCard post={post} index={i + 1} />)}</div>
+    : <p class="empty rule-b">{author.name.split(' ')[0]}'s first article is on the way.</p>}
+</Base>

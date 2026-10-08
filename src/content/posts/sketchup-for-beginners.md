@@ -20,6 +20,8 @@ sources:
   - title: Softening, Smoothing, and Hiding Geometry – SketchUp Help
     url: https://help.sketchup.com/en/sketchup/softening-smoothing-and-hiding-geometry
 aiAssisted: true
+author: dana
+beat: fundamentals
 imageQuery: architect designing 3d model on laptop
 topicId: sketchup-for-beginners
 ---

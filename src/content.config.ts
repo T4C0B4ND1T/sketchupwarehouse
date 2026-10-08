@@ -2,6 +2,7 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { CATEGORY_KEYS } from './site.config';
+import { AUTHOR_IDS, DEFAULT_AUTHOR } from './lib/authors';
 
 const posts = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/posts' }),
@@ -14,6 +15,9 @@ const posts = defineCollection({
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
     aiAssisted: z.boolean().default(false),
+    // Byline: an id from src/data/authors.json, and optionally one of that author's beats.
+    author: z.enum(AUTHOR_IDS).default(DEFAULT_AUTHOR),
+    beat: z.string().optional(),
     topicId: z.string().optional(),
     sources: z.array(z.object({ title: z.string(), url: z.string().url() })).default([]),
     // Stock-photo search the image fetcher uses (scripts/add-images.mjs).
