@@ -18,7 +18,7 @@
 import fs from 'node:fs';
 
 const SITE = (process.env.SITE_URL || 'https://sketchupwarehouse.com').replace(/\/$/, '');
-const GRAPH = `https://graph.facebook.com/${process.env.FACEBOOK_GRAPH_VERSION || 'v23.0'}`;
+const GRAPH = `https://graph.facebook.com/${process.env.FACEBOOK_GRAPH_VERSION || 'v26.0'}`;
 const TOKEN = process.env.FACEBOOK_PAGE_TOKEN || '';
 // A deploy normally makes one article public, occasionally a few scheduled
 // ones together. Many more means URLs changed (e.g. renamed pages),
