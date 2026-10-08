@@ -10,6 +10,8 @@ tags:
   - modeling
 imageQuery: woodworking workshop furniture making
 aiAssisted: true
+author: dana
+beat: fundamentals
 topicId: sketchup-groups-vs-components
 sources:
   - title: SketchUp Help Center

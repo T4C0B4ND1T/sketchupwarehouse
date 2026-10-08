@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { SITE } from '../site.config';
+import { AUTHORS, PEN_NAME_NOTE, authorUrl } from '../lib/authors';
 ---
 <Base title="About" description={`About ${SITE.name} and our editorial standards.`}>
   <section class="page-hero swiss-grid-pattern bg-muted">
@@ -18,6 +19,12 @@ import { SITE } from '../site.config';
         We are not affiliated with Trimble Inc. SketchUp and 3D Warehouse are trademarks of Trimble Inc. Looking for
         free 3D models? The official library is <a href="https://3dwarehouse.sketchup.com/">3D Warehouse</a>.
       </p>
+
+      <h2 id="contributors">Who writes here</h2>
+      <ul>
+        {AUTHORS.map((a) => <li><a href={authorUrl(a)}>{a.name}</a>, {a.role.toLowerCase()}</li>)}
+      </ul>
+      <p>{PEN_NAME_NOTE}</p>
 
       <h2 id="editorial-standards">Editorial standards</h2>
       <ul>

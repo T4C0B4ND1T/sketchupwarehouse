@@ -414,6 +414,25 @@ a.label:hover { color: var(--accent-ink); }
 
 .empty { padding: var(--space) var(--gutter); margin: 0; font-size: var(--t-lg); }
 
+/* Authors: monogram squares (pen names never get photos), bylines, beats */
+.avatar { display: inline-grid; place-items: center; flex: none; background: var(--fg); color: var(--bg); font-weight: 900; letter-spacing: -0.02em; line-height: 1; }
+.avatar--sm { width: 28px; height: 28px; font-size: 0.6875rem; }
+.avatar--lg { width: 72px; height: 72px; font-size: 1.75rem; }
+.byline { display: inline-flex; align-items: center; gap: 12px; align-self: flex-start; font-size: var(--t-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; text-decoration: none; }
+.byline:hover span:last-child, .byline:focus-visible span:last-child { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.card--author { min-height: 0; }
+.card--author .card-top { align-items: center; }
+.card--author:hover .avatar { background: var(--fg); }
+.card .beats { flex: none; }
+.author-hero-name { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.author-hero .label a { color: inherit; }
+.page-hero p.pen-note { font-size: var(--t-sm); color: var(--muted-fg); }
+.beat-list { margin: 0; display: grid; grid-template-columns: 1fr; gap: var(--rule-thin); background: var(--border); }
+.beat-list > div { background: var(--bg); padding: 28px var(--gutter); }
+.beat-list dt { font-weight: 800; font-size: var(--t-lg); letter-spacing: -0.02em; }
+.beat-list dd { margin: 6px 0 0; color: var(--muted-fg); }
+@media (min-width: 768px) { .beat-list { grid-template-columns: repeat(3, 1fr); } }
+
 /* ==========================================================================
    Article — full-width header, then 8:4 body + sticky aside
    ========================================================================== */

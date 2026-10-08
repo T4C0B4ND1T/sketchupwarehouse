@@ -30,6 +30,11 @@ on:
         type: choice
         options: [auto, tutorials, extensions, rendering, workflows, hardware]
         default: auto
+      author:
+        description: 'Byline (auto: whoever''s day it is, or the owner of the requested category).'
+        type: choice
+        options: [auto, dana, theo, rosa]
+        default: auto
       issue:
         description: 'Article request issue number to report back to (set automatically).'
         type: string
@@ -75,6 +80,7 @@ jobs:
           REQUEST_LINK: ${{ inputs.link }}
           REQUEST_NOTES: ${{ inputs.notes }}
           REQUEST_CATEGORY: ${{ inputs.category != 'auto' && inputs.category || '' }}
+          REQUEST_AUTHOR: ${{ inputs.author }}
         run: |
           NEWS=""
           if [ -z "$REQUEST_TOPIC$REQUEST_LINK" ]; then
@@ -112,6 +118,7 @@ jobs:
           REQUEST_LINK: ${{ inputs.link }}
           REQUEST_NOTES: ${{ inputs.notes }}
           REQUEST_CATEGORY: ${{ inputs.category != 'auto' && inputs.category || '' }}
+          REQUEST_AUTHOR: ${{ inputs.author }}
         run: |
           if [ "${{ steps.job.outputs.engine }}" = "claude-code" ]; then
             node scripts/generate-post.mjs --finalize

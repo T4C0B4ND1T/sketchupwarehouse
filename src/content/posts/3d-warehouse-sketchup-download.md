@@ -10,6 +10,8 @@ tags:
   - beginners
 imageQuery: modern furnished living room interior
 aiAssisted: true
+author: dana
+beat: fundamentals
 topicId: 3d-warehouse-sketchup-download
 sources:
   - title: 3D Warehouse

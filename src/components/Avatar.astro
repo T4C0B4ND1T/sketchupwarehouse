@@ -1,0 +1,8 @@
+---
+import type { Author } from '../lib/authors';
+
+// Monogram square. Pen names never get a photo, so nobody is mistaken for a real person.
+interface Props { author: Author; size?: 'sm' | 'lg' }
+const { author, size = 'sm' } = Astro.props;
+---
+<span class={`avatar avatar--${size}`} aria-hidden="true">{author.initials}</span>

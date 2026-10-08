@@ -66,6 +66,30 @@ collections:
           - { label: Industry Workflows, value: workflows }
           - { label: Hardware & Setup, value: hardware }
           - { label: News, value: news }
+      - label: Author
+        name: author
+        widget: select
+        default: joel
+        hint: 'Dana, Theo and Rosa are house pen names for AI-assisted articles.'
+        options:
+          - { label: Joel, value: joel }
+          - { label: Dana Brooks, value: dana }
+          - { label: Theo Marsh, value: theo }
+          - { label: Rosa Calder, value: rosa }
+      - label: Beat
+        name: beat
+        widget: select
+        required: false
+        options:
+          - { label: 'Dana · Fundamentals', value: fundamentals }
+          - { label: 'Dana · Fix It', value: fix-it }
+          - { label: 'Dana · Build Along', value: build-along }
+          - { label: 'Theo · Render Lab', value: render-lab }
+          - { label: 'Theo · Head to Head', value: head-to-head }
+          - { label: 'Theo · Rig Check', value: rig-check }
+          - { label: 'Rosa · On the Job', value: on-the-job }
+          - { label: 'Rosa · Worth It?', value: worth-it }
+          - { label: 'Rosa · The Tuesday Brief', value: tuesday-brief }
       - { label: Tags, name: tags, widget: list, required: false, hint: 'Short lowercase tags, e.g. rendering, v-ray.' }
       - { label: Draft (hidden from the site), name: draft, widget: boolean, default: false }
       - label: Cover image
@@ -126,6 +150,20 @@ collections:
                   - { label: Rendering, value: rendering }
                   - { label: Industry Workflows, value: workflows }
                   - { label: Hardware & Setup, value: hardware }
+              - label: Beat
+                name: beat
+                widget: select
+                required: false
+                hint: 'Which contributor series this belongs to. Leave empty to use the category (Tutorials → Dana · Fundamentals, Rendering → Theo · Render Lab, Hardware → Theo · Rig Check, Workflows → Rosa · On the Job, Extensions → Rosa · Worth It?).'
+                options:
+                  - { label: 'Dana · Fundamentals', value: fundamentals }
+                  - { label: 'Dana · Fix It', value: fix-it }
+                  - { label: 'Dana · Build Along', value: build-along }
+                  - { label: 'Theo · Render Lab', value: render-lab }
+                  - { label: 'Theo · Head to Head', value: head-to-head }
+                  - { label: 'Theo · Rig Check', value: rig-check }
+                  - { label: 'Rosa · On the Job', value: on-the-job }
+                  - { label: 'Rosa · Worth It?', value: worth-it }
               - { label: Search keyword, name: keyword, widget: string, required: false, hint: 'The phrase people search for. Optional.' }
               - { label: Angle or notes, name: angle, widget: text, required: false, hint: 'What to focus on, who it is for, anything to include or avoid.' }
               - { label: Link to an article, name: link, widget: string, required: false, pattern: ['^https?://', 'Must start with http:// or https://'], hint: 'Optional starting point. It is cited; the article is written from scratch.' }

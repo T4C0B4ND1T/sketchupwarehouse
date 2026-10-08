@@ -10,6 +10,8 @@ tags:
   - lathe
   - beginner
 aiAssisted: true
+author: dana
+beat: fundamentals
 topicId: sketchup-follow-me-tool
 imageQuery: carpenter installing crown molding ceiling
 sources:

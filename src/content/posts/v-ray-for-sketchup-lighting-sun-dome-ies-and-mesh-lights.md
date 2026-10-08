@@ -10,6 +10,8 @@ tags:
   - sketchup
   - rendering
 aiAssisted: true
+author: theo
+beat: render-lab
 topicId: v-ray-for-sketchup-lighting-sun-dome-ies-and-mesh-lights
 imageQuery: modern living room natural light
 sources:

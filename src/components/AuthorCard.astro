@@ -1,0 +1,17 @@
+---
+import Avatar from './Avatar.astro';
+import { authorUrl, type Author } from '../lib/authors';
+
+interface Props { author: Author; count?: number }
+const { author, count } = Astro.props;
+---
+<article class="card card--author">
+  <div class="card-top">
+    <Avatar author={author} size="lg" />
+    <span class="label">{author.role}</span>
+  </div>
+  <h3><a href={authorUrl(author)}>{author.name}</a></h3>
+  <p>{author.bio}</p>
+  {author.beats.length > 0 && <p class="beats label">{author.beats.map((b) => b.name).join(' · ')}</p>}
+  {count !== undefined && count > 0 && <p class="label">{count} {count === 1 ? 'article' : 'articles'}</p>}
+</article>

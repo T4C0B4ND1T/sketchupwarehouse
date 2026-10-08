@@ -10,6 +10,8 @@ tags:
   - tips
 imageQuery: architect working on 3d building model computer
 aiAssisted: true
+author: dana
+beat: fix-it
 topicId: sketchup-slow-model-file-size
 sources:
   - title: SketchUp Help Center

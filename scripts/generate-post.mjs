@@ -5,6 +5,11 @@
 // asks Claude to find a fresh SketchUp news story), has Claude research it with
 // web search, and writes a Markdown post into src/content/posts/.
 //
+// Each article is written under a contributor byline from src/data/authors.json:
+// the author whose weekday it is (Mon Dana, Wed Theo, Fri Rosa; news is Rosa's
+// Tuesday Brief), in their voice, on whichever of their beats has gone longest
+// without a new article. REQUEST_AUTHOR (or --author) picks the author instead.
+//
 // Two ways to run it:
 //
 // 1. Claude API (billed per token):
@@ -37,6 +42,8 @@ import YAML from 'yaml';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const POSTS_DIR = path.join(root, 'src/content/posts');
 const QUEUE_FILE = path.join(root, 'content-queue/topics.json');
+const AUTHORS = JSON.parse(fs.readFileSync(path.join(root, 'src/data/authors.json'), 'utf8')).authors;
+const BEATS = AUTHORS.flatMap((a) => a.beats.map((b) => ({ ...b, author: a.id })));
 
 const MODEL = process.env.CLAUDE_MODEL || 'claude-opus-5';
 const EFFORT = process.env.CLAUDE_EFFORT || 'medium';
@@ -91,6 +98,35 @@ function requestedTopic() {
 // Topics added in /admin only need a title; the id comes from it.
 const topicKey = (t) => t.id || slugify(t.title ?? '');
 
+const authorById = (id) => AUTHORS.find((a) => a.id === id);
+// A topic taken from the queue (not a request, not news).
+const fromQueue = (t) => Boolean(t && !t.requested && !t.news);
+
+// A topic's beat: the one it names, else its category's default beat.
+function topicBeat(t) {
+  return BEATS.find((b) => b.id === t.beat) ?? BEATS.find((b) => b.defaultFor?.includes(t.category));
+}
+
+// The author's own beat for a category, if they have one.
+function authorBeatFor(author, category) {
+  return author.beats.find((b) => b.defaultFor?.includes(category));
+}
+
+// Who writes today: an explicit pick, else the author whose weekday it is, else
+// (a manual run on another day) the scheduled author who has waited longest.
+function scheduledAuthor(published) {
+  const pick = (argValue('--author') ?? process.env.REQUEST_AUTHOR ?? '').trim();
+  if (pick && pick !== 'auto') {
+    if (!authorById(pick)) throw new Error(`Unknown author "${pick}"`);
+    return authorById(pick);
+  }
+  const day = new Date().getUTCDay();
+  const today = AUTHORS.find((a) => a.days?.includes(day));
+  if (today) return today;
+  const last = (a) => Math.max(0, ...published.filter((p) => p.author === a.id).map((p) => p.pubDate));
+  return AUTHORS.filter((a) => a.days?.length).sort((a, b) => last(a) - last(b))[0];
+}
+
 function readQueue() {
   return JSON.parse(fs.readFileSync(QUEUE_FILE, 'utf8'));
 }
@@ -120,6 +156,9 @@ function existingPosts() {
         title: data.title ?? '',
         category: data.category,
         topicId: data.topicId,
+        author: data.author,
+        beat: data.beat,
+        pubDate: new Date(data.pubDate).getTime() || 0,
         live: !data.draft && new Date(data.pubDate).getTime() <= Date.now(),
       };
     });
@@ -148,18 +187,31 @@ function dropDeadInternalLinks(body) {
   );
 }
 
-// The first topic that isn't paused, written, or waiting in an open review
-// branch (PENDING_TOPICS: comma-separated keys, set by the GitHub Action).
-function nextTopic(published) {
+// The next topic for this author: their beat that has gone longest without a
+// new article, then the first open topic on it (top to bottom). Open means not
+// paused, written, or waiting in a review branch (PENDING_TOPICS: comma-separated
+// keys, set by the GitHub Action). Topics with no category or beat can go to
+// anyone; when the author's beats are all empty, the next topic in the list is
+// written by its own beat's author.
+function nextTopic(published, author) {
   const queue = readQueue();
   const done = new Set(published.map((p) => p.topicId).filter(Boolean));
   const pending = new Set((process.env.PENDING_TOPICS ?? '').split(',').map((s) => s.trim()).filter(Boolean));
-  const topic = queue.topics.find((t) => {
+  const open = queue.topics.filter((t) => {
     const key = topicKey(t);
     return key && !t.paused && !t.post && !done.has(key) && !pending.has(key);
   });
-  if (!topic) throw new Error('Topic queue is empty — add more topics in /admin (Topic list) or content-queue/topics.json');
-  return { ...topic, id: topicKey(topic) };
+  if (!open.length) throw new Error('Topic queue is empty — add more topics in /admin (Topic list) or content-queue/topics.json');
+  const last = (beat) => Math.max(0, ...published.filter((p) => p.beat === beat.id).map((p) => p.pubDate));
+  const beats = author.beats.filter((b) => !b.news).sort((a, b) => last(a) - last(b));
+  for (const beat of beats) {
+    const topic = open.find((t) => topicBeat(t)?.id === beat.id);
+    if (topic) return { ...topic, id: topicKey(topic), author: author.id, beat: beat.id };
+  }
+  const unassigned = open.find((t) => !topicBeat(t));
+  if (unassigned) return { ...unassigned, id: topicKey(unassigned), author: author.id };
+  const beat = topicBeat(open[0]);
+  return { ...open[0], id: topicKey(open[0]), author: beat.author, beat: beat.id };
 }
 
 // Mark a queue topic as written so it isn't picked again, even if its title is
@@ -183,7 +235,7 @@ Write genuinely useful, accurate, people-first articles. Standards:
 - Never invent version numbers, prices, release dates, menu paths, keyboard shortcuts or features. If you cannot verify a detail, leave it out or say it may vary by version.
 - Verify every keyboard shortcut, modifier key (Shift/Ctrl/Option/Alt) and tool behavior you describe against the official SketchUp Help Center (help.sketchup.com) page for that tool before writing it. Modifier keys are easy to mix up — for example, with the Eraser, Shift hides edges while Ctrl/Option softens and smooths them.
 - Cite at least 2 distinct sources you actually consulted, including the official help page for any tool whose behavior you describe.
-- Be specific: concrete steps, real menu names, real extension names, practical tips from experience, common mistakes and how to fix them.
+- Be specific: concrete steps, real menu names, real extension names, practical tips, common mistakes and how to fix them.
 - Plain, confident, friendly tone. No filler intros ("In today's fast-paced world..."), no "In conclusion", no hype, no emojis.
 - Structure with ## and ### headings, short paragraphs, numbered steps for procedures, and a comparison table when comparing options. Use <kbd>X</kbd> for keys.
 - Do not start the body with an H1 or repeat the title. Start with a 2–3 sentence intro that answers the reader's question fast.
@@ -206,7 +258,30 @@ sources:
 
 <markdown body>`;
 
+// The byline's voice, layered on top of the house standards above.
+function personaPrompt(topic) {
+  const author = authorById(topic.author);
+  if (!author?.voice) return '';
+  const beat = author.beats.find((b) => b.id === topic.beat);
+  return `
+
+## Your byline: ${author.name}
+
+This article runs under the house pen name ${author.name} (${author.role.toLowerCase()})${beat ? `, in the "${beat.name}" series: ${beat.description}` : ''}.
+
+Voice: ${author.voice}
+
+Signature habits (use the ones that fit this article):
+${author.habits.map((h) => `- ${h}`).join('\n')}
+
+${author.name} is a pen name, not a real person, and readers are told so. Opinions, preferences and recommendations in this voice are welcome. Never invent personal experience, credentials, clients, projects or anecdotes, and never claim to have personally tested, timed or benchmarked something. Every accuracy and sourcing rule above still applies in full.`;
+}
+
 function userPrompt(topic) {
+  return articlePrompt(topic) + personaPrompt(topic);
+}
+
+function articlePrompt(topic) {
   if (newsMode) {
     const recent = existingPosts()
       .slice(-40)
@@ -325,6 +400,14 @@ function toMarkdown(data, body) {
   return `---\n${fm}\n---\n\n${body}\n`;
 }
 
+// Byline fields for the saved post. A topic without a beat (requested, or no
+// category) gets its author's beat for the category the article ended up in.
+function bylineFor(topic, category) {
+  const author = authorById(topic.author);
+  const beat = topic.beat ?? authorBeatFor(author, category)?.id;
+  return { author: author.id, ...(beat ? { beat } : {}) };
+}
+
 function savePost(raw, topic, published) {
   const { data, body, words } = parseArticle(raw);
 
@@ -336,7 +419,8 @@ function savePost(raw, topic, published) {
     category: newsMode ? 'news' : topic.category || data.category,
     tags: data.tags.map((t) => String(t).toLowerCase()).slice(0, 6),
     aiAssisted: true,
-    ...(topic && !topic.requested ? { topicId: topic.id } : {}),
+    ...bylineFor(topic, newsMode ? 'news' : topic.category || data.category),
+    ...(fromQueue(topic) ? { topicId: topic.id } : {}),
     ...(typeof data.imageQuery === 'string' && data.imageQuery.trim() ? { imageQuery: data.imageQuery.trim().slice(0, 80) } : {}),
     sources: data.sources.slice(0, 8),
   };
@@ -355,7 +439,7 @@ function savePost(raw, topic, published) {
   }
   console.error(`[done] ${dryRun ? '(dry run) ' : ''}${path.relative(root, file)} — ${words} words`);
   if (dryRun) return;
-  if (topic && !topic.requested) markTopicWritten(topic, slug);
+  if (fromQueue(topic)) markTopicWritten(topic, slug);
   fs.mkdirSync(JOB_DIR, { recursive: true });
   fs.writeFileSync(PR_FILE, reviewSummary(post, slug, words, topic));
   // Expose the title to the GitHub Action for the commit message; `topic` names the review branch.
@@ -363,7 +447,7 @@ function savePost(raw, topic, published) {
     const oneLine = (s) => String(s).replace(/[\r\n]+/g, ' ');
     fs.appendFileSync(
       process.env.GITHUB_OUTPUT,
-      `title=${oneLine(post.title)}\nslug=${slug}\ntopic=${topic && !topic.requested ? topic.id : slug}\n`,
+      `title=${oneLine(post.title)}\nslug=${slug}\ntopic=${fromQueue(topic) ? topic.id : slug}\n`,
     );
   }
 }
@@ -374,7 +458,7 @@ function reviewSummary(post, slug, words, topic) {
     ? [topic.title && `**Requested topic:** ${topic.title}`, topic.link && `**Starting link:** ${topic.link}`]
         .filter(Boolean)
         .join('\n')
-    : topic
+    : fromQueue(topic)
       ? `**From the topic list:** ${topic.title}`
       : '**News article**';
   return `${asked}
@@ -383,6 +467,7 @@ function reviewSummary(post, slug, words, topic) {
 ${post.description}
 
 - Category: ${post.category}
+- Byline: ${authorById(post.author).name}${post.beat ? ` (${BEATS.find((b) => b.id === post.beat)?.name})` : ''}
 - Length: ${words} words
 - File: \`src/content/posts/${slug}.md\`
 
@@ -413,6 +498,20 @@ ${userPrompt(topic)}
   console.error(`[prepared] ${path.relative(root, PROMPT_FILE)}`);
 }
 
+function pickTopic(published) {
+  if (newsMode) {
+    const beat = BEATS.find((b) => b.news);
+    return { news: true, author: beat.author, beat: beat.id };
+  }
+  const requested = requestedTopic();
+  if (!requested) return nextTopic(published, scheduledAuthor(published));
+  // A requested article goes to an explicitly picked author, else the owner of its category's beat.
+  const pick = (argValue('--author') ?? process.env.REQUEST_AUTHOR ?? '').trim();
+  const beat = !pick || pick === 'auto' ? BEATS.find((b) => b.defaultFor?.includes(requested.category)) : undefined;
+  const author = beat ? authorById(beat.author) : scheduledAuthor(published);
+  return { ...requested, author: author.id, ...(beat ? { beat: beat.id } : {}) };
+}
+
 async function main() {
   const published = existingPosts();
 
@@ -422,7 +521,7 @@ async function main() {
     return;
   }
 
-  const topic = newsMode ? null : (requestedTopic() ?? nextTopic(published));
+  const topic = pickTopic(published);
   console.error(
     newsMode
       ? '[topic] latest news'
@@ -430,6 +529,7 @@ async function main() {
         ? `[topic] requested: ${topic.title || topic.link}`
         : `[topic] ${topic.id}: ${topic.title}`,
   );
+  console.error(`[byline] ${authorById(topic.author).name}${topic.beat ? ` / ${topic.beat}` : ''}`);
 
   if (prepareMode) {
     prepare(topic);
