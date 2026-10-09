@@ -19,6 +19,8 @@ concurrency:
 
 jobs:
   build:
+    outputs:
+      new_posts: ${{ steps.new.outputs.posts }}
     # Pushes deploy only from the default branch. (Scheduled runs always use the default branch.)
     if: github.event_name != 'push' || github.ref_name == github.event.repository.default_branch
     runs-on: ubuntu-latest
@@ -44,6 +46,13 @@ jobs:
           PUBLIC_CONTACT_EMAIL: ${{ vars.PUBLIC_CONTACT_EMAIL }}
           PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }}
           PUBLIC_BING_SITE_VERIFICATION: ${{ vars.PUBLIC_BING_SITE_VERIFICATION }}
+      # Articles and components this deploy makes public, for the Facebook job below. Read
+      # before deploying, while the live site still has the old sitemap.
+      - name: Find new articles
+        id: new
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://sketchupwarehouse.com' }}
+        run: echo "posts=$(node scripts/facebook-post.mjs --find)" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
@@ -57,3 +66,23 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # Shares each newly published article on the Facebook Page. Skips quietly
+  # until the FACEBOOK_PAGE_TOKEN secret is added (see the README).
+  facebook:
+    needs: [build, deploy]
+    if: needs.build.outputs.new_posts != '' && needs.build.outputs.new_posts != '[]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Post to Facebook
+        env:
+          NEW_POSTS: ${{ needs.build.outputs.new_posts }}
+          FACEBOOK_PAGE_TOKEN: ${{ secrets.FACEBOOK_PAGE_TOKEN }}
+          FACEBOOK_GRAPH_VERSION: ${{ vars.FACEBOOK_GRAPH_VERSION }}
+        run: node scripts/facebook-post.mjs --post

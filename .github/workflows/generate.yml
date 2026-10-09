@@ -191,6 +191,8 @@ jobs:
     needs: generate
     if: needs.generate.outputs.published == 'true'
     uses: ./.github/workflows/deploy.yml
+    # Passes FACEBOOK_PAGE_TOKEN through for sharing the new article.
+    secrets: inherit
 
   # Email the owner: a GitHub issue that @mentions them sends a notification
   # email (on by default). Runs after the deploy so the link already works.

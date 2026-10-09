@@ -54,3 +54,4 @@ jobs:
     needs: images
     if: needs.images.outputs.changed == 'true'
     uses: ./.github/workflows/deploy.yml
+    secrets: inherit
