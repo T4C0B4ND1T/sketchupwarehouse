@@ -171,7 +171,8 @@
       "keyword": "sketchup sandbox terrain",
       "angle": "From contours and from scratch, stamping a building pad.",
       "slug": "sketchup-sandbox-terrain",
-      "beat": "build-along"
+      "beat": "build-along",
+      "post": "sketchup-sandbox-terrain"
     },
     {
       "id": "how-to-import-autocad-dwg-plans-into-sketchup-and-clean-them-up",
