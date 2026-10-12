@@ -4,6 +4,7 @@ description: A white double-hung window, 36 in wide and 60 in tall, with two sli
 pubDate: 2026-10-07
 tags: [08 Openings, window, double-hung, vinyl, residential]
 file: /downloads/components/double-hung-window-36x60.skp
+warehouseUrl: https://3dwarehouse.sketchup.com/model/a4a429ab-da9a-4c00-8592-02759d2d841e
 dimensions: 36 × 4.5 × 60 in (W × D × H), sill projects 1 in
 preview:
   src: ./images/double-hung-window-36x60.png
