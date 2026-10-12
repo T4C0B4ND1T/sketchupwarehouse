@@ -4,6 +4,7 @@ description: A 65 in flat-screen TV with a thin black bezel, a slim rear housing
 pubDate: 2026-10-09
 tags: [27 Communications, TV, television, audio-video, living room, electronics]
 file: /downloads/components/flat-screen-tv-65in.skp
+warehouseUrl: https://3dwarehouse.sketchup.com/model/efc120b6-4d40-49d3-b0f1-3f759376e82c/65-in-Flat-Screen-TV-on-a-Pedestal-Stand
 dimensions: 57.1 × 10 × 35.8 in (W × D × H) on its stand; the panel alone is 57.1 × 2.3 × 32.7 in
 preview:
   src: ./images/flat-screen-tv-65in.png
