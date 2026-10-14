@@ -4,6 +4,7 @@ description: A queen platform bed with a walnut frame, a tall grey upholstered h
 pubDate: 2026-10-14
 tags: [12 Furnishings, bed, queen bed, platform bed, bedroom, residential]
 file: /downloads/components/queen-bed-with-headboard.skp
+warehouseUrl: https://3dwarehouse.sketchup.com/model/c9d2dac7-54c9-4031-a9c9-6de6d7aea5db/Queen-Bed-with-Upholstered-Headboard
 dimensions: 64 × 86 × 50 in (W × L × H), for a 60 × 80 in queen mattress
 preview:
   src: ./images/queen-bed-with-headboard.png
