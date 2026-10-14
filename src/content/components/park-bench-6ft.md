@@ -4,6 +4,7 @@ description: A 6 ft backed park bench with teak-colored slats on black cast-iron
 pubDate: 2026-10-12
 tags: [32 Exterior Improvements, bench, park bench, site furnishings, landscape, outdoor seating]
 file: /downloads/components/park-bench-6ft.skp
+warehouseUrl: https://3dwarehouse.sketchup.com/model/50b5e8ad-170d-4e81-8fc6-617844d33c52/Park-Bench-6-ft-with-Backrest
 dimensions: 72 × 24.5 × 33 in (L × D × H), seat height 18 in
 preview:
   src: ./images/park-bench-6ft.png
