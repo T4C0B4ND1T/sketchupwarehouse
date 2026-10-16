@@ -1,0 +1,60 @@
+name: Link 3D Warehouse models
+
+# Checks the site's 3D Warehouse account for newly uploaded models. When one
+# matches a free component by title, it adds the 3D Warehouse link to the
+# component, writes the announcement post if there isn't one, and deploys.
+on:
+  schedule:
+    - cron: '23 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: generate
+  cancel-in-progress: false
+
+jobs:
+  link:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.commit.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Find new 3D Warehouse links
+        env:
+          WAREHOUSE_CREATOR_ID: ${{ vars.WAREHOUSE_CREATOR_ID }}
+        run: node scripts/link-warehouse.mjs
+
+      - name: Verify the site still builds
+        run: |
+          if [ -z "$(git status --porcelain src/content)" ]; then exit 0; fi
+          npm run build
+
+      - name: Commit
+        id: commit
+        run: |
+          git config user.name "sketchupwarehouse-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/content
+          if git diff --cached --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+          git commit -m "Add 3D Warehouse links"
+          git push origin "HEAD:${{ github.event.repository.default_branch }}"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    needs: link
+    if: needs.link.outputs.changed == 'true'
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
