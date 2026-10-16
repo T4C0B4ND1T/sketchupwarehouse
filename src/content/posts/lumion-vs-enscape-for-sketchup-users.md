@@ -1,6 +1,6 @@
 ---
-title: "Lumion vs Enscape for SketchUp Users: Which Should You Pick?"
-description: "Lumion vs Enscape for SketchUp: live-link workflow, render quality, asset libraries, animation, hardware and pricing, with who should pick which."
+title: 'Lumion vs Enscape for SketchUp Users: Which Should You Pick?'
+description: 'Lumion vs Enscape for SketchUp: live-link workflow, render quality, asset libraries, animation, hardware and pricing, with who should pick which.'
 pubDate: 2026-10-14
 category: rendering
 author: theo
@@ -13,9 +13,9 @@ tags:
   - comparison
 draft: false
 sources:
-  - title: "Lumion: SketchUp rendering and LiveSync"
+  - title: 'Lumion: SketchUp rendering and LiveSync'
     url: https://lumion.com/compatibility/sketchup-rendering
-  - title: "Chaos Enscape: SketchUp rendering"
+  - title: 'Chaos Enscape: SketchUp rendering'
     url: https://www.chaos.com/enscape/sketchup-rendering
   - title: Enscape System Requirements – Windows
     url: https://learn.enscape3d.com/?p=64122
@@ -24,12 +24,6 @@ sources:
 aiAssisted: true
 imageQuery: architect presenting building visualization to client
 topicId: lumion-vs-enscape-for-sketchup-users
-cover:
-  src: ./images/lumion-vs-enscape-for-sketchup-users.jpg
-  alt: Two architects in suits and hard hats discussing architectural plans on a flipchart.
-  credit: Gustavo Fring
-  creditUrl: https://www.pexels.com/photo/two-men-wearing-safety-helmet-while-looking-6285137/
-  pexelsId: 6285137
 ---
 
 If you want to keep modeling in SketchUp and glance at a rendered view the whole time, Enscape fits that habit best. If you want a separate scene where you build a polished environment with lots of vegetation, water, weather and animation, Lumion is the stronger fit. Both work with SketchUp, and neither is the right answer for everyone, so here is what it depends on.
