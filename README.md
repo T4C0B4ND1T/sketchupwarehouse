@@ -141,7 +141,9 @@ The `/components/` library lists free SketchUp models to download. Each one is t
 - `src/content/components/images/<slug>.png`: the preview render, referenced as `preview.src: ./images/<slug>.png` with `preview.alt`.
 - `public/downloads/components/<slug>.skp`: the model, referenced as `file: /downloads/components/<slug>.skp`.
 
-When the model is also live on 3D Warehouse, add its page link as `warehouseUrl` and the page shows a "View on 3D Warehouse" button. Set `draft: true` to hold a component back.
+When the model is also live on 3D Warehouse, add its page link as `warehouseUrl` and the page shows a "View on 3D Warehouse" button.
+
+You don't have to paste the link. Upload the model to 3D Warehouse from the components account with the same title as the component, and the **Link 3D Warehouse models** workflow (hourly, or run it by hand from the Actions tab) finds it, adds `warehouseUrl`, writes the "Free SketchUp Model" announcement post if the component doesn't have one, and deploys. A model whose description links `/components/<slug>/` is matched too, even if its title differs. The account is set in `scripts/link-warehouse.mjs`; the `WAREHOUSE_CREATOR_ID` repository variable overrides it. Set `draft: true` to hold a component back.
 
 ## Cover photos
 
