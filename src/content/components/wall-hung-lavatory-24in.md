@@ -4,6 +4,7 @@ description: A 24 in wall-hung lavatory in white vitreous china with a single-le
 pubDate: 2026-10-16
 tags: [22 Plumbing, lavatory, bathroom sink, wall-hung sink, faucet, bathroom, ADA]
 file: /downloads/components/wall-hung-lavatory-24in.skp
+warehouseUrl: https://3dwarehouse.sketchup.com/model/2b617998-80bd-48aa-867b-e8b3c4a92e2e/Wall-Hung-Bathroom-Sink-with-Faucet-24-in
 dimensions: 24 × 18 × 6 in basin (W × D × H), rim at 34 in above the floor
 preview:
   src: ./images/wall-hung-lavatory-24in.png
