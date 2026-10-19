@@ -57,4 +57,27 @@ const components = defineCollection({
   }),
 });
 
-export const collections = { posts, components };
+// Community showcase: popular models by other creators on 3D Warehouse.
+// Nothing is re-hosted: the thumbnail and 3D viewer load from 3D Warehouse,
+// and the download stays there, credited to the creator.
+const showcase = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/showcase' }),
+  schema: z.object({
+    title: z.string().max(100),
+    description: z.string().max(200),
+    pubDate: z.coerce.date(),
+    draft: z.boolean().default(false),
+    tags: z.array(z.string()).default([]),
+    // The model's id and page on 3D Warehouse.
+    warehouseId: z.string(),
+    warehouseUrl: z.string().url(),
+    // Who made it, exactly as 3D Warehouse shows them, and their profile.
+    creator: z.object({ name: z.string(), url: z.string().url() }),
+    // 3D Warehouse's own thumbnail for the model, loaded from their server.
+    thumbnail: z.object({ src: z.string().url(), alt: z.string() }),
+    // Counts from 3D Warehouse on the date picked.
+    stats: z.object({ downloads: z.number(), views: z.number(), asOf: z.coerce.date() }).optional(),
+  }),
+});
+
+export const collections = { posts, components, showcase };

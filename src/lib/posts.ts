@@ -49,3 +49,16 @@ export async function getPublishedComponents(): Promise<Component[]> {
 export function componentUrl(item: Component): string {
   return `/components/${item.id}/`;
 }
+
+export type ShowcaseItem = CollectionEntry<'showcase'>;
+
+/** Published showcase picks, newest first. */
+export async function getPublishedShowcase(): Promise<ShowcaseItem[]> {
+  const now = Date.now();
+  const items = await getCollection('showcase', ({ data }) => !data.draft && data.pubDate.getTime() <= now);
+  return items.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+}
+
+export function showcaseUrl(item: ShowcaseItem): string {
+  return `/showcase/${item.id}/`;
+}
