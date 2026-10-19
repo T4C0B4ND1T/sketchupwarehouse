@@ -105,7 +105,8 @@
       "keyword": "sketchup reversed faces",
       "angle": "Why blue/grey faces matter for rendering and 3D printing; fixes and extensions.",
       "slug": "sketchup-reversed-faces",
-      "beat": "fix-it"
+      "beat": "fix-it",
+      "post": "sketchup-reversed-faces"
     },
     {
       "id": "revit-families-vs-sketchup-components-what-carries-over",
