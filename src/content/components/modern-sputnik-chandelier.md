@@ -4,6 +4,7 @@ description: A mid-century modern sputnik chandelier in brushed brass with 18 ar
 pubDate: 2026-10-19
 tags: [26 Electrical, chandelier, light fixture, pendant, sputnik, mid-century modern, interior lighting]
 file: /downloads/components/modern-sputnik-chandelier.skp
+warehouseUrl: https://3dwarehouse.sketchup.com/model/f3076ce5-1cb4-4b2c-a3ce-4e4db2070f87/Modern-Sputnik-Chandelier-18-Lights
 dimensions: 42 in diameter × 41½ in overall drop from the ceiling
 preview:
   src: ./images/modern-sputnik-chandelier.png
