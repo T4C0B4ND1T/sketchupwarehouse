@@ -1,0 +1,18 @@
+---
+import Icon from './Icon.astro';
+import { showcaseUrl, type ShowcaseItem } from '../lib/posts';
+
+interface Props { item: ShowcaseItem; index?: number }
+const { item, index } = Astro.props;
+---
+<article class="card card--media">
+  <div class="card-media card-media--model">
+    <img src={item.data.thumbnail.src} alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" />
+  </div>
+  <div class="card-top">
+    <span class="label">{index !== undefined && <b>{String(index).padStart(2, '0')}.</b>} By {item.data.creator.name}</span>
+    <Icon name="arrow" class="arrow" />
+  </div>
+  <h3><a href={showcaseUrl(item)}>{item.data.title}</a></h3>
+  <p>{item.data.description}</p>
+</article>
