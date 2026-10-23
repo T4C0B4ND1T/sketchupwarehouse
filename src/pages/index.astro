@@ -1,16 +1,19 @@
 ---
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
+import ShowcaseCard from '../components/ShowcaseCard.astro';
 import AdZone from '../components/AdZone.astro';
 import Newsletter from '../components/Newsletter.astro';
 import Section from '../components/Section.astro';
 import Icon from '../components/Icon.astro';
 import { Image } from 'astro:assets';
-import { getPublishedPosts, postUrl } from '../lib/posts';
+import { getPublishedPosts, getFeed, postUrl } from '../lib/posts';
 import { SITE, CATEGORIES } from '../site.config';
 
 const posts = await getPublishedPosts();
-const latest = posts.slice(0, SITE.postsPerPage);
+// Main feed: articles and community showcase picks, newest first.
+const feed = await getFeed();
+const latest = feed.slice(0, SITE.postsPerPage);
 const topics = Object.entries(CATEGORIES);
 // Hero mosaic: the newest articles that have a cover photo (up to 3).
 const featured = posts.filter((p) => p.data.cover).slice(0, 3);
@@ -37,6 +40,7 @@ const jsonLd = {
       <p class="lede">{SITE.description}</p>
       <div class="hero-actions">
         <a class="btn" href="#latest">Latest articles <Icon name="arrow" class="icon" /></a>
+        <a class="btn btn--secondary" href="/showcase/">Community showcase</a>
         <a class="btn btn--secondary" href="#topics">Browse topics</a>
       </div>
     </div>
@@ -95,14 +99,16 @@ const jsonLd = {
   <Section index="01" label="Journal" title="Latest articles" id="latest">
     <p slot="intro">New tutorials, reviews and release notes — researched, cited and updated when SketchUp changes.</p>
     <div class="grid">
-      {latest.map((post, i) => (
+      {latest.map((entry, i) => (
         <>
-          <PostCard post={post} index={i + 1} />
+          {entry.kind === 'post'
+            ? <PostCard post={entry.post} index={i + 1} />
+            : <ShowcaseCard item={entry.item} index={i + 1} />}
           {i === 5 && latest.length > 6 && <AdZone zone="feed" />}
         </>
       ))}
     </div>
-    {posts.length > SITE.postsPerPage && (
+    {feed.length > SITE.postsPerPage && (
       <nav class="pager pager--single" aria-label="Pagination">
         <a href="/blog/2/">Older articles <Icon name="arrow" class="icon" /></a>
       </nav>
