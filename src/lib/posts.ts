@@ -62,3 +62,18 @@ export async function getPublishedShowcase(): Promise<ShowcaseItem[]> {
 export function showcaseUrl(item: ShowcaseItem): string {
   return `/showcase/${item.id}/`;
 }
+
+/** One entry in the main feed: an article or a community showcase pick. */
+export type FeedItem =
+  | { kind: 'post'; date: Date; post: Post }
+  | { kind: 'showcase'; date: Date; item: ShowcaseItem };
+
+/** Articles and showcase picks together, newest first. */
+export async function getFeed(): Promise<FeedItem[]> {
+  const [posts, showcase] = await Promise.all([getPublishedPosts(), getPublishedShowcase()]);
+  const items: FeedItem[] = [
+    ...posts.map((post) => ({ kind: 'post' as const, date: post.data.pubDate, post })),
+    ...showcase.map((item) => ({ kind: 'showcase' as const, date: item.data.pubDate, item })),
+  ];
+  return items.sort((a, b) => b.date.getTime() - a.date.getTime());
+}

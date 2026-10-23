@@ -2,17 +2,18 @@
 import type { GetStaticPaths, Page } from 'astro';
 import Base from '../../layouts/Base.astro';
 import PostCard from '../../components/PostCard.astro';
+import ShowcaseCard from '../../components/ShowcaseCard.astro';
 import Icon from '../../components/Icon.astro';
 import AdZone from '../../components/AdZone.astro';
-import { getPublishedPosts, type Post } from '../../lib/posts';
+import { getFeed, type FeedItem } from '../../lib/posts';
 import { SITE } from '../../site.config';
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const posts = await getPublishedPosts();
-  return paginate(posts, { pageSize: SITE.postsPerPage });
+  const feed = await getFeed();
+  return paginate(feed, { pageSize: SITE.postsPerPage });
 }) satisfies GetStaticPaths;
 
-const { page } = Astro.props as { page: Page<Post> };
+const { page } = Astro.props as { page: Page<FeedItem> };
 const offset = (page.currentPage - 1) * SITE.postsPerPage;
 ---
 <Base title={`All articles — page ${page.currentPage}`} noindex={page.currentPage > 1}>
@@ -20,9 +21,11 @@ const offset = (page.currentPage - 1) * SITE.postsPerPage;
     <p class="label"><b>{String(page.currentPage).padStart(2, '0')}.</b> Page {page.currentPage} of {page.lastPage}</p>
     <h1>All articles</h1>
   </section>
-  <div class="grid grid--3">{page.data.map((post, i) => (
+  <div class="grid grid--3">{page.data.map((entry, i) => (
     <>
-      <PostCard post={post} index={offset + i + 1} />
+      {entry.kind === 'post'
+        ? <PostCard post={entry.post} index={offset + i + 1} />
+        : <ShowcaseCard item={entry.item} index={offset + i + 1} />}
       {i === 5 && page.data.length > 6 && <AdZone zone="feed" />}
     </>
   ))}</div>
