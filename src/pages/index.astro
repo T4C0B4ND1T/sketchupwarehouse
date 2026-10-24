@@ -7,7 +7,7 @@ import Newsletter from '../components/Newsletter.astro';
 import Section from '../components/Section.astro';
 import Icon from '../components/Icon.astro';
 import { Image } from 'astro:assets';
-import { getPublishedPosts, getFeed, postUrl } from '../lib/posts';
+import { getPublishedPosts, getPublishedComponents, getPublishedShowcase, getFeed, postUrl, formatDate } from '../lib/posts';
 import { SITE, CATEGORIES } from '../site.config';
 
 const posts = await getPublishedPosts();
@@ -17,13 +17,16 @@ const latest = feed.slice(0, SITE.postsPerPage);
 const topics = Object.entries(CATEGORIES);
 // Hero mosaic: the newest articles that have a cover photo (up to 3).
 const featured = posts.filter((p) => p.data.cover).slice(0, 3);
-const sourcesCited = posts.reduce((n, p) => n + p.data.sources.length, 0);
-const stats = [
-  { value: posts.length, label: 'Articles' },
-  { value: topics.length, label: 'Topics' },
-  { value: sourcesCited, label: 'Sources cited' },
-  { value: '$0', label: 'Always free' },
-];
+const [components, showcase] = await Promise.all([getPublishedComponents(), getPublishedShowcase()]);
+const latestNews = posts.find((p) => p.data.category === 'news');
+const tutorialCount = posts.filter((p) => p.data.category === 'tutorials').length;
+// Shortcuts strip under the hero: the parts of the site the header nav doesn't reach.
+const shortcuts = [
+  components.length > 0 && { href: '/components/', label: 'Free downloads', text: `${components.length} ready-to-use .skp components` },
+  latestNews && { href: postUrl(latestNews), label: `Latest news · ${formatDate(latestNews.data.pubDate)}`, text: latestNews.data.title },
+  showcase.length > 0 && { href: '/showcase/', label: 'Community', text: `${showcase.length} 3D Warehouse showcase picks` },
+  tutorialCount > 0 && { href: '/category/tutorials/', label: 'Start here', text: `${tutorialCount} step-by-step tutorials` },
+].filter(Boolean) as { href: string; label: string; text: string }[];
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
@@ -84,15 +87,17 @@ const jsonLd = {
     )}
   </section>
 
-  <div class="stats">
-    {stats.map((s) => (
-      <div class="stat">
-        <Icon name="plus" class="plus" />
-        <strong>{s.value}</strong>
-        <span class="label">{s.label}</span>
-      </div>
-    ))}
-  </div>
+  {shortcuts.length > 0 && (
+    <nav class="shortcuts" aria-label="Shortcuts">
+      {shortcuts.map((s) => (
+        <a class="shortcut" href={s.href}>
+          <span class="label">{s.label}</span>
+          <strong>{s.text}</strong>
+          <Icon name="arrow" class="icon" />
+        </a>
+      ))}
+    </nav>
+  )}
 
   <AdZone zone="pageTop" />
 

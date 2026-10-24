@@ -333,28 +333,34 @@ a.label:hover { color: var(--accent-ink); }
 /* ==========================================================================
    Stats strip — 2×2 on mobile, 1×4 on desktop
    ========================================================================== */
-.stats { display: grid; grid-template-columns: repeat(2, 1fr); border-bottom: var(--rule) solid var(--border); }
-.stat {
-  position: relative;
-  padding: 32px var(--gutter) 28px;
+.shortcuts { display: grid; grid-template-columns: 1fr; border-bottom: var(--rule) solid var(--border); background: var(--fg); }
+.shortcut {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  background: var(--fg);
+  gap: 10px;
+  padding: 24px var(--gutter);
   color: var(--bg);
+  text-decoration: none;
   transition: background-color var(--ease-fast), color var(--ease-fast);
 }
-.stat:nth-child(odd) { border-right: var(--rule-thin) solid var(--bg); }
-.stat:nth-child(-n + 2) { border-bottom: var(--rule-thin) solid var(--bg); }
-.stat strong { font-size: var(--t-2xl); font-weight: 900; letter-spacing: -0.05em; line-height: 1; transform-origin: left bottom; transition: transform var(--ease); }
-.stat .plus { position: absolute; top: 20px; right: 20px; }
-.stat:hover { background: var(--accent); color: var(--fg); }
-.stat:hover strong { transform: scale(1.05); }
-.stat:hover .plus { transform: rotate(90deg); }
+.shortcut + .shortcut { border-top: var(--rule-thin) solid var(--bg); }
+.shortcut strong { font-size: var(--t-lg); font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+.shortcut .icon { margin-top: auto; transition: transform var(--ease); }
+.shortcut:hover, .shortcut:focus-visible { background: var(--accent); color: var(--fg); }
+.shortcut:focus-visible { outline: 3px solid var(--fg); outline-offset: -3px; }
+.shortcut:hover .icon, .shortcut:focus-visible .icon { transform: translateX(6px); }
+@media (min-width: 768px) {
+  .shortcuts { grid-template-columns: repeat(2, 1fr); }
+  .shortcut + .shortcut { border-top: 0; }
+  .shortcut:nth-child(odd):not(:last-child) { border-right: var(--rule-thin) solid var(--bg); }
+  .shortcut:nth-child(n + 3) { border-top: var(--rule-thin) solid var(--bg); }
+  .shortcut:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
 @media (min-width: 1024px) {
-  .stats { grid-template-columns: repeat(4, 1fr); }
-  .stat:nth-child(-n + 2) { border-bottom: 0; }
-  .stat:not(:last-child) { border-right: var(--rule-thin) solid var(--bg); }
+  .shortcuts { grid-template-columns: none; grid-auto-columns: 1fr; grid-auto-flow: column; }
+  .shortcut:nth-child(n + 3) { border-top: 0; }
+  .shortcut:last-child:nth-child(odd) { grid-column: auto; }
+  .shortcut:not(:last-child) { border-right: var(--rule-thin) solid var(--bg); }
 }
 
 /* ==========================================================================
