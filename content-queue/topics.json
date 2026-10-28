@@ -79,7 +79,8 @@
       "title": "Lumion LiveSync for SketchUp: Setup and Workflow",
       "keyword": "lumion livesync sketchup",
       "angle": "Installing the plugin, what syncs live, materials and layers, when to export a .skp instead, version compatibility.",
-      "slug": "lumion-livesync-for-sketchup-setup-and-workflow"
+      "slug": "lumion-livesync-for-sketchup-setup-and-workflow",
+      "post": "lumion-livesync-for-sketchup-setup-and-workflow"
     },
     {
       "id": "sketchup-tags-layers",
