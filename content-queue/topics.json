@@ -125,7 +125,8 @@
       "keyword": "sketchup solid for 3d printing",
       "angle": "Solid inspector, holes, stray edges, exporting STL.",
       "slug": "sketchup-solid-for-3d-printing",
-      "beat": "fix-it"
+      "beat": "fix-it",
+      "post": "sketchup-solid-for-3d-printing"
     },
     {
       "id": "how-to-manage-update-and-uninstall-sketchup-extensions",
