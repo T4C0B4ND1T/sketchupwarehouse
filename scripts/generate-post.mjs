@@ -29,7 +29,8 @@
 //   node scripts/generate-post.mjs --finalize           # validates the draft and saves the post
 //
 // Env (API mode only):
-//   ANTHROPIC_API_KEY   required
+//   AI_GATEWAY_API_KEY  routes the call through Vercel AI Gateway when set
+//   ANTHROPIC_API_KEY   otherwise required (calls Anthropic directly)
 //   CLAUDE_MODEL        optional, defaults to claude-opus-5
 //   CLAUDE_EFFORT       optional, low|medium|high (default medium)
 
@@ -45,7 +46,10 @@ const QUEUE_FILE = path.join(root, 'content-queue/topics.json');
 const AUTHORS = JSON.parse(fs.readFileSync(path.join(root, 'src/data/authors.json'), 'utf8')).authors;
 const BEATS = AUTHORS.flatMap((a) => a.beats.map((b) => ({ ...b, author: a.id })));
 
-const MODEL = process.env.CLAUDE_MODEL || 'claude-opus-5';
+const GATEWAY_KEY = process.env.AI_GATEWAY_API_KEY || '';
+// The gateway names models "anthropic/claude-opus-5"; Anthropic names them "claude-opus-5".
+const BASE_MODEL = (process.env.CLAUDE_MODEL || 'claude-opus-5').replace(/^anthropic\//, '');
+const MODEL = GATEWAY_KEY ? `anthropic/${BASE_MODEL}` : BASE_MODEL;
 const EFFORT = process.env.CLAUDE_EFFORT || 'medium';
 const CATEGORIES = ['tutorials', 'extensions', 'rendering', 'workflows', 'hardware', 'news'];
 const MIN_WORDS = 700;
@@ -315,13 +319,21 @@ Write a news article in the "news" category explaining what changed, who it matt
 }
 
 async function callClaude(prompt) {
-  const client = new Anthropic();
+  // Vercel AI Gateway speaks the Anthropic Messages API. It documents the
+  // web_search_20250305 tool but not web fetch or server-side fallbacks, so the
+  // gateway path searches only (search results carry the URLs the article cites).
+  const client = GATEWAY_KEY
+    ? new Anthropic({ apiKey: GATEWAY_KEY, baseURL: 'https://ai-gateway.vercel.sh' })
+    : new Anthropic();
+  console.error(`[claude] ${GATEWAY_KEY ? 'Vercel AI Gateway' : 'Anthropic API'}, model ${MODEL}`);
   const messages = [{ role: 'user', content: prompt }];
-  const tools = [
-    { type: 'web_search_20260209', name: 'web_search', max_uses: 8 },
-    { type: 'web_fetch_20260209', name: 'web_fetch', max_uses: 5 },
-  ];
-  const useFallbacks = MODEL === 'claude-opus-5';
+  const tools = GATEWAY_KEY
+    ? [{ type: 'web_search_20250305', name: 'web_search', max_uses: 8 }]
+    : [
+        { type: 'web_search_20260209', name: 'web_search', max_uses: 8 },
+        { type: 'web_fetch_20260209', name: 'web_fetch', max_uses: 5 },
+      ];
+  const useFallbacks = !GATEWAY_KEY && MODEL === 'claude-opus-5';
 
   // Server tools can pause long turns (stop_reason "pause_turn"); resume until done.
   for (let i = 0; i < 5; i++) {
@@ -542,7 +554,8 @@ async function main() {
 
 main().catch((err) => {
   if (err instanceof Anthropic.RateLimitError) console.error('[error] rate limited:', err.message);
-  else if (err instanceof Anthropic.AuthenticationError) console.error('[error] bad ANTHROPIC_API_KEY');
+  else if (err instanceof Anthropic.AuthenticationError)
+    console.error(`[error] bad ${GATEWAY_KEY ? 'AI_GATEWAY_API_KEY' : 'ANTHROPIC_API_KEY'}`);
   else if (err instanceof Anthropic.APIError) console.error(`[error] API ${err.status}:`, err.message);
   else console.error('[error]', err.message);
   process.exit(1);

@@ -74,8 +74,13 @@ jobs:
       - name: Pick topic
         id: job
         env:
-          # "claude-code" (default) bills your Claude subscription; "api" bills an Anthropic API key.
+          # "claude-code" (default) runs the Claude Code agent; "api" makes one Claude API call.
           ENGINE: ${{ vars.ARTICLE_ENGINE || 'claude-code' }}
+          # Claude Code goes through Vercel AI Gateway (its monthly free credit) when the
+          # AI_GATEWAY_API_KEY secret is set, and falls back to the Claude subscription
+          # (CLAUDE_CODE_OAUTH_TOKEN) if that run fails. AI_PROVIDER=anthropic skips the gateway.
+          HAS_GATEWAY: ${{ secrets.AI_GATEWAY_API_KEY != '' && vars.AI_PROVIDER != 'anthropic' }}
+          HAS_SUBSCRIPTION: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' }}
           REQUEST_TOPIC: ${{ inputs.topic }}
           REQUEST_LINK: ${{ inputs.link }}
           REQUEST_NOTES: ${{ inputs.notes }}
@@ -88,13 +93,51 @@ jobs:
           fi
           echo "news=$NEWS" >> "$GITHUB_OUTPUT"
           echo "engine=$ENGINE" >> "$GITHUB_OUTPUT"
+          echo "gateway=$HAS_GATEWAY" >> "$GITHUB_OUTPUT"
+          echo "subscription=$HAS_SUBSCRIPTION" >> "$GITHUB_OUTPUT"
           # Topics already waiting for review on an article/* branch aren't picked again.
           PENDING_TOPICS=$(git ls-remote --heads origin 'refs/heads/article/*' | sed 's#.*refs/heads/article/##' | paste -sd, -)
           echo "PENDING_TOPICS=$PENDING_TOPICS" >> "$GITHUB_ENV"
           if [ "$ENGINE" = "claude-code" ]; then node scripts/generate-post.mjs --prepare $NEWS; fi
 
-      - name: Write article with Claude Code
-        if: steps.job.outputs.engine == 'claude-code'
+      - name: Write article with Claude Code (Vercel AI Gateway)
+        id: gateway
+        if: steps.job.outputs.engine == 'claude-code' && steps.job.outputs.gateway == 'true'
+        # A failure here falls through to the subscription step below.
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        env:
+          ANTHROPIC_BASE_URL: https://ai-gateway.vercel.sh/claude-code
+          ANTHROPIC_AUTH_TOKEN: ${{ secrets.AI_GATEWAY_API_KEY }}
+          # Claude Code's helper model (summarizing fetched pages), named the gateway's way.
+          ANTHROPIC_DEFAULT_HAIKU_MODEL: anthropic/claude-haiku-5.5
+          ANTHROPIC_SMALL_FAST_MODEL: anthropic/claude-haiku-5.5
+        with:
+          anthropic_api_key: ${{ secrets.AI_GATEWAY_API_KEY }}
+          github_token: ${{ github.token }}
+          allowed_bots: github-actions
+          prompt: Read .article/prompt.md and follow its instructions exactly. Finish by writing the article to .article/draft.md.
+          claude_args: >-
+            --allowedTools "WebSearch,WebFetch,Read,Write,Glob,Grep"
+            --max-turns 40
+            --model ${{ vars.GATEWAY_MODEL || 'anthropic/claude-sonnet-5.5' }}
+
+      - name: Check the gateway run wrote a draft
+        id: gateway_check
+        if: steps.job.outputs.engine == 'claude-code' && steps.job.outputs.gateway == 'true'
+        run: |
+          if [ "${{ steps.gateway.outcome }}" = "success" ] && [ -s .article/draft.md ]; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::The AI Gateway run didn't produce an article. Falling back to the Claude subscription if CLAUDE_CODE_OAUTH_TOKEN is set."
+          fi
+
+      - name: Write article with Claude Code (Claude subscription)
+        if: >-
+          steps.job.outputs.engine == 'claude-code' &&
+          (steps.job.outputs.gateway != 'true' ||
+            (steps.job.outputs.subscription == 'true' && steps.gateway_check.outputs.ok != 'true'))
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -112,6 +155,8 @@ jobs:
         id: gen
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # API engine: used instead of ANTHROPIC_API_KEY when set (and AI_PROVIDER isn't "anthropic").
+          AI_GATEWAY_API_KEY: ${{ vars.AI_PROVIDER != 'anthropic' && secrets.AI_GATEWAY_API_KEY || '' }}
           CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
           CLAUDE_EFFORT: ${{ vars.CLAUDE_EFFORT }}
           REQUEST_TOPIC: ${{ inputs.topic }}
@@ -125,6 +170,16 @@ jobs:
           else
             node scripts/generate-post.mjs ${{ steps.job.outputs.news }}
           fi
+
+      - name: Show AI Gateway credit left
+        if: always() && steps.job.outputs.gateway == 'true'
+        continue-on-error: true
+        env:
+          KEY: ${{ secrets.AI_GATEWAY_API_KEY }}
+        run: |
+          CREDITS=$(curl -fsS https://ai-gateway.vercel.sh/v1/credits -H "Authorization: Bearer $KEY" || echo '{}')
+          BALANCE=$(echo "$CREDITS" | jq -r '.balance // "unknown"')
+          echo "AI Gateway credit left: \$$BALANCE" | tee -a "$GITHUB_STEP_SUMMARY"
 
       - name: Add cover photo
         env:
