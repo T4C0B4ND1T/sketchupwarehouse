@@ -4,7 +4,7 @@ A static SketchUp content site that runs on its own: GitHub Actions has Claude r
 
 - **Site:** [Astro](https://astro.build) static site, fast, SEO-ready (sitemap, RSS, canonical URLs, Open Graph, JSON-LD `BlogPosting`/`BreadcrumbList`, `robots.txt`, `ads.txt`).
 - **Hosting:** GitHub Pages, $0.
-- **Content engine:** by default, [Claude Code](https://github.com/anthropics/claude-code-action) runs inside GitHub Actions on your Claude subscription. It researches with web search and writes a cited Markdown article. `scripts/generate-post.mjs` picks the topic beforehand and runs quality checks on the result. It can also call the Claude API directly if you prefer pay-per-use billing.
+- **Content engine:** by default, [Claude Code](https://github.com/anthropics/claude-code-action) runs inside GitHub Actions on your Claude subscription for some runs and through [Vercel AI Gateway](https://vercel.com/docs/ai-gateway), paid from its free monthly credit, for others (Monday and Wednesday by default). If one fails, the other writes the article. It researches with web search and writes a cited Markdown article. `scripts/generate-post.mjs` picks the topic beforehand and runs quality checks on the result. It can also call the Claude API directly if you prefer pay-per-use billing.
 - **Schedule:** evergreen articles Mon/Wed/Fri, a news article on Tuesdays, and a daily rebuild. That's about 17 articles a month.
 
 ## Monthly running cost
@@ -14,11 +14,12 @@ A static SketchUp content site that runs on its own: GitHub Actions has Claude r
 | Domain (already owned) | about $1/mo ($10–20/yr renewal) |
 | Hosting (GitHub Pages) | $0 |
 | Build minutes (GitHub Actions) | $0 (a public repo, or well under the private-repo free tier) |
-| Article writing with Claude Code (default) | $0 extra, uses your Claude Pro/Max plan's usage limits |
+| Article writing, Mon/Wed on Vercel AI Gateway (default) | about $1.50–2 a month for ~9 articles with Claude Sonnet 5.5 (measured about $0.16–0.24 each), covered by Vercel's $5 monthly credit |
+| Article writing, Tue/Fri and requests on your Claude subscription | $0 extra, uses your Claude Pro/Max plan's usage limits |
 | *or* Claude API with `claude-opus-5` (`ARTICLE_ENGINE=api`) | about $5–10 |
-| **Total** | **about $1/mo on top of your Claude plan** |
+| **Total** | **about $1/mo** |
 
-With Claude Code, each run shares your plan's usage limits with your own Claude use. At about 4 articles a week, that's a noticeable share on Pro and comfortable on Max. If a run hits your limit, that article fails, nothing gets published, and the next scheduled run tries again.
+Watch the gateway credit: each run prints what's left in the run summary. Backup runs (when the subscription fails) also use it. If the $5 runs out before the month ends, gateway days fall back to your Claude subscription. Without the gateway, each Claude Code run shares your plan's usage limits with your own Claude use. At about 4 articles a week, that's a noticeable share on Pro and comfortable on Max. If a run hits your limit, that article fails, nothing gets published, and the next scheduled run tries again.
 
 ## One-time setup (about 30 minutes)
 
@@ -28,7 +29,8 @@ With Claude Code, each run shares your plan's usage limits with your own Claude 
    - `CNAME` for `www` → `t4c0b4nd1t.github.io`
 
    Then, in *Settings → Pages*, set the custom domain to `sketchupwarehouse.com` and tick **Enforce HTTPS**. (`public/CNAME` is already committed.)
-3. **Connect your Claude subscription.** On your computer, install Claude Code (`npm install -g @anthropic-ai/claude-code`), then run `claude setup-token` and sign in with your Claude account. Copy the token it prints and add it under *Settings → Secrets and variables → Actions → Secrets* as `CLAUDE_CODE_OAUTH_TOKEN`.
+3. **Connect Vercel AI Gateway.** In the [Vercel dashboard](https://vercel.com/dashboard), open *AI Gateway → API Keys → Create key*. Give it a budget of $5 that refreshes monthly, so it can never spend past the free credit. Add the key under *Settings → Secrets and variables → Actions → Secrets* as `AI_GATEWAY_API_KEY`.
+   - *Fallback, your Claude subscription (recommended to keep):* on your computer, install Claude Code (`npm install -g @anthropic-ai/claude-code`), then run `claude setup-token` and sign in with your Claude account. Copy the token it prints and add it under *Settings → Secrets and variables → Actions → Secrets* as `CLAUDE_CODE_OAUTH_TOKEN`.
    - *Alternative, pay-per-use API:* create a key at [console.anthropic.com](https://console.anthropic.com) with web search enabled. Add it as the secret `ANTHROPIC_API_KEY`, and set the repository variable `ARTICLE_ENGINE` to `api`.
 4. **Allow the bot to push.** *Settings → Actions → General → Workflow permissions → Read and write*. Also tick "Allow GitHub Actions to create pull requests". Article requests and review mode need it.
 5. **Test it.** *Actions → Generate article → Run workflow*. After a few minutes a new article should be live.
@@ -45,7 +47,10 @@ All monetization settings are **repository variables** (*Settings → Secrets an
 | `PUBLIC_NEWSLETTER_ACTION` | Form endpoint from a free newsletter tool (Buttondown, MailerLite, Kit). Shows a signup box. |
 | `PUBLIC_CF_ANALYTICS_TOKEN` or `PUBLIC_GA4_ID` | Free analytics. |
 | `PUBLIC_CONTACT_EMAIL` | Shown on the Contact and Privacy pages. |
-| `ARTICLE_ENGINE` | `claude-code` (default, uses your subscription) or `api` (uses `ANTHROPIC_API_KEY`). |
+| `ARTICLE_ENGINE` | `claude-code` (default, the Claude Code agent) or `api` (one Claude API call, through the gateway when `AI_GATEWAY_API_KEY` is set, otherwise `ANTHROPIC_API_KEY`). |
+| `GATEWAY_DAYS` | Weekdays (UTC) whose scheduled article is written on Vercel AI Gateway, default `mon,wed`. Use e.g. `mon,tue,wed,thu,fri` for all of them (about $3–4.50/mo), or `wed` for less. Other runs use your subscription first. |
+| `AI_PROVIDER` | Set to `anthropic` to skip Vercel AI Gateway and use your Claude subscription or Anthropic key directly. |
+| `GATEWAY_MODEL` | Model for gateway runs, default `anthropic/claude-sonnet-5.5`. `anthropic/claude-haiku-5.5` costs about a twentieth as much per token, but writes less carefully. |
 | `CLAUDE_CODE_MODEL` | Optional model for Claude Code runs, e.g. `sonnet` to use less of your plan's usage. If unset, your plan's default model is used. |
 | `CLAUDE_MODEL` / `CLAUDE_EFFORT` | API engine only. The model defaults to `claude-opus-5` and effort to `medium`. |
 | `PUBLISH_MODE` | `auto` (default) publishes straight away. `review` opens a PR that you merge to publish. |
