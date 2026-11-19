@@ -97,13 +97,13 @@ jobs:
           echo "engine=$ENGINE" >> "$GITHUB_OUTPUT"
           echo "gateway=$HAS_GATEWAY" >> "$GITHUB_OUTPUT"
           echo "subscription=$HAS_SUBSCRIPTION" >> "$GITHUB_OUTPUT"
-          # Which writer goes first. Scheduled runs on GATEWAY_DAYS use the gateway;
-          # everything else (other days, article requests) uses the subscription.
+          # Which writer goes first. Topic-list runs (scheduled or "Run workflow") on
+          # GATEWAY_DAYS use the gateway; other days and article requests use the subscription.
           # Whichever goes first, the other is the backup.
           TODAY=$(date -u +%a | tr '[:upper:]' '[:lower:]')
           if [ "$HAS_GATEWAY" != "true" ]; then PRIMARY=subscription
           elif [ "$HAS_SUBSCRIPTION" != "true" ]; then PRIMARY=gateway
-          elif [ "${{ github.event_name }}" = "schedule" ] && echo ",$GATEWAY_DAYS," | tr -d ' ' | grep -q ",$TODAY,"; then PRIMARY=gateway
+          elif [ -z "$REQUEST_TOPIC$REQUEST_LINK" ] && echo ",$GATEWAY_DAYS," | tr -d ' ' | grep -q ",$TODAY,"; then PRIMARY=gateway
           else PRIMARY=subscription; fi
           echo "primary=$PRIMARY" >> "$GITHUB_OUTPUT"
           echo "Writer: $PRIMARY first ($TODAY, ${{ github.event_name }})" >> "$GITHUB_STEP_SUMMARY"
