@@ -97,13 +97,13 @@ jobs:
           echo "engine=$ENGINE" >> "$GITHUB_OUTPUT"
           echo "gateway=$HAS_GATEWAY" >> "$GITHUB_OUTPUT"
           echo "subscription=$HAS_SUBSCRIPTION" >> "$GITHUB_OUTPUT"
-          # Which writer goes first. Scheduled runs on GATEWAY_DAYS use the gateway;
-          # everything else (other days, article requests) uses the subscription.
+          # Which writer goes first. Topic-list runs (scheduled or "Run workflow") on
+          # GATEWAY_DAYS use the gateway; other days and article requests use the subscription.
           # Whichever goes first, the other is the backup.
           TODAY=$(date -u +%a | tr '[:upper:]' '[:lower:]')
           if [ "$HAS_GATEWAY" != "true" ]; then PRIMARY=subscription
           elif [ "$HAS_SUBSCRIPTION" != "true" ]; then PRIMARY=gateway
-          elif [ "${{ github.event_name }}" = "schedule" ] && echo ",$GATEWAY_DAYS," | tr -d ' ' | grep -q ",$TODAY,"; then PRIMARY=gateway
+          elif [ -z "$REQUEST_TOPIC$REQUEST_LINK" ] && echo ",$GATEWAY_DAYS," | tr -d ' ' | grep -q ",$TODAY,"; then PRIMARY=gateway
           else PRIMARY=subscription; fi
           echo "primary=$PRIMARY" >> "$GITHUB_OUTPUT"
           echo "Writer: $PRIMARY first ($TODAY, ${{ github.event_name }})" >> "$GITHUB_STEP_SUMMARY"
@@ -119,22 +119,10 @@ jobs:
         id: gateway_first
         if: steps.job.outputs.engine == 'claude-code' && steps.job.outputs.primary == 'gateway'
         continue-on-error: true
-        uses: anthropics/claude-code-action@v1
         env:
-          ANTHROPIC_BASE_URL: https://ai-gateway.vercel.sh/claude-code
-          ANTHROPIC_AUTH_TOKEN: ${{ secrets.AI_GATEWAY_API_KEY }}
-          # Claude Code's helper model (summarizing fetched pages), named the gateway's way.
-          ANTHROPIC_DEFAULT_HAIKU_MODEL: anthropic/claude-haiku-5.5
-          ANTHROPIC_SMALL_FAST_MODEL: anthropic/claude-haiku-5.5
-        with:
-          anthropic_api_key: ${{ secrets.AI_GATEWAY_API_KEY }}
-          github_token: ${{ github.token }}
-          allowed_bots: github-actions
-          prompt: Read .article/prompt.md and follow its instructions exactly. Finish by writing the article to .article/draft.md.
-          claude_args: >-
-            --allowedTools "WebSearch,WebFetch,Read,Write,Glob,Grep"
-            --max-turns 40
-            --model ${{ vars.GATEWAY_MODEL || 'anthropic/claude-sonnet-5.5' }}
+          AI_GATEWAY_API_KEY: ${{ secrets.AI_GATEWAY_API_KEY }}
+          GATEWAY_MODEL: ${{ vars.GATEWAY_MODEL }}
+        run: scripts/write-with-gateway.sh
 
       - name: Check for a draft
         id: draft1
@@ -179,22 +167,10 @@ jobs:
           steps.job.outputs.engine == 'claude-code' && steps.job.outputs.gateway == 'true' &&
           steps.job.outputs.primary != 'gateway' && steps.draft2.outputs.ok != 'true'
         continue-on-error: true
-        uses: anthropics/claude-code-action@v1
         env:
-          ANTHROPIC_BASE_URL: https://ai-gateway.vercel.sh/claude-code
-          ANTHROPIC_AUTH_TOKEN: ${{ secrets.AI_GATEWAY_API_KEY }}
-          # Claude Code's helper model (summarizing fetched pages), named the gateway's way.
-          ANTHROPIC_DEFAULT_HAIKU_MODEL: anthropic/claude-haiku-5.5
-          ANTHROPIC_SMALL_FAST_MODEL: anthropic/claude-haiku-5.5
-        with:
-          anthropic_api_key: ${{ secrets.AI_GATEWAY_API_KEY }}
-          github_token: ${{ github.token }}
-          allowed_bots: github-actions
-          prompt: Read .article/prompt.md and follow its instructions exactly. Finish by writing the article to .article/draft.md.
-          claude_args: >-
-            --allowedTools "WebSearch,WebFetch,Read,Write,Glob,Grep"
-            --max-turns 40
-            --model ${{ vars.GATEWAY_MODEL || 'anthropic/claude-sonnet-5.5' }}
+          AI_GATEWAY_API_KEY: ${{ secrets.AI_GATEWAY_API_KEY }}
+          GATEWAY_MODEL: ${{ vars.GATEWAY_MODEL }}
+        run: scripts/write-with-gateway.sh
 
       - name: Make sure an article was written
         if: steps.job.outputs.engine == 'claude-code'
